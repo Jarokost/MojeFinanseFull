@@ -73,6 +73,20 @@ class User extends \Core\Model
     public $is_active;
 
     /**
+     * user remember token
+     * 
+     * @var string
+     */
+    public $remember_token;
+
+    /**
+     * user cookie remember login expiry timestamp
+     * 
+     * @var string
+     */
+    public $expiry_timestamp;
+
+    /**
      * Error messages
      *
      * @var array
@@ -85,20 +99,6 @@ class User extends \Core\Model
      * @var string
      */
     private $password;
-
-    /**
-     * user remember token
-     * 
-     * @var string
-     */
-    private $remember_token;
-
-    /**
-     * cookie remember login expiry timestamp
-     * 
-     * @var string
-     */
-    private $expiry_timestamp;
 
     /**
      * user password reset token

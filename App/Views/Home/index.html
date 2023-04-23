@@ -2,6 +2,88 @@
 
 {% block title %}Home{% endblock %}
 
+{% block footer %}
+    <script src="\js\hideShowPassword.min.js"></script>
+    <script src="/js/app.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+            
+            $('#formSignup').validate({
+                errorClass: "is-invalid",
+                rules: {
+                    name: 'required',
+                    email: {
+                        required: true,
+                        email: true,
+                        remote: '/account/validate-email'
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6,
+                        validPassword: true
+                    },
+                },
+                messages: {
+                    name: {
+                      required: 'to pole jest wymagane'
+                    },
+                    email: {
+                        remote: 'email already taken'
+                    }
+                }
+            });
+            
+            /**
+              * Show password toggle button
+              */
+              $('#inputPassword').hideShowPassword({
+                show: false,
+                innerToggle: 'focus',
+                states: {
+                  shown: {
+                    toggle: {
+                      content: "ukryj"
+                    }
+                  },
+                  hidden: {
+                    toggle: {
+                      content: "pokaż"
+                    }
+                  }
+                }
+            });
+            /**
+              * Show password toggle button
+              */
+              $('#inputPasswordReg').hideShowPassword({
+                show: false,
+                innerToggle: 'focus',
+                states: {
+                  shown: {
+                    toggle: {
+                      content: "ukryj"
+                    }
+                  },
+                  hidden: {
+                    toggle: {
+                      content: "pokaż"
+                    }
+                  }
+                }
+            });
+        });
+    </script>
+
+    <!-- <script>
+        if ($( "#inputNameReg" ).hasClass( "error" )) { 
+                $('#inputNameReg').addClass('is-invalid')
+            }
+    </script> -->
+
+{% endblock %}
+
 {% block body %}
 
 <main class="container">
@@ -177,6 +259,7 @@
                 id="inputEmail"
                 name="email"
                 placeholder="Adres email"
+                value="{{ email }}"
               />
               <label for="inputEmail">Adres email</label>
             </div>
@@ -190,6 +273,11 @@
               />
               <label for="inputPassword">Hasło</label>
             </div>
+            <div class="form-check mb-3">
+              <label>
+                  <input type="checkbox" name="remember_me" {% if remember_me %} checked="checked"{% endif %} class="form-check-input" /> Zapamiętaj mnie!
+              </label>
+          </div>
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
               type="submit"
@@ -235,40 +323,31 @@
               <input
                 type="text"
                 class="form-control rounded-3"
-                id="inputName"
+                id="inputNameReg"
                 name="name"
                 placeholder="Imię"
               />
-              <label for="inputName">Imię</label>
+              <!-- <label for="inputNameReg">Imię</label> -->
             </div>
             <div class="form-floating mb-3">
               <input
                 type="email"
                 class="form-control rounded-3"
-                id="inputEmail"
+                id="inputEmailReg"
                 name="email"
                 placeholder="Adres email"
               />
-              <label for="inputEmail">Adres email</label>
+              <!-- <label for="inputEmailReg">Adres email</label> -->
             </div>
             <div class="form-floating mb-3">
+              <label for="inputPasswordReg">Hasło</label>
               <input
                 type="password"
                 class="form-control rounded-3"
-                id="inputPassword"
+                id="inputPasswordReg"
                 name="password"
                 placeholder="Hasło"
               />
-              <label for="inputPassword">Hasło</label>
-            </div>
-            <div class="form-floating mb-3">
-              <input
-                type="password"
-                class="form-control rounded-3"
-                id="floatingPassword2"
-                placeholder="Powtórz Hasło"
-              />
-              <label for="floatingPassword2">Powtórz hasło</label>
             </div>
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
