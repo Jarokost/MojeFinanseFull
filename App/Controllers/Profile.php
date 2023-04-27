@@ -65,7 +65,7 @@ class Profile extends Authenticated
     {
         if ($this->user->updateProfile($_POST)) {
 
-            Flash::addMessage('Changes saved');
+            Flash::addMessage('Zapisano zmiany');
 
             $this->redirect('/profile/show');
 
