@@ -36,14 +36,45 @@
       },
     });
 
+    $("#formLogin").validate({
+      errorClass: "is-invalid",
+      rules: {
+        email: {
+          required: true,
+          email: true,
+        },
+        password: {
+          required: true,
+        },
+      },
+      messages: {
+        email: {
+          required: "Podaj adres email",
+          email: "Podaj adres email",
+        },
+        password: {
+          required: "Podaj hasło",
+        }
+      },
+    });
+
     setInterval(removeDefaultLabelOnValidateError, 1);
   });
 
-  function pass_show_hide() {
-    var pass_sh = document.getElementById("inputPasswordReg");
+  function passShowHideReg() {
+    var pass_shreg = document.getElementById("inputPasswordReg");
+    if (pass_shreg.type == "password") pass_shreg.type = "text";
+    else pass_shreg.type = "password";
+    var btnreg = document.getElementById("inputPasswordRegBtn");
+    if (btnreg.innerHTML == "Pokaż") btnreg.innerHTML = "Ukryj";
+    else btnreg.innerHTML = "Pokaż";
+  }
+
+  function passShowHide() {
+    var pass_sh = document.getElementById("inputPassword");
     if (pass_sh.type == "password") pass_sh.type = "text";
     else pass_sh.type = "password";
-    var btn = document.getElementById("inputPasswordRegBtn");
+    var btn = document.getElementById("inputPasswordBtn");
     if (btn.innerHTML == "Pokaż") btn.innerHTML = "Ukryj";
     else btn.innerHTML = "Pokaż";
   }
@@ -75,6 +106,26 @@
       if (document.getElementById("inputPasswordRegLabel") === null) {
         $("#inputPasswordReg").after(
           '<label id="inputPasswordRegLabel" for="inputPasswordReg">Hasło</label>'
+        );
+      }
+    }
+
+    if ($("#inputEmail").hasClass("is-invalid")) {
+      $("#inputEmailLabel").remove();
+    } else {
+      if (document.getElementById("inputEmailLabel") === null) {
+        $("#inputEmail").after(
+          '<label id="inputEmailLabel" for="inputEmail">Adres email</label>'
+        );
+      }
+    }
+
+    if ($("#inputPassword").hasClass("is-invalid")) {
+      $("#inputPasswordLabel").remove();
+    } else {
+      if (document.getElementById("inputPasswordLabel") === null) {
+        $("#inputPassword").after(
+          '<label id="inputPasswordLabel" for="inputPassword">Hasło</label>'
         );
       }
     }
@@ -245,44 +296,38 @@
         ></button>
       </div>
       <div class="modal-body px-5">
-        <form class="" action="/login/create" method="post">
+        <form class="" action="/login/create" method="post" id="formLogin">
           <div class="form-floating mb-3">
             <input
               type="email"
-              class="form-control rounded-3"
+              class="form-control"
               id="inputEmail"
               name="email"
               placeholder="Adres email"
+              autocomplete="off"
               value="{{ email }}"
             />
-            <label for="inputEmail">Adres email</label>
           </div>
-          <!-- <div class="form-floating mb-3">
+
+          <div class="input-group mb-3">
+            <div class="form-floating">
               <input
                 type="password"
-                class="form-control rounded-3"
+                class="form-control"
                 id="inputPassword"
                 name="password"
                 placeholder="Hasło"
-              />
-              <label for="inputPassword">Hasło</label>
-            </div> -->
-          <div class="pass_show">
-            <span class="has-float-label">
-              <input
-                type="password"
-                name="txtnewpass"
-                class="form-control"
-                id="txtnewpass"
-                placeholder="New Password"
-                required="required"
+                aria-label="Hasło"
+                aria-describedby="inputPasswordBtn"
                 autocomplete="off"
               />
-              <label for="txtnewpass"
-                >New Password <span class="required">*</span></label
-              >
-            </span>
-            <span id="error_newpass" class="error"></span>
+            </div>
+            <button
+              onclick="passShowHide()"
+              class="btn btn-outline-secondary"
+              type="button"
+              id="inputPasswordBtn"
+            >Pokaż</button>
           </div>
           <div class="form-check mb-3">
             <label>
@@ -377,13 +422,11 @@
               />
             </div>
             <button
-              onclick="pass_show_hide()"
+              onclick="passShowHideReg()"
               class="btn btn-outline-secondary"
               type="button"
               id="inputPasswordRegBtn"
-            >
-              Pokaż
-            </button>
+            >Pokaż</button>
           </div>
 
           <button
