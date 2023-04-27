@@ -1,5 +1,5 @@
-Account activation
+Aktywacja konta w serwisie Moje Finanse
 
-Thank you for signing up. Please click the following link to activate your account:
+Dziękujemy za zarejestrowanie się. Proszę kliknij w poniższy link, aby aktywować swoje konto:
 
 {{ url }}

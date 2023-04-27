@@ -132,7 +132,34 @@
   }
 </script>
 
-{% endblock %} {% block body %}
+{% endblock %}
+
+{% block loginBtn %}
+  <div class="flex-grow-2">
+    {% if current_user %}
+    <span class="logged-in-as m-1 m-xl-0">
+      Zalogowany jako: {{ current_user.name }}
+    </span>
+    {% else %}
+    <a
+      class="btn btn-outline-success m-1 m-xl-0 d-block d-xl-inline-block mb-2"
+      data-bs-toggle="modal"
+      href="#exampleModalToggle"
+      role="button"
+      >Logowanie</a
+    >
+    <a
+      class="btn btn-outline-primary m-1 m-xl-0 d-block d-xl-inline-block"
+      data-bs-toggle="modal"
+      href="#exampleModalToggle2"
+      role="button"
+      >Rejestracja</a
+    >
+    {% endif %}
+  </div>
+  {% endblock %}
+
+{% block body %}
 
 <main class="container">
   <div class="bg-light px-5 pb-5 pt-4 rounded appear">
