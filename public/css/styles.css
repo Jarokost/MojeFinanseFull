@@ -180,3 +180,7 @@ body {
     margin-left: 0;
     margin-right: 0;
   }
+
+  .signup-success {
+    color: #93c01f;
+  }
