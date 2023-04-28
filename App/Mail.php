@@ -4,7 +4,6 @@ namespace App;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
 use App\Config;
 
 /**
@@ -31,7 +30,7 @@ class Mail
         
         try {
             //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->SMTPDebug = Config::SMTP_DEBUG_LEVEL;                      //Enable verbose debug output
             $mail->isSMTP();                                            //Send using SMTP
             $mail->Host       = Config::SMTP_HOST;                     //Set the SMTP server to send through
             $mail->SMTPAuth   = Config::SMTP_AUTH;                                   //Enable SMTP authentication
@@ -51,9 +50,9 @@ class Mail
             $mail->AltBody = $text;
         
             $mail->send();
-            echo 'Message has been sent';
+            //echo 'Message has been sent';
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     }
 }

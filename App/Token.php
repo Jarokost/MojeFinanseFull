@@ -11,7 +11,7 @@ class Token
 {
     /**
      * The token value
-     * @var array
+     * @var string
      */
     protected $token;
 
