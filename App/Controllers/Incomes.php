@@ -3,7 +3,9 @@
 namespace App\Controllers;
 
 use \Core\View;
+//use \App\Models\Incomes;
 use \App\Models\IncomesCategoryAssignedToUsers;
+use \App\Flash;
 
 /**
  * Items controller (example)
@@ -33,9 +35,14 @@ class Incomes extends Authenticated
      *
      * @return void
      */
-    public function insertAction()
+    public function addAction()
     {
-        echo "new action";
+        $income = New \App\Models\Incomes($_POST);
+        $income->add();
+
+        Flash::addMessage('Dodano nowy przychód');
+
+        $this->redirect('/Incomes/new');
     }
 
 }

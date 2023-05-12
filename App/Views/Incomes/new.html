@@ -8,13 +8,14 @@
     <div class="bg-light px-5 py-4 rounded">
       <!-- <h1 class="h3 mb-4 center-block">Wprowadź dane:</h1> -->
 
-      <form>
+      <form method="post" action="/Incomes/add" id="formAddIncome">
         <!-- JS use class is-invalid when input validation -->
         <div class="form-floating mb-2 center-block">
           <input
             type="number"
             class="form-control input-width"
             id="floatingInputKwota"
+            name="amount"
             placeholder="0,00"
             value="0.00"
             step="0.01"
@@ -28,6 +29,7 @@
             type="date"
             class="form-control input-width"
             id="floatingDate"
+            name="date_of_income"
             placeholder="Data"
             value="{{ 'now'|date('Y-m-d') }}"
           />
@@ -36,7 +38,10 @@
 
         <!-- JS use class is-invalid when input validation -->
         <div class="form-floating mb-2 center-block">
-          <select class="form-select input-width" id="floatingSelect">
+          <select class="form-select input-width" 
+          id="floatingSelect"
+          name="income_category_assigned_to_user_id"
+          >
             <option selected>Twój wybór</option>
             {% for category in income_categories %}
               <option value="{{ category.id }}">
@@ -52,6 +57,7 @@
             class="form-control input-width"
             placeholder="Komentarz"
             id="floatingTextarea"
+            name="income_comment"
           ></textarea>
           <label for="floatingTextarea">Komentarz</label>
         </div>
