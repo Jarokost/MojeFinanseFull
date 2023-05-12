@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Incomes{% endblock %}
+
+{% block body %}
+
+<main class="container">
+    <div class="bg-light px-5 py-4 rounded">
+      <!-- <h1 class="h3 mb-4 center-block">Wprowadź dane:</h1> -->
+
+      <form>
+        <!-- JS use class is-invalid when input validation -->
+        <div class="form-floating mb-2 center-block">
+          <input
+            type="number"
+            class="form-control input-width"
+            id="floatingInputKwota"
+            placeholder="0,00"
+            value="0.00"
+            step="0.01"
+          />
+          <label for="floatingInputKwota">Kwota [PLN]</label>
+        </div>
+
+        <!-- JS use class is-invalid when input validation -->
+        <div class="form-floating mb-2 center-block">
+          <input
+            type="date"
+            class="form-control input-width"
+            id="floatingDate"
+            placeholder="Data"
+            value="{{ 'now'|date('Y-m-d') }}"
+          />
+          <label for="floatingDate">Data</label>
+        </div>
+
+        <!-- JS use class is-invalid when input validation -->
+        <div class="form-floating mb-2 center-block">
+          <select class="form-select input-width" id="floatingSelect">
+            <option selected>Twój wybór</option>
+            {% for category in income_categories %}
+              <option value="{{ category.id }}">
+                  {{ category.name }}
+              </option>
+            {% endfor %}
+          </select>
+          <label for="floatingSelect">Kategoria</label>
+        </div>
+
+        <div class="form-floating mb-2 center-block">
+          <textarea
+            class="form-control input-width"
+            placeholder="Komentarz"
+            id="floatingTextarea"
+          ></textarea>
+          <label for="floatingTextarea">Komentarz</label>
+        </div>
+
+        <button class="w-100 btn btn-lg rounded-3 btn-success input-width center-block" type="submit">
+          Dodaj
+        </button>
+      </form>
+    </div>
+</main>
+
+{% endblock %}
