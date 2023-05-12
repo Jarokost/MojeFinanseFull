@@ -51,4 +51,18 @@ class IncomesCategoryAssignedToUsers extends \Core\Model
         return $stmt->fetchAll();
 
     }
+
+    public static function fillCategoriesAssignedToUserWithDefault($user_id)
+    {
+        $sql = 'INSERT INTO incomes_category_assigned_to_users (user_id, name)
+                SELECT :user_id, name FROM incomes_category_default';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+    }
 }
