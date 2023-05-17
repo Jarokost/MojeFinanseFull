@@ -19,3 +19,17 @@ function(value, element, param) {
 },
 'Must contain at least one letter and one number'
 );
+
+$.validator.addMethod('validCategory',
+function(value, element, param) {
+
+    if (value != '') {
+        if (value === 'wybierz' ) {
+            return false;
+        }
+    }
+
+    return true;
+},
+'Wybierz kategorię'
+);
