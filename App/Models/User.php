@@ -129,6 +129,24 @@ class User extends \Core\Model
     }
 
     /**
+     * Get last user id 
+     * 
+     * @return array
+     */
+    public function getLastUserId() {
+        $sql = 'SELECT id from users ORDER BY id DESC LIMIT 1';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
+
+    /**
      * Save the user model with the current property values
      *
      * @return boolean  True if the user was saved, false otherwise
