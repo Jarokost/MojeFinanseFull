@@ -22,11 +22,15 @@ class Incomes extends Authenticated
      */
     public function newAction()
     {
+        $arr['date_of_income'] = date('Y-m-d');
+        $arr['amount'] = '0.00';
+        $income = New \App\Models\Incomes($arr);
         $categories = IncomesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
 
         View::renderTemplate('Incomes/new.html', [
-            'income_categories' => $categories
+            'income_categories' => $categories,
+            'income' => $income
         ]);
     }
 
@@ -38,11 +42,22 @@ class Incomes extends Authenticated
     public function addAction()
     {
         $income = New \App\Models\Incomes($_POST);
-        $income->add();
+        if ($income->add()) {
 
-        Flash::addMessage('Dodano nowy przychód');
+            Flash::addMessage('Dodano nowy przychód');
 
-        $this->redirect('/Incomes/new');
+            $this->redirect('/Incomes/new');
+
+        } else {
+
+            $categories = IncomesCategoryAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+
+            View::renderTemplate('Incomes/new.html', [
+                'income_categories' => $categories,
+                'income' => $income
+            ]);
+        }
     }
 
 }

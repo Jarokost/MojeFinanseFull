@@ -7,8 +7,18 @@
 <main class="container">
     <div class="bg-light px-5 py-4 rounded">
       <!-- <h1 class="h3 mb-4 center-block">Wprowadź dane:</h1> -->
-
       <form method="post" action="/Incomes/add" id="formAddIncome">
+
+        {% if income.errors is not empty %}
+          <div class="form-floating mb-2 center-block">
+            <ul>
+                {% for error in income.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
         <!-- JS use class is-invalid when input validation -->
         <div class="form-floating mb-2 center-block">
           <input
@@ -17,7 +27,7 @@
             id="floatingInputKwota"
             name="amount"
             placeholder="0,00"
-            value="0.00"
+            value="{{ income.amount }}"
             step="0.01"
           />
           <label for="floatingInputKwota">Kwota [PLN]</label>
@@ -31,7 +41,7 @@
             id="floatingDate"
             name="date_of_income"
             placeholder="Data"
-            value="{{ 'now'|date('Y-m-d') }}"
+            value="{{ income.date_of_income }}"
           />
           <label for="floatingDate">Data</label>
         </div>
@@ -42,9 +52,10 @@
           id="floatingSelect"
           name="income_category_assigned_to_user_id"
           >
-            <option selected>Twój wybór</option>
+            <option>wybierz</option>
             {% for category in income_categories %}
-              <option value="{{ category.id }}">
+              <option value="{{ category.id }}"
+              {{ (category.id==income.income_category_assigned_to_user_id) ? 'selected' }}>
                   {{ category.name }}
               </option>
             {% endfor %}
@@ -58,7 +69,7 @@
             placeholder="Komentarz"
             id="floatingTextarea"
             name="income_comment"
-          ></textarea>
+          >{{ income.income_comment ?? '' }}</textarea>
           <label for="floatingTextarea">Komentarz</label>
         </div>
 

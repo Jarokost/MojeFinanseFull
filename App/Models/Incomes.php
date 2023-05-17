@@ -83,7 +83,7 @@ class Incomes extends \Core\Model
      */
     public function add()
     {
-        //$this->validate();
+        $this->validate();
 
         if (empty($this->errors)) {
 
@@ -115,8 +115,14 @@ class Incomes extends \Core\Model
     public function validate()
     {
         // Amount
-        if ($this->amount > '0,00') {
+        if (floatval($this->amount) <= 0.0) {
             $this->errors[] = 'Kwota jest zbyt niska';
+        }
+        if (floatval($this->amount) > 999999.99) {
+            $this->errors[] = 'Kwota jest zbyt wysoka';
+        }
+        if ($this->income_category_assigned_to_user_id === 'wybierz') {
+            $this->errors[] = 'Nie wybrano kategorii';
         }
     }
 }

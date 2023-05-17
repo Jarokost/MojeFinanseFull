@@ -128,6 +128,11 @@ class User extends \Core\Model
         };
     }
 
+    /**
+     * Get last user id 
+     * 
+     * @return array
+     */
     public function getLastUserId() {
         $sql = 'SELECT id from users ORDER BY id DESC LIMIT 1';
 
