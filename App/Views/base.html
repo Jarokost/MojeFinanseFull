@@ -40,8 +40,29 @@
                 <li class="nav-item m-1 m-xl-0">
                 <a class="nav-link border rounded {{ (controllerType[0]=='Expenses') ? 'active' }}" href="/Expenses/new">Dodaj Wydatek</a>
                 </li>
-                <li class="nav-item m-1 m-xl-0">
-                <a class="nav-link border rounded" href="balance.html">Przeglądaj Bilans</a>
+                {% if controllerType[0]=='Balance' %}
+                  <li class="nav-item m-1 m-xl-0 dropdown">
+                    <a
+                      class="nav-link border rounded active dropdown-toggle"
+                      href="/Balance/index"
+                      data-bs-toggle="dropdown"
+                      >Przeglądaj Bilans</a
+                    >
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                      <li><a class="dropdown-item" href="/Balance/index">Ostatnie 30 dni</a></li>
+                      <li><a class="dropdown-item" href="/Balance/index">Bieżący miesiąc</a></li>
+                      <li><a class="dropdown-item" href="/Balance/index">Poprzedni miesiąc</a></li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li>
+                        {% block modal %}{% endblock %}
+                      </li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li class="nav-item m-1 m-xl-0">
+                  <a class="nav-link border rounded" href="/Balance/index">Przeglądaj Bilans</a>
+                {% endif %}
+
                 </li>
                 <li class="nav-item m-1 m-xl-0">
                 <a class="nav-link border rounded" href="settings.html">Ustawienia</a>
