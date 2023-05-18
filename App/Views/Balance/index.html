@@ -17,10 +17,9 @@
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ["Przychody", "Wartość"],
-          ["Wynagrodzenie", 11],
-          ["Odsetki bankowe", 2],
-          ["Sprzedaż na allegro", 2],
-          ["Inne", 2],
+          {% for income_category in incomes_sum %}
+            ["{{ income_category[0] }}", {{income_category[1]}}],
+          {% endfor %}
         ]);
 
         var options = {
@@ -56,23 +55,9 @@
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ["Wydatki", "Wartość"],
-          ["Jedzenie", 11],
-          ["Mieszkanie", 2],
-          ["Transport", 2],
-          ["Telekomunikacja", 2],
-          ["Opieka zdrowotna", 2],
-          ["Ubrania", 2],
-          ["Higiena", 2],
-          ["Dzieci", 2],
-          ["Rozrywka", 2],
-          ["Wycieczka", 2],
-          ["Trening", 2],
-          ["Książki", 2],
-          ["Oszczędności", 2],
-          ["Na złotą jesień, czyli emeryturę", 2],
-          ["Spłata długów", 2],
-          ["Darowizna", 2],
-          ["Inne wydatki", 2],
+          {% for expense_category in expenses_sum %}
+            ["{{ expense_category[0] }}", {{expense_category[1]}}],
+          {% endfor %}
         ]);
 
         var options = {
@@ -110,6 +95,8 @@
                     <div class="h3 balance_plus">+4236.88PLN</div>
                     <!-- DELETE ME!! -->
                     {{ dump(incomes) }}
+                    <br>
+                    {{ dump(expenses) }}
                 </div>
 
                 <div class="col-lg-6 d-flex justify-content-center">
@@ -142,11 +129,11 @@
                             <tbody>
                                 {% for income in incomes %}
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>{{ income.date_of_income }}</td>
-                                    <td>{{ income.name }}</td>
-                                    <td>{{ income.income_comment }}</td>
-                                    <td>{{ income.amount }}</td>
+                                    <th scope="row">{{ loop.index0+1 }}</th>
+                                    <td>{{ income[1] }}</td>
+                                    <td>{{ income[3] }}</td>
+                                    <td>{{ income[2] }}</td>
+                                    <td>{{ income[0] }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -171,14 +158,16 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for expense in expenses %}
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>2022-01-01</td>
-                                    <td>rata kredytu</td>
-                                    <td>przelew</td>
-                                    <td>Santander</td>
-                                    <td>2673.23</td>
+                                    <th scope="row">{{ loop.index0+1 }}</th>
+                                    <td>{{ expense[1] }}</td>
+                                    <td>{{ expense[3] }}</td>
+                                    <td>{{ expense[4] }}</td>
+                                    <td>{{ expense[2] }}</td>
+                                    <td>{{ expense[0] }}</td>
                                 </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
