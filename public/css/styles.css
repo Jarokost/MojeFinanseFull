@@ -128,6 +128,10 @@ body {
   .balance_plus {
     color: #93c01f;
   }
+
+  .balance_minus {
+    color: rgb(159, 25, 25);
+  }
   
   .table-responsive {
     width: 100%;

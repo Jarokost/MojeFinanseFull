@@ -181,4 +181,28 @@ class Incomes extends \Core\Model
 
         return $stmt->fetchAll();
     }
+
+    /**
+     * Select incomes sum
+     * 
+     * @return float
+     */
+    public static function getIncomesSum($user_id, $date_start, $date_end)
+    {
+        $sql = 'SELECT SUM(i.amount) AS amount_sum
+                FROM incomes AS i
+                WHERE i.user_id = :user_id
+                AND i.date_of_income BETWEEN :date_start AND :date_end';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
+        $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
 }

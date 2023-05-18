@@ -17,7 +17,7 @@
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ["Przychody", "Wartość"],
-          {% for income_category in incomes_sum %}
+          {% for income_category in incomes_sum_cat %}
             ["{{ income_category[0] }}", {{income_category[1]}}],
           {% endfor %}
         ]);
@@ -55,7 +55,7 @@
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ["Wydatki", "Wartość"],
-          {% for expense_category in expenses_sum %}
+          {% for expense_category in expenses_sum_cat %}
             ["{{ expense_category[0] }}", {{expense_category[1]}}],
           {% endfor %}
         ]);
@@ -92,11 +92,8 @@
                     <h1>PODSUMOWANIE</h1>
                     <div class="h4">ostatnie 30 dni</div>
                     <div class="h3">BILANS:</div>
-                    <div class="h3 balance_plus">+4236.88PLN</div>
-                    <!-- DELETE ME!! -->
-                    {{ dump(incomes) }}
-                    <br>
-                    {{ dump(expenses) }}
+                    {% set balance = incomes_sum[0] - expenses_sum[0] %}
+                    <div class="h3 {{ (balance >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance }}</div>
                 </div>
 
                 <div class="col-lg-6 d-flex justify-content-center">

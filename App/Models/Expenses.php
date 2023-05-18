@@ -140,7 +140,7 @@ class Expenses extends \Core\Model
     }
 
     /**
-     * Select incomes from incomes table between dates
+     * Select expenses from expenses table between dates
      * 
      * @return object
      */
@@ -168,7 +168,7 @@ class Expenses extends \Core\Model
     }
 
     /**
-     * Select incomes sum group by categories
+     * Select expenses sum group by categories
      * 
      * @return array
      */
@@ -194,5 +194,29 @@ class Expenses extends \Core\Model
         $stmt->execute();
 
         return $stmt->fetchAll();
+    }
+
+    /**
+     * Select expenses sum
+     * 
+     * @return float
+     */
+    public static function getExpensesSum($user_id, $date_start, $date_end)
+    {
+        $sql = 'SELECT SUM(e.amount) AS amount_sum
+                FROM expenses AS e
+                WHERE e.user_id = :user_id
+                AND e.date_of_expense BETWEEN :date_start AND :date_end';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
+        $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $stmt->fetch();
     }
 }
