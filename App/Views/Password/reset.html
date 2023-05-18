@@ -3,63 +3,102 @@
 {% block title %}Reset password{% endblock %}
 
 {% block footer %}
-    <script src="/js/hideShowPassword.min.js"></script>
     <script src="/js/app.js"></script>
     
     <script>
 
         $(document).ready(function() {
 
-            /**
-             * Validate the form
-             */
             $('#formPassword').validate({
+                errorClass: "is-invalid",
                 rules: {
                     password: {
                         required: true,
                         minlength: 6,
                         validPassword: true
                     }
+                },
+                messages: {
+                    password: {
+                        required: 'Podaj nowe hasło',
+                        minlength: 'Minimalna długość hasła to 6 znaków'
+                    }
                 }
             });
 
-
-            /**
-              * Show password toggle button
-              */
-            $('#inputPassword').hideShowPassword({
-                show: false,
-                innerToggle: 'focus'
-            });
+            setInterval(removeDefaultLabelOnValidateError, 1);
         });
+
+        function passShowHide() {
+            var pass_sh = document.getElementById("inputPassword");
+            if (pass_sh.type == "password") pass_sh.type = "text";
+            else pass_sh.type = "password";
+            var btn = document.getElementById("inputPasswordBtn");
+            if (btn.innerHTML == "Pokaż") btn.innerHTML = "Ukryj";
+            else btn.innerHTML = "Pokaż";
+        }
+
+        function removeDefaultLabelOnValidateError() {
+            if ($("#inputPassword").hasClass("is-invalid")) {
+            $("#inputPasswordLabel").remove();
+            } else {
+                if (document.getElementById("inputPasswordLabel") === null) {
+                    $("#inputPassword").after(
+                    '<label id="inputPasswordLabel" for="inputPassword">Hasło</label>'
+                    );
+                }
+            }
+        }
     </script>
 
 {% endblock %}
 
 {% block body %}
 
-    <h1>Reset password</h1>
+    <main class="container">
+        <div class="bg-light px-5 py-4 rounded">
 
-    {% if user.errors is not empty %}
-        <p>Errors:</p>
-        <ul>
-            {% for error in user.errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+            <h1>Resetowanie hasła</h1>
 
-    <form method="post" id="formPassword" action="/password/reset-password">
+            {% if user.errors is not empty %}
+                <p>Errors:</p>
+                <ul>
+                    {% for error in user.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
 
-        <input type="hidden" name="token" value="{{ token }}" />
+            <form method="post" id="formPassword" action="/password/reset-password">
 
-        <div class="mb-3">
-            <label for="inputPassword">Password</label>
-            <input type="password" id="inputPassword" name="password" placeholder="Password" required class="form-control"/>
+                <input type="hidden" name="token" value="{{ token }}" />
+
+                <div class="input-group mb-3">
+                <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="inputPassword"
+                      name="password"
+                      placeholder="Hasło"
+                      aria-label="Hasło"
+                      aria-describedby="inputPasswordBtn"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <button
+                    onclick="passShowHide()"
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="inputPasswordBtn"
+                  >Pokaż</button>
+                </div>
+
+                <button type="submit" class="btn btn-dark">Zresetuj hasło</button>
+
+            </form>
+
         </div>
-
-        <button type="submit" class="btn btn-light">Reset password</button>
-
-    </form>
+    </main>
 
 {% endblock %}

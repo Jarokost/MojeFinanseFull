@@ -2,18 +2,62 @@
 
 {% block title %}Forgot password{% endblock %}
 
+{% block footer %}
+<script src="/js/app.js"></script>
+
+<script>
+  $(document).ready(function () {
+
+    $("#formPasswordReset").validate({
+      errorClass: "is-invalid",
+      rules: {
+        email: {
+          required: true,
+          email: true,
+        },
+      },
+      messages: {
+        email: {
+          required: "Podaj adres email",
+          email: "Podaj adres email",
+        },
+      },
+    });
+
+    setInterval(removeDefaultLabelOnValidateError, 1);
+  });
+
+  function removeDefaultLabelOnValidateError() {
+    if ($("#inputEmail").hasClass("is-invalid")) {
+      $("#inputEmailLabel").remove();
+    } else {
+      if (document.getElementById("inputEmailLabel") === null) {
+        $("#inputEmail").after(
+          '<label id="inputEmailLabel" for="inputEmail">Adres email</label>'
+        );
+      }
+    }
+  }
+</script>
+
+{% endblock %}
+
 {% block body %}
 
-    <h1>Request password reset</h1>
+    <main class="container">
+        <div class="bg-light px-5 py-4 rounded">
+            <h1>Resetowanie hasła</h1>
 
-    <form method="post" action="/password/request-reset">
+            <form method="post" action="/password/request-reset" id="formPasswordReset">
 
-        <div class="mb-3">
-            <label for="inputEmail">Email address</label>
-            <input type="email" id="inputEmail" name="email" placeholder="Email address" autofocus required class="form-control" />
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Adres email" autofocus required />
+                    <!-- <label for="inputEmail">Adres email</label> -->
+                </div>
+
+                <button type="submit" class="btn btn-dark">Resetowanie hasła</button>
+            </form>
         </div>
-
-        <button type="submit" class="btn btn-light">Send password reset</button>
-    </form>
+    </main>
 
 {% endblock %}
