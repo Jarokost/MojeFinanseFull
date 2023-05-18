@@ -55,7 +55,7 @@ class PaymentMethodsAssignedToUsers extends \Core\Model
     public static function fillCategoriesAssignedToUserWithDefault($user_id)
     {
         $sql = 'INSERT INTO payment_methods_assigned_to_users (user_id, name)
-                SELECT :user_id, name FROM payment_default';
+                SELECT :user_id, name FROM payment_methods_default';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);

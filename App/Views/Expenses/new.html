@@ -147,7 +147,7 @@
           name="expense_category_assigned_to_user_id"
           >
             <option>wybierz</option>
-            {% for category in expense_categories %}
+            {% for category in expenses_categories %}
               <option value="{{ category.id }}"
               {{ (category.id==expense.expense_category_assigned_to_user_id) ? 'selected' }}>
                   {{ category.name }}

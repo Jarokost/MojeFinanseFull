@@ -26,13 +26,13 @@ class Expenses extends Authenticated
         $arr['date_of_expense'] = date('Y-m-d');
         $arr['amount'] = '0.00';
         $expense = New \App\Models\Expenses($arr);
-        $categories = ExpensesCategoryAssignedToUsers::
+        $expenses_categories = ExpensesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
         $methods = PaymentMethodsAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
-        
+
         View::renderTemplate('Expenses/new.html', [
-            'expenses_categories' => $categories,
+            'expenses_categories' => $expenses_categories,
             'expense' => $expense,
             'payment_methods' => $methods
         ]);
@@ -48,19 +48,19 @@ class Expenses extends Authenticated
         $expense = New \App\Models\Expenses($_POST);
         if ($expense->add()) {
 
-            Flash::addMessage('Dodano nowy przychód');
+            Flash::addMessage('Dodano wydatek');
 
             $this->redirect('/Expenses/new');
 
         } else {
 
-            $categories = ExpensesCategoryAssignedToUsers::
+            $expenses_categories = ExpensesCategoryAssignedToUsers::
             getCategoriesAssignedToUser($_SESSION['user_id']);
             $methods = PaymentMethodsAssignedToUsers::
             getCategoriesAssignedToUser($_SESSION['user_id']);
 
             View::renderTemplate('Expenses/new.html', [
-                'expenses_categories' => $categories,
+                'expenses_categories' => $expenses_categories,
                 'expense' => $expense,
                 'payment_methods' => $methods
             ]);

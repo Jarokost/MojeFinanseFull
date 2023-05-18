@@ -96,7 +96,7 @@ class Expenses extends \Core\Model
 
             $user_id = $_SESSION['user_id'];
 									 
-            $sql = 'INSERT INTO incomes (user_id, expense_category_assigned_to_user_id, payment_method_assigned_to_user_id, amount, date_of_expense, expense_comment)
+            $sql = 'INSERT INTO expenses (user_id, expense_category_assigned_to_user_id, payment_method_assigned_to_user_id, amount, date_of_expense, expense_comment)
                     VALUES (:user_id, :expense_category_assigned_to_user_id, :payment_method_assigned_to_user_id, :amount, :date_of_expense, :expense_comment)';
 
             $db = static::getDB();
