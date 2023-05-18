@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}Expenses{% endblock %}
+
+{% block footer %}
+  <script src="/js/app.js"></script>
+
+  <script>
+
+    $(document).ready(function() {
+        
+        $('#formAddExpense').validate({
+          errorClass: "is-invalid",
+          rules: {
+              amount: { 
+                required: true,
+                range: [0.01, 999999.99]
+              },
+              date_of_expense: {
+                required: true,
+                date: true
+              },
+              expense_category_assigned_to_user_id: {
+                required: true,
+                validCategory: true
+              },
+              payment_method_assigned_to_user_id: {
+                required: true,
+                validCategory: true
+              }
+          },
+          messages: {
+            amount: {
+              required: "Podaj kwotę",
+              range: "Podaj kwotę z zakresu od 0,01 do 999999,99"
+            },
+            date_of_expense: {
+              required: "Podaj datę",
+              date: "Niepoprawny format daty dd.mm.rrrr"
+            },
+            expense_category_assigned_to_user_id: {
+              required: "Wybierz kategorię"
+            },
+            payment_method_assigned_to_user_id: {
+              required: "Wybierz metodę płatności",
+              validCategory: "Wybierz metodę płatności"
+            }
+          }
+        });
+
+        setInterval(removeDefaultLabelOnValidateError, 1);
+    });
+
+    function removeDefaultLabelOnValidateError() {
+      if ($("#floatingInputKwota").hasClass("is-invalid")) {
+        $("#floatingInputKwotaLabel").remove();
+      } else {
+        if (document.getElementById("floatingInputKwotaLabel") === null) {
+          $("#floatingInputKwota").after(
+            '<label id="floatingInputKwotaLabel" for="floatingInputKwota">Kwota [PLN]</label>'
+          );
+        }
+      }
+
+      if ($("#floatingSelect").hasClass("is-invalid")) {
+        $("#floatingSelectLabel").remove();
+      } else {
+        if (document.getElementById("floatingSelectLabel") === null) {
+          $("#floatingSelect").after(
+            '<label id="floatingSelectLabel" for="floatingSelect">Wybierz kategorię</label>'
+          );
+        }
+      }
+
+      if ($("#floatingSelectMethod").hasClass("is-invalid")) {
+        $("#floatingSelectMethodLabel").remove();
+      } else {
+        if (document.getElementById("floatingSelectMethodLabel") === null) {
+          $("#floatingSelectMethod").after(
+            '<label id="floatingSelectMethodLabel" for="floatingSelectMethod">Wybierz metodę płatności</label>'
+          );
+        }
+      }
+
+      if ($("#floatingDate").hasClass("is-invalid")) {
+        $("#floatingDateLabel").remove();
+      } else {
+        if (document.getElementById("floatingDateLabel") === null) {
+          $("#floatingDate").after(
+            '<label id="floatingDateLabel" for="floatingDate">Data</label>'
+          );
+        }
+      }
+    }
+  </script>
+
+{% endblock %}
+
+{% block body %}
+
+<main class="container">
+    <div class="bg-light px-5 py-4 rounded">
+      <!-- <h1 class="h3 mb-4 center-block">Wprowadź dane:</h1> -->
+      <form method="post" action="/Expenses/add" id="formAddExpense">
+
+        {% if expense.errors is not empty %}
+          <div class="form-floating mb-2 center-block">
+            <ul>
+                {% for error in expense.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        <!-- JS use class is-invalid when input validation -->
+        <div class="form-floating mb-2 center-block">
+          <input
+            type="number"
+            class="form-control input-width"
+            id="floatingInputKwota"
+            name="amount"
+            placeholder="0,00"
+            value="{{ expense.amount }}"
+            step="0.01"
+          />
+          <!-- <label for="floatingInputKwota">Kwota [PLN]</label> -->
+        </div>
+
+        <!-- JS use class is-invalid when input validation -->
+        <div class="form-floating mb-2 center-block">
+          <input
+            type="date"
+            class="form-control input-width"
+            id="floatingDate"
+            name="date_of_expense"
+            placeholder="Data"
+            value="{{ expense.date_of_expense }}"
+          />
+          <label for="floatingDate">Data</label>
+        </div>
+
+        <!-- JS use class is-invalid when input validation -->
+        <div class="form-floating mb-2 center-block">
+          <select class="form-select input-width" 
+          id="floatingSelect"
+          name="expense_category_assigned_to_user_id"
+          >
+            <option>wybierz</option>
+            {% for category in expenses_categories %}
+              <option value="{{ category.id }}"
+              {{ (category.id==expense.expense_category_assigned_to_user_id) ? 'selected' }}>
+                  {{ category.name }}
+              </option>
+            {% endfor %}
+          </select>
+          <!-- <label for="floatingSelect">Kategoria</label> -->
+        </div>
+
+        <!-- JS use class is-invalid when input validation -->
+        <div class="form-floating mb-2 center-block">
+          <select class="form-select input-width" 
+          id="floatingSelectMethod"
+          name="payment_method_assigned_to_user_id"
+          >
+            <option>wybierz</option>
+            {% for methods in payment_methods %}
+              <option value="{{ methods.id }}"
+              {{ (methods.id==expense.payment_method_assigned_to_user_id) ? 'selected' }}>
+                  {{ methods.name }}
+              </option>
+            {% endfor %}
+          </select>
+          <!-- <label for="floatingSelect">Kategoria</label> -->
+        </div>
+
+        <div class="form-floating mb-2 center-block">
+          <textarea
+            class="form-control input-width"
+            placeholder="Komentarz"
+            id="floatingTextarea"
+            name="expense_comment"
+          >{{ expense.expense_comment ?? '' }}</textarea>
+          <label for="floatingTextarea">Komentarz</label>
+        </div>
+
+        <button class="w-100 btn btn-lg rounded-3 btn-success input-width center-block" type="submit">
+          Dodaj
+        </button>
+      </form>
+    </div>
+</main>
+
+{% endblock %}

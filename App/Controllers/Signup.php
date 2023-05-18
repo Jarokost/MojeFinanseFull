@@ -5,6 +5,8 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Models\User;
 use \App\Models\IncomesCategoryAssignedToUsers;
+use \App\Models\ExpensesCategoryAssignedToUsers;
+use \App\Models\PaymentMethodsAssignedToUsers;
 
 /**
  * Signup controller
@@ -37,6 +39,8 @@ class Signup extends \Core\Controller
             $lastUserId = $user->getLastUserId();
 
             IncomesCategoryAssignedToUsers::fillCategoriesAssignedToUserWithDefault($lastUserId['id']);
+            ExpensesCategoryAssignedToUsers::fillCategoriesAssignedToUserWithDefault($lastUserId['id']);
+            PaymentMethodsAssignedToUsers::fillCategoriesAssignedToUserWithDefault($lastUserId['id']);
 
             $user->sendActivationEmail();
 
