@@ -129,8 +129,13 @@ class Expenses extends \Core\Model
         if (floatval($this->amount) > 999999.99) {
             $this->errors[] = 'Kwota jest zbyt wysoka';
         }
+        // Expense category
         if ($this->expense_category_assigned_to_user_id === 'wybierz') {
             $this->errors[] = 'Nie wybrano kategorii';
+        }
+        // Payment method
+        if ($this->payment_method_assigned_to_user_id === 'wybierz') {
+            $this->errors[] = 'Nie wybrano metody płatności';
         }
     }
 }

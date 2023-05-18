@@ -5,6 +5,7 @@ namespace App\Controllers;
 use \Core\View;
 //use \App\Models\Expenses;
 use \App\Models\ExpensesCategoryAssignedToUsers;
+use App\Models\PaymentMethodsAssignedToUsers;
 use \App\Flash;
 
 /**
@@ -27,10 +28,13 @@ class Expenses extends Authenticated
         $expense = New \App\Models\Expenses($arr);
         $categories = ExpensesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
-
+        $methods = PaymentMethodsAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+        
         View::renderTemplate('Expenses/new.html', [
             'expenses_categories' => $categories,
-            'expense' => $expense
+            'expense' => $expense,
+            'payment_methods' => $methods
         ]);
     }
 
@@ -52,10 +56,13 @@ class Expenses extends Authenticated
 
             $categories = ExpensesCategoryAssignedToUsers::
             getCategoriesAssignedToUser($_SESSION['user_id']);
+            $methods = PaymentMethodsAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
 
             View::renderTemplate('Expenses/new.html', [
                 'expenses_categories' => $categories,
-                'expense' => $expense
+                'expense' => $expense,
+                'payment_methods' => $methods
             ]);
         }
     }
