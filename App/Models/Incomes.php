@@ -125,4 +125,29 @@ class Incomes extends \Core\Model
             $this->errors[] = 'Nie wybrano kategorii';
         }
     }
+
+    /**
+     * Select incomes from incomes table between dates
+     * 
+     * @return object
+     */
+    public static function getIncomes($user_id, $date_start, $date_end) 
+    {
+        $sql = 'SELECT * FROM incomes
+                WHERE user_id = :user_id'; 
+                //AND date_of_income BETWEEN :date_start AND :date_end';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        //$stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
+        //$stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
 }

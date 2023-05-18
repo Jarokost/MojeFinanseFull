@@ -102,85 +102,85 @@
 {% block body %}
     <main class="container">
         <div class="bg-light px-5 py-4 mb-5 rounded">
-        <div class="row">
-            <div
-            class="w-100 text-center bg-dark rounded text-secondary py-3 mt-3"
-            >
-            <h1>PODSUMOWANIE</h1>
-            <div class="h4">ostatnie 30 dni</div>
-            <div class="h3">BILANS:</div>
-            <div class="h3 balance_plus">+4236.88PLN</div>
-            </div>
+            <div class="row">
+                <div class="w-100 text-center bg-dark rounded text-secondary py-3 mt-3">
+                    <h1>PODSUMOWANIE</h1>
+                    <div class="h4">ostatnie 30 dni</div>
+                    <div class="h3">BILANS:</div>
+                    <div class="h3 balance_plus">+4236.88PLN</div>
+                    {{ dump(incomes) }}
+                </div>
 
-            <div class="col-lg-6 d-flex justify-content-center">
-            <div id="incomesdonutchart" class=""></div>
-            </div>
-            <div class="col-lg-6 d-flex justify-content-center">
-            <div id="outcomesdonutchart" class=""></div>
-            </div>
+                <div class="col-lg-6 d-flex justify-content-center">
+                    <div id="incomesdonutchart" class=""></div>
+                </div>
 
-            <div class="w-100 text-center">
-            <h1></h1>
-            </div>
+                <div class="col-lg-6 d-flex justify-content-center">
+                    <div id="outcomesdonutchart" class=""></div>
+                </div>
 
-            <div class="col-xxl-6 d-flex justify-content-center">
-            <div class="table-responsive">
-                <table class="table caption-top table-success">
-                <caption>
-                    Przychody
-                </caption>
-                <thead>
-                    <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Data</th>
-                    <th scope="col">Kategoria</th>
-                    <th scope="col">Opis</th>
-                    <th scope="col">Kwota</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <th scope="row">1</th>
-                    <td>2022-01-01</td>
-                    <td>wypłata</td>
-                    <td>etat</td>
-                    <td>5003.72</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-            </div>
+                <div class="w-100 text-center">
+                    <h1></h1>
+                </div>
 
-            <div class="col-xxl-6 d-flex justify-content-center">
-            <div class="table-responsive">
-                <table class="table caption-top table-danger">
-                <caption>
-                    Wydatki
-                </caption>
-                <thead>
-                    <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Data</th>
-                    <th scope="col">Kategoria</th>
-                    <th scope="col">Forma płatności</th>
-                    <th scope="col">Opis</th>
-                    <th scope="col">Kwota</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <th scope="row">1</th>
-                    <td>2022-01-01</td>
-                    <td>rata kredytu</td>
-                    <td>przelew</td>
-                    <td>Santander</td>
-                    <td>2673.23</td>
-                    </tr>
-                </tbody>
-                </table>
+                <div class="col-xxl-6 d-flex justify-content-center">
+                    <div class="table-responsive">
+                        <table class="table caption-top table-success">
+                            <caption>
+                                Przychody
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Kategoria</th>
+                                    <th scope="col">Opis</th>
+                                    <th scope="col">Kwota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>2022-01-01</td>
+                                    <td>wypłata</td>
+                                    <td>etat</td>
+                                    <td>5003.72</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-xxl-6 d-flex justify-content-center">
+                    <div class="table-responsive">
+                        <table class="table caption-top table-danger">
+                            <caption>
+                                Wydatki
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Kategoria</th>
+                                    <th scope="col">Forma płatności</th>
+                                    <th scope="col">Opis</th>
+                                    <th scope="col">Kwota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>2022-01-01</td>
+                                    <td>rata kredytu</td>
+                                    <td>przelew</td>
+                                    <td>Santander</td>
+                                    <td>2673.23</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            </div>
-        </div>
         </div>
     </main>
 
