@@ -108,6 +108,7 @@
                     <div class="h4">ostatnie 30 dni</div>
                     <div class="h3">BILANS:</div>
                     <div class="h3 balance_plus">+4236.88PLN</div>
+                    <!-- DELETE ME!! -->
                     {{ dump(incomes) }}
                 </div>
 
@@ -139,13 +140,15 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for income in incomes %}
                                 <tr>
                                     <th scope="row">1</th>
-                                    <td>2022-01-01</td>
-                                    <td>wypłata</td>
-                                    <td>etat</td>
-                                    <td>5003.72</td>
+                                    <td>{{ income.date_of_income }}</td>
+                                    <td>{{ income.name }}</td>
+                                    <td>{{ income.income_comment }}</td>
+                                    <td>{{ income.amount }}</td>
                                 </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
