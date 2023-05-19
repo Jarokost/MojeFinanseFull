@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block title %}Bilans{% endblock %}
+
+{% block modal %}
+    <a class="dropdown-item" href="#modalDateSelector" data-bs-toggle="modal">Wybrany zakres dat</a>
+{% endblock %}
+
+{% block footer %}
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script type="text/javascript">
+      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["Przychody", "Wartość"],
+          {% for income_category in incomes_sum_cat %}
+            ["{{ income_category[0] }}", {{income_category[1]}}],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title: "Przychody",
+          titleTextStyle: {
+            // color: <string>,    // any HTML string color ('red', '#cc00cc')
+            // fontName: <string>, // i.e. 'Times New Roman'
+            fontSize: 18, // 12, 18 whatever you want (don't specify px)
+            // bold: <boolean>,    // true or false
+            // italic: <boolean>   // true of false
+          },
+          pieHole: 0.3,
+          legend: "none",
+          backgroundColor: "transparent",
+          width: 400,
+          height: 400,
+        };
+
+        var chart = new google.visualization.PieChart(
+          document.getElementById("incomesdonutchart")
+        );
+        chart.draw(data, options);
+      }
+    </script>
+
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script type="text/javascript">
+      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["Wydatki", "Wartość"],
+          {% for expense_category in expenses_sum_cat %}
+            ["{{ expense_category[0] }}", {{expense_category[1]}}],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title: "Wydatki",
+          titleTextStyle: {
+            // color: <string>,    // any HTML string color ('red', '#cc00cc')
+            // fontName: <string>, // i.e. 'Times New Roman'
+            fontSize: 18, // 12, 18 whatever you want (don't specify px)
+            // bold: <boolean>,    // true or false
+            // italic: <boolean>   // true of false
+          },
+          pieHole: 0.3,
+          legend: "none",
+          backgroundColor: "transparent",
+          width: 400,
+          height: 400,
+        };
+
+        var chart = new google.visualization.PieChart(
+          document.getElementById("outcomesdonutchart")
+        );
+        chart.draw(data, options);
+      }
+    </script>
+{% endblock %}
+
+{% block body %}
+    <main class="container">
+        <div class="bg-light px-5 py-4 mb-5 rounded">
+            <div class="row">
+                <div class="w-100 text-center bg-dark rounded text-secondary py-3 mt-3">
+                    <div class="h3">PODSUMOWANIE</div>
+                    <div class="h5">{{ action }}</div>
+                    <div class="h5">BILANS:</div>
+                    {% set balance = incomes_sum[0] - expenses_sum[0] %}
+                    <div class="h4 {{ (balance >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance }}</div>
+                </div>
+
+                <div class="col-lg-6 d-flex justify-content-center">
+                    <div id="incomesdonutchart" class=""></div>
+                </div>
+
+                <div class="col-lg-6 d-flex justify-content-center">
+                    <div id="outcomesdonutchart" class=""></div>
+                </div>
+
+                <div class="w-100 text-center"></div>
+
+                <div class="col-xxl-6 d-flex justify-content-center">
+                    <div class="table-responsive">
+                        <table class="table caption-top table-success">
+                            <caption>
+                                Przychody
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Kategoria</th>
+                                    <th scope="col">Opis</th>
+                                    <th scope="col">Kwota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for income in incomes %}
+                                <tr>
+                                    <th scope="row">{{ loop.index0+1 }}</th>
+                                    <td>{{ income[1] }}</td>
+                                    <td>{{ income[3] }}</td>
+                                    <td>{{ income[2] }}</td>
+                                    <td>{{ income[0] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-xxl-6 d-flex justify-content-center">
+                    <div class="table-responsive">
+                        <table class="table caption-top table-danger">
+                            <caption>
+                                Wydatki
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Kategoria</th>
+                                    <th scope="col">Forma płatności</th>
+                                    <th scope="col">Opis</th>
+                                    <th scope="col">Kwota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for expense in expenses %}
+                                <tr>
+                                    <th scope="row">{{ loop.index0+1 }}</th>
+                                    <td>{{ expense[1] }}</td>
+                                    <td>{{ expense[3] }}</td>
+                                    <td>{{ expense[4] }}</td>
+                                    <td>{{ expense[2] }}</td>
+                                    <td>{{ expense[0] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+  <!-- MODAL DATE SELECTION -->
+    <div class="modal fade" id="modalDateSelector" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h1 class="fw-bold mb-0 fs-2">Wybierz zakres dat</h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+                </div>
+
+                <div class="modal-body p-5 pt-0">
+                <form action="/Balance/indexSelectedDates" method="post">
+                    <div class="form-floating mb-3">
+                    <input
+                        type="date"
+                        class="form-control rounded-3"
+                        name="dateFrom"
+                        id="floatingDateFrom"
+                        placeholder="Data od"
+                    />
+                    <label for="floatingDateFrom">Data od</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                    <input
+                        type="date"
+                        class="form-control rounded-3"
+                        name="dateTo"
+                        id="floatingDateTo"
+                        placeholder="Data do"
+                    />
+                    <label for="floatingDateTo">Data do</label>
+                    </div>
+                    <button
+                    class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+                    type="submit"
+                    >
+                    Zatwierdź
+                    </button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

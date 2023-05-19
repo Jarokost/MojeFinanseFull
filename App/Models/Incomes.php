@@ -125,4 +125,84 @@ class Incomes extends \Core\Model
             $this->errors[] = 'Nie wybrano kategorii';
         }
     }
+
+    /**
+     * Select incomes from incomes table between dates
+     * 
+     * @return object
+     */
+    public static function getIncomes($user_id, $date_start, $date_end) 
+    {
+        $sql = 'SELECT i.amount, i.date_of_income, i.income_comment, iu.name
+                FROM incomes AS i, incomes_category_assigned_to_users AS iu
+                WHERE i.user_id = :user_id 
+                AND i.date_of_income BETWEEN :date_start AND :date_end
+                AND i.income_category_assigned_to_user_id = iu.id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
+        $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
+
+        $stmt->setFetchMode(PDO::FETCH_NUM);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Select incomes sum group by categories
+     * 
+     * @return array
+     */
+    public static function getIncomesSumGroupedByCategories($user_id, $date_start, $date_end)
+    {
+        $sql = 'SELECT iu.name, SUM(i.amount) AS amount_sum
+                FROM incomes AS i, incomes_category_assigned_to_users AS iu
+                WHERE i.user_id = :user_id
+                AND i.date_of_income BETWEEN :date_start AND :date_end
+                AND i.income_category_assigned_to_user_id = iu.id 
+                GROUP BY iu.name 
+                ORDER BY amount_sum DESC';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
+        $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
+
+        $stmt->setFetchMode(PDO::FETCH_NUM);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Select incomes sum
+     * 
+     * @return float
+     */
+    public static function getIncomesSum($user_id, $date_start, $date_end)
+    {
+        $sql = 'SELECT SUM(i.amount) AS amount_sum
+                FROM incomes AS i
+                WHERE i.user_id = :user_id
+                AND i.date_of_income BETWEEN :date_start AND :date_end';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
+        $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
 }
