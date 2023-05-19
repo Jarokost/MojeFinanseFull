@@ -31,7 +31,7 @@
             // bold: <boolean>,    // true or false
             // italic: <boolean>   // true of false
           },
-          pieHole: 0.4,
+          pieHole: 0.3,
           legend: "none",
           backgroundColor: "transparent",
           width: 400,
@@ -69,7 +69,7 @@
             // bold: <boolean>,    // true or false
             // italic: <boolean>   // true of false
           },
-          pieHole: 0.4,
+          pieHole: 0.3,
           legend: "none",
           backgroundColor: "transparent",
           width: 400,
@@ -89,11 +89,11 @@
         <div class="bg-light px-5 py-4 mb-5 rounded">
             <div class="row">
                 <div class="w-100 text-center bg-dark rounded text-secondary py-3 mt-3">
-                    <h1>PODSUMOWANIE</h1>
-                    <div class="h4">ostatnie 30 dni</div>
-                    <div class="h3">BILANS:</div>
+                    <div class="h3">PODSUMOWANIE</div>
+                    <div class="h5">{{ action }}</div>
+                    <div class="h5">BILANS:</div>
                     {% set balance = incomes_sum[0] - expenses_sum[0] %}
-                    <div class="h3 {{ (balance >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance }}</div>
+                    <div class="h4 {{ (balance >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance }}</div>
                 </div>
 
                 <div class="col-lg-6 d-flex justify-content-center">
@@ -104,9 +104,7 @@
                     <div id="outcomesdonutchart" class=""></div>
                 </div>
 
-                <div class="w-100 text-center">
-                    <h1></h1>
-                </div>
+                <div class="w-100 text-center"></div>
 
                 <div class="col-xxl-6 d-flex justify-content-center">
                     <div class="table-responsive">
@@ -188,11 +186,12 @@
                 </div>
 
                 <div class="modal-body p-5 pt-0">
-                <form class="">
+                <form action="/Balance/indexSelectedDates" method="post">
                     <div class="form-floating mb-3">
                     <input
                         type="date"
                         class="form-control rounded-3"
+                        name="dateFrom"
                         id="floatingDateFrom"
                         placeholder="Data od"
                     />
@@ -202,6 +201,7 @@
                     <input
                         type="date"
                         class="form-control rounded-3"
+                        name="dateTo"
                         id="floatingDateTo"
                         placeholder="Data do"
                     />
