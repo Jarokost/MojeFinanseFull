@@ -35,23 +35,23 @@
             </li>
             {% if current_user %}
                 <li class="nav-item m-1 m-xl-0">
-                <a class="nav-link border rounded {{ (controllerType[0]=='Incomes') ? 'active' }}" href="/Incomes/new">Dodaj Przychód</a>
+                <a class="nav-link border rounded {{ (controllerType[0]=='incomes') ? 'active' }}" href="/incomes/new">Dodaj Przychód</a>
                 </li>
                 <li class="nav-item m-1 m-xl-0">
-                <a class="nav-link border rounded {{ (controllerType[0]=='Expenses') ? 'active' }}" href="/Expenses/new">Dodaj Wydatek</a>
+                <a class="nav-link border rounded {{ (controllerType[0]=='expenses') ? 'active' }}" href="/expenses/new">Dodaj Wydatek</a>
                 </li>
-                {% if controllerType[0]=='Balance' %}
+                {% if controllerType[0]=='balance' %}
                   <li class="nav-item m-1 m-xl-0 dropdown">
                     <a
                       class="nav-link border rounded active dropdown-toggle"
-                      href="/Balance/index"
+                      href="/balance/index"
                       data-bs-toggle="dropdown"
                       >Przeglądaj Bilans</a
                     >
                     <ul class="dropdown-menu dropdown-menu-dark">
-                      <li><a class="dropdown-item" href="/Balance/index">Ostatnie 30 dni</a></li>
-                      <li><a class="dropdown-item" href="/Balance/indexCurrentMonth">Bieżący miesiąc</a></li>
-                      <li><a class="dropdown-item" href="/Balance/indexPreviousMonth">Poprzedni miesiąc</a></li>
+                      <li><a class="dropdown-item" href="/balance/index">Ostatnie 30 dni</a></li>
+                      <li><a class="dropdown-item" href="/balance/indexCurrentMonth">Bieżący miesiąc</a></li>
+                      <li><a class="dropdown-item" href="/balance/indexPreviousMonth">Poprzedni miesiąc</a></li>
                       <li><hr class="dropdown-divider" /></li>
                       <li>
                         {% block modal %}{% endblock %}
@@ -60,7 +60,7 @@
                   </li>
                 {% else %}
                   <li class="nav-item m-1 m-xl-0">
-                  <a class="nav-link border rounded" href="/Balance/index">Przeglądaj Bilans</a>
+                  <a class="nav-link border rounded" href="/balance/index">Przeglądaj Bilans</a>
                 {% endif %}
 
                 </li>

@@ -46,7 +46,7 @@ class Incomes extends Authenticated
 
             Flash::addMessage('Dodano nowy przychód');
 
-            $this->redirect('/Incomes/new');
+            $this->redirect('/incomes/new');
 
         } else {
 
