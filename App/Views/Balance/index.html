@@ -96,16 +96,23 @@
                     <div class="h4 {{ (balance >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance }}</div>
                 </div>
 
-                {% if expenses_sum[0] is null %}
+                {% if expenses_sum[0] is null and incomes_sum[0] is null %}
                   <div class="h5 w-100 text-center py-3 mt-3">
-                    Brak wydatków dla danego okresu czasu
+                    Brak zarejestrowanych transakcji w danym okresie czasu
                   </div>
-                {% endif %}
+                {% else %}
 
-                {% if incomes_sum[0] is null %}
-                  <div class="h5 w-100 text-center py-3 mt-3">
-                    Brak przychodów dla danego okresu czasu
-                  </div>
+                  {% if expenses_sum[0] is null %}
+                    <div class="h5 w-100 text-center py-3 mt-3">
+                      Brak wydatków w danym okresie czasu
+                    </div>
+                  {% endif %}
+
+                  {% if incomes_sum[0] is null %}
+                    <div class="h5 w-100 text-center py-3 mt-3">
+                      Brak przychodów w danym okresie czasu
+                    </div>
+                  {% endif %}
                 {% endif %}
 
                 {% if expenses_sum[0] is null %}
