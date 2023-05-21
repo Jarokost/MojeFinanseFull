@@ -17,7 +17,7 @@
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ["Przychody", "Wartość"],
-          {% for income_category in incomes_sum_cat %}
+          {% for income_category in balance.incomes_sum_cat %}
             ["{{ income_category[0] }}", {{income_category[1]}}],
           {% endfor %}
         ]);
@@ -55,7 +55,7 @@
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ["Wydatki", "Wartość"],
-          {% for expense_category in expenses_sum_cat %}
+          {% for expense_category in balance.expenses_sum_cat %}
             ["{{ expense_category[0] }}", {{expense_category[1]}}],
           {% endfor %}
         ]);
@@ -92,59 +92,59 @@
                     <div class="h3">PODSUMOWANIE</div>
                     <div class="h5">{{ action }}</div>
                     <div class="h5">BILANS:</div>
-                    {% set balance = incomes_sum[0] - expenses_sum[0] %}
-                    <div class="h4 {{ (balance >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance }}</div>
+                    {% set balance_val = balance.incomes_sum[0] - balance.expenses_sum[0] %}
+                    <div class="h4 {{ (balance_val >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance_val }}</div>
                 </div>
 
-                {% if expenses_sum[0] is null and incomes_sum[0] is null %}
+                {% if balance.expenses_sum[0] is null and balance.incomes_sum[0] is null %}
                   <div class="h5 w-100 text-center py-3 mt-3">
                     Brak zarejestrowanych transakcji w danym okresie czasu
                   </div>
                 {% else %}
 
-                  {% if expenses_sum[0] is null %}
+                  {% if balance.expenses_sum[0] is null %}
                     <div class="h5 w-100 text-center py-3 mt-3">
                       Brak wydatków w danym okresie czasu
                     </div>
                   {% endif %}
 
-                  {% if incomes_sum[0] is null %}
+                  {% if balance.incomes_sum[0] is null %}
                     <div class="h5 w-100 text-center py-3 mt-3">
                       Brak przychodów w danym okresie czasu
                     </div>
                   {% endif %}
                 {% endif %}
 
-                {% if expenses_sum[0] is null %}
+                {% if balance.expenses_sum[0] is null %}
                   <div class="d-flex justify-content-center">
                 {% endif %}
-                    {% if incomes_sum[0] is not null %}
+                    {% if balance.incomes_sum[0] is not null %}
                       <div class="col-lg-6 d-flex justify-content-center">
                           <div id="incomesdonutchart" class=""></div>
                       </div>
                     {% endif %}
-                {% if expenses_sum[0] is null %}
+                {% if balance.expenses_sum[0] is null %}
                   </div>
                 {% endif %}
 
-                {% if incomes_sum[0] is null %}
+                {% if balance.incomes_sum[0] is null %}
                   <div class="d-flex justify-content-center">
                 {% endif %}
-                    {% if expenses_sum[0] is not null %}
+                    {% if balance.expenses_sum[0] is not null %}
                       <div class="col-lg-6 d-flex justify-content-center">
                           <div id="outcomesdonutchart" class=""></div>
                       </div>
                     {% endif %}
-                {% if incomes_sum[0] is null %}
+                {% if balance.incomes_sum[0] is null %}
                   </div>
                 {% endif %}
 
                 <div class="w-100 text-center"></div>
 
-                {% if expenses_sum[0] is null %}
+                {% if balance.expenses_sum[0] is null %}
                   <div class="d-flex justify-content-center">
                 {% endif %}
-                  {% if incomes_sum[0] is not null %}
+                  {% if balance.incomes_sum[0] is not null %}
                     <div class="col-xxl-6 d-flex justify-content-center">
                         <div class="table-responsive">
                             <table class="table caption-top table-success">
@@ -161,7 +161,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for income in incomes %}
+                                    {% for income in balance.incomes %}
                                     <tr>
                                         <th scope="row">{{ loop.index0+1 }}</th>
                                         <td>{{ income[1] }}</td>
@@ -175,14 +175,14 @@
                         </div>
                     </div>
                   {% endif %}
-                {% if expenses_sum[0] is null %}
+                {% if balance.expenses_sum[0] is null %}
                   </div>
                 {% endif %}
 
-                {% if incomes_sum[0] is null %}
+                {% if balance.incomes_sum[0] is null %}
                   <div class="d-flex justify-content-center">
                 {% endif %}
-                  {% if expenses_sum[0] is not null %}
+                  {% if balance.expenses_sum[0] is not null %}
                     <div class="col-xxl-6 d-flex justify-content-center">
                         <div class="table-responsive">
                             <table class="table caption-top table-danger">
@@ -200,7 +200,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for expense in expenses %}
+                                    {% for expense in balance.expenses %}
                                     <tr>
                                         <th scope="row">{{ loop.index0+1 }}</th>
                                         <td>{{ expense[1] }}</td>
@@ -215,7 +215,7 @@
                         </div>
                     </div>
                   {% endif %}
-                {% if incomes_sum[0] is null %}
+                {% if balance.incomes_sum[0] is null %}
                   </div>
                 {% endif %}
 
