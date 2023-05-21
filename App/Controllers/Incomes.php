@@ -30,7 +30,8 @@ class Incomes extends Authenticated
 
         View::renderTemplate('Incomes/new.html', [
             'income_categories' => $categories,
-            'income' => $income
+            'income' => $income,
+            'action' => 'new'
         ]);
     }
 
@@ -55,7 +56,8 @@ class Incomes extends Authenticated
 
             View::renderTemplate('Incomes/new.html', [
                 'income_categories' => $categories,
-                'income' => $income
+                'income' => $income,
+                'action' => 'add'
             ]);
         }
     }
