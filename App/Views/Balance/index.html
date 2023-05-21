@@ -96,77 +96,122 @@
                     <div class="h4 {{ (balance >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance }}</div>
                 </div>
 
-                <div class="col-lg-6 d-flex justify-content-center">
-                    <div id="incomesdonutchart" class=""></div>
-                </div>
+                {% if expenses_sum[0] is null %}
+                  <div class="h5 w-100 text-center py-3 mt-3">
+                    Brak wydatków dla danego okresu czasu
+                  </div>
+                {% endif %}
 
-                <div class="col-lg-6 d-flex justify-content-center">
-                    <div id="outcomesdonutchart" class=""></div>
-                </div>
+                {% if incomes_sum[0] is null %}
+                  <div class="h5 w-100 text-center py-3 mt-3">
+                    Brak przychodów dla danego okresu czasu
+                  </div>
+                {% endif %}
+
+                {% if expenses_sum[0] is null %}
+                  <div class="d-flex justify-content-center">
+                {% endif %}
+                    {% if incomes_sum[0] is not null %}
+                      <div class="col-lg-6 d-flex justify-content-center">
+                          <div id="incomesdonutchart" class=""></div>
+                      </div>
+                    {% endif %}
+                {% if expenses_sum[0] is null %}
+                  </div>
+                {% endif %}
+
+                {% if incomes_sum[0] is null %}
+                  <div class="d-flex justify-content-center">
+                {% endif %}
+                    {% if expenses_sum[0] is not null %}
+                      <div class="col-lg-6 d-flex justify-content-center">
+                          <div id="outcomesdonutchart" class=""></div>
+                      </div>
+                    {% endif %}
+                {% if incomes_sum[0] is null %}
+                  </div>
+                {% endif %}
 
                 <div class="w-100 text-center"></div>
 
-                <div class="col-xxl-6 d-flex justify-content-center">
-                    <div class="table-responsive">
-                        <table class="table caption-top table-success">
-                            <caption>
-                                Przychody
-                            </caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Data</th>
-                                    <th scope="col">Kategoria</th>
-                                    <th scope="col">Opis</th>
-                                    <th scope="col">Kwota</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for income in incomes %}
-                                <tr>
-                                    <th scope="row">{{ loop.index0+1 }}</th>
-                                    <td>{{ income[1] }}</td>
-                                    <td>{{ income[3] }}</td>
-                                    <td>{{ income[2] }}</td>
-                                    <td>{{ income[0] }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                {% if expenses_sum[0] is null %}
+                  <div class="d-flex justify-content-center">
+                {% endif %}
+                  {% if incomes_sum[0] is not null %}
+                    <div class="col-xxl-6 d-flex justify-content-center">
+                        <div class="table-responsive">
+                            <table class="table caption-top table-success">
+                                <caption>
+                                    Przychody
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Data</th>
+                                        <th scope="col">Kategoria</th>
+                                        <th scope="col">Opis</th>
+                                        <th scope="col">Kwota</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for income in incomes %}
+                                    <tr>
+                                        <th scope="row">{{ loop.index0+1 }}</th>
+                                        <td>{{ income[1] }}</td>
+                                        <td>{{ income[3] }}</td>
+                                        <td>{{ income[2] }}</td>
+                                        <td>{{ income[0] }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                  {% endif %}
+                {% if expenses_sum[0] is null %}
+                  </div>
+                {% endif %}
 
-                <div class="col-xxl-6 d-flex justify-content-center">
-                    <div class="table-responsive">
-                        <table class="table caption-top table-danger">
-                            <caption>
-                                Wydatki
-                            </caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Data</th>
-                                    <th scope="col">Kategoria</th>
-                                    <th scope="col">Forma płatności</th>
-                                    <th scope="col">Opis</th>
-                                    <th scope="col">Kwota</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for expense in expenses %}
-                                <tr>
-                                    <th scope="row">{{ loop.index0+1 }}</th>
-                                    <td>{{ expense[1] }}</td>
-                                    <td>{{ expense[3] }}</td>
-                                    <td>{{ expense[4] }}</td>
-                                    <td>{{ expense[2] }}</td>
-                                    <td>{{ expense[0] }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                {% if incomes_sum[0] is null %}
+                  <div class="d-flex justify-content-center">
+                {% endif %}
+                  {% if expenses_sum[0] is not null %}
+                    <div class="col-xxl-6 d-flex justify-content-center">
+                        <div class="table-responsive">
+                            <table class="table caption-top table-danger">
+                                <caption>
+                                    Wydatki
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Data</th>
+                                        <th scope="col">Kategoria</th>
+                                        <th scope="col">Forma płatności</th>
+                                        <th scope="col">Opis</th>
+                                        <th scope="col">Kwota</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for expense in expenses %}
+                                    <tr>
+                                        <th scope="row">{{ loop.index0+1 }}</th>
+                                        <td>{{ expense[1] }}</td>
+                                        <td>{{ expense[3] }}</td>
+                                        <td>{{ expense[4] }}</td>
+                                        <td>{{ expense[2] }}</td>
+                                        <td>{{ expense[0] }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                  {% endif %}
+                {% if incomes_sum[0] is null %}
+                  </div>
+                {% endif %}
+
             </div>
         </div>
     </main>
