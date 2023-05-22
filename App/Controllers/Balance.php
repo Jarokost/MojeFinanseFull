@@ -15,11 +15,70 @@ use \App\Models\Expenses;
 class Balance extends Authenticated
 {
     /**
+     * incomes table
+     * 
+     * @var array
+     */
+    public $incomes;
+
+    /**
+     * expenses table
+     * 
+     * @var array
+     */
+    public $expenses;
+    
+    /**
+     * incomes sum grouped by categories
+     * 
+     * @var array
+     */
+    public $incomes_sum_cat;
+
+    /**
+     * expenses sum grouped by categories
+     * 
+     * @var array
+     */
+    public $expenses_sum_cat;
+
+    /**
+     * incomes sum
+     * 
+     * @var array
+     */
+    public $incomes_sum;
+
+    /**
+     * expenses sum
+     * 
+     * @var array
+     */
+    public $expenses_sum;
+
+    /**
      * Error messages
      *
      * @var array
      */
     public $errors = [];
+
+    /**
+     * functions
+     * 
+     * @return void
+     */
+    private function queries($date_start, $date_end)
+    {
+        $user_id = $_SESSION['user_id'];
+
+        $this->incomes = Incomes::getIncomes($user_id, $date_start, $date_end);
+        $this->expenses = Expenses::getExpenses($user_id, $date_start, $date_end);
+        $this->incomes_sum_cat = Incomes::getIncomesSumGroupedByCategories($user_id, $date_start, $date_end);
+        $this->expenses_sum_cat = Expenses::getExpensesSumGroupedByCategories($user_id, $date_start, $date_end);
+        $this->incomes_sum = Incomes::getIncomesSum($user_id, $date_start, $date_end);
+        $this->expenses_sum = Expenses::getExpensesSum($user_id, $date_start, $date_end);
+    }
 
     /**
      * Balance index
@@ -28,26 +87,14 @@ class Balance extends Authenticated
      */
     public function indexAction()
     {
-        $user_id = $_SESSION['user_id'];
-
         $d=strtotime("-30 Days");
         $date_start = date("Y-m-d", $d);
         $date_end = date("Y-m-d");
 
-        $incomes = Incomes::getIncomes($user_id, $date_start, $date_end);
-        $expenses = Expenses::getExpenses($user_id, $date_start, $date_end);
-        $expenses_sum_cat = Expenses::getExpensesSumGroupedByCategories($user_id, $date_start, $date_end);
-        $incomes_sum_cat = Incomes::getIncomesSumGroupedByCategories($user_id, $date_start, $date_end);
-        $incomes_sum = Incomes::getIncomesSum($user_id, $date_start, $date_end);
-        $expenses_sum = Expenses::getExpensesSum($user_id, $date_start, $date_end);
+        $this->queries($date_start, $date_end);
 
         View::renderTemplate('Balance/index.html', [
-            'incomes' => $incomes,
-            'expenses' => $expenses,
-            'expenses_sum_cat' => $expenses_sum_cat,
-            'incomes_sum_cat' => $incomes_sum_cat,
-            'expenses_sum' => $expenses_sum,
-            'incomes_sum' => $incomes_sum,
+            'balance' => $this,
             'action' => 'ostatnie 30 dni' 
         ]);
     }
@@ -59,26 +106,14 @@ class Balance extends Authenticated
      */
     public function indexCurrentMonthAction()
     {
-        $user_id = $_SESSION['user_id'];
-
         $date_start = date("Y-m-01");
         $date_end = date("Y-m-d");
 
-        $incomes = Incomes::getIncomes($user_id, $date_start, $date_end);
-        $expenses = Expenses::getExpenses($user_id, $date_start, $date_end);
-        $expenses_sum_cat = Expenses::getExpensesSumGroupedByCategories($user_id, $date_start, $date_end);
-        $incomes_sum_cat = Incomes::getIncomesSumGroupedByCategories($user_id, $date_start, $date_end);
-        $incomes_sum = Incomes::getIncomesSum($user_id, $date_start, $date_end);
-        $expenses_sum = Expenses::getExpensesSum($user_id, $date_start, $date_end);
+        $this->queries($date_start, $date_end);
 
         View::renderTemplate('Balance/index.html', [
-            'incomes' => $incomes,
-            'expenses' => $expenses,
-            'expenses_sum_cat' => $expenses_sum_cat,
-            'incomes_sum_cat' => $incomes_sum_cat,
-            'expenses_sum' => $expenses_sum,
-            'incomes_sum' => $incomes_sum,
-            'action' => 'bieżący miesiąc'
+            'balance' => $this,
+            'action' => 'bieżący miesiąc' 
         ]);
     }
 
@@ -89,28 +124,16 @@ class Balance extends Authenticated
      */
     public function indexPreviousMonthAction()
     {
-        $user_id = $_SESSION['user_id'];
-
         $d=strtotime("first day of last month");
         $date_start = date("Y-m-d", $d);
         $d=strtotime("last day of last month");
         $date_end = date("Y-m-d", $d);
 
-        $incomes = Incomes::getIncomes($user_id, $date_start, $date_end);
-        $expenses = Expenses::getExpenses($user_id, $date_start, $date_end);
-        $expenses_sum_cat = Expenses::getExpensesSumGroupedByCategories($user_id, $date_start, $date_end);
-        $incomes_sum_cat = Incomes::getIncomesSumGroupedByCategories($user_id, $date_start, $date_end);
-        $incomes_sum = Incomes::getIncomesSum($user_id, $date_start, $date_end);
-        $expenses_sum = Expenses::getExpensesSum($user_id, $date_start, $date_end);
+        $this->queries($date_start, $date_end);
 
         View::renderTemplate('Balance/index.html', [
-            'incomes' => $incomes,
-            'expenses' => $expenses,
-            'expenses_sum_cat' => $expenses_sum_cat,
-            'incomes_sum_cat' => $incomes_sum_cat,
-            'expenses_sum' => $expenses_sum,
-            'incomes_sum' => $incomes_sum,
-            'action' => 'poprzedni miesiąc'
+            'balance' => $this,
+            'action' => 'poprzedni miesiąc' 
         ]);
     }
 
@@ -121,26 +144,14 @@ class Balance extends Authenticated
      */
     public function indexSelectedDatesAction()
     {
-        $user_id = $_SESSION['user_id'];
-
         $date_start = date($_POST['dateFrom']);
         $date_end = date($_POST['dateTo']);
 
-        $incomes = Incomes::getIncomes($user_id, $date_start, $date_end);
-        $expenses = Expenses::getExpenses($user_id, $date_start, $date_end);
-        $expenses_sum_cat = Expenses::getExpensesSumGroupedByCategories($user_id, $date_start, $date_end);
-        $incomes_sum_cat = Incomes::getIncomesSumGroupedByCategories($user_id, $date_start, $date_end);
-        $incomes_sum = Incomes::getIncomesSum($user_id, $date_start, $date_end);
-        $expenses_sum = Expenses::getExpensesSum($user_id, $date_start, $date_end);
+        $this->queries($date_start, $date_end);
 
         View::renderTemplate('Balance/index.html', [
-            'incomes' => $incomes,
-            'expenses' => $expenses,
-            'expenses_sum_cat' => $expenses_sum_cat,
-            'incomes_sum_cat' => $incomes_sum_cat,
-            'expenses_sum' => $expenses_sum,
-            'incomes_sum' => $incomes_sum,
-            'action' => $date_start . ' - ' . $date_end
+            'balance' => $this,
+            'action' => $date_start . ' - ' . $date_end 
         ]);
     }
 }

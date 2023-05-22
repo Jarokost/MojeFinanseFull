@@ -50,7 +50,7 @@ class Expenses extends Authenticated
 
             Flash::addMessage('Dodano wydatek');
 
-            $this->redirect('/Expenses/new');
+            $this->redirect('/expenses/new');
 
         } else {
 

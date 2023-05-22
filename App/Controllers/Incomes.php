@@ -30,7 +30,8 @@ class Incomes extends Authenticated
 
         View::renderTemplate('Incomes/new.html', [
             'income_categories' => $categories,
-            'income' => $income
+            'income' => $income,
+            'action' => 'new'
         ]);
     }
 
@@ -46,7 +47,7 @@ class Incomes extends Authenticated
 
             Flash::addMessage('Dodano nowy przychód');
 
-            $this->redirect('/Incomes/new');
+            $this->redirect('/incomes/new');
 
         } else {
 
@@ -55,7 +56,8 @@ class Incomes extends Authenticated
 
             View::renderTemplate('Incomes/new.html', [
                 'income_categories' => $categories,
-                'income' => $income
+                'income' => $income,
+                'action' => 'add'
             ]);
         }
     }
