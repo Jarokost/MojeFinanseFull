@@ -63,6 +63,34 @@ class Expenses extends \Core\Model
     public $expense_comment;
 
     /**
+     * expenses_category_assigned_to_users table name
+     * 
+     * @var string
+     */
+    public $category_name;
+
+    /**
+     * payment_methods_assigned_to_users table name
+     * 
+     * @var string
+     */
+    public $payment_method_name;
+
+    /**
+     * expenses sum grouped by category
+     * 
+     * @var string
+     */
+    public $category_amount_sum;
+
+    /**
+     * expenses sum total
+     * 
+     * @var string
+     */
+    public $amount_sum;
+
+    /**
      * Error messages
      *
      * @var array
@@ -146,7 +174,7 @@ class Expenses extends \Core\Model
      */
     public static function getExpenses($user_id, $date_start, $date_end) 
     {
-        $sql = 'SELECT e.amount, e.date_of_expense, e.expense_comment, eu.name, pu.name 
+        $sql = 'SELECT e.amount, e.date_of_expense, e.expense_comment, eu.name AS category_name, pu.name AS payment_method_name
                 FROM expenses AS e, expenses_category_assigned_to_users AS eu, payment_methods_assigned_to_users AS pu
                 WHERE e.user_id = :user_id 
                 AND e.date_of_expense BETWEEN :date_start AND :date_end
@@ -160,7 +188,7 @@ class Expenses extends \Core\Model
         $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
         $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
 
-        $stmt->setFetchMode(PDO::FETCH_NUM);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
         $stmt->execute();
 
@@ -174,13 +202,13 @@ class Expenses extends \Core\Model
      */
     public static function getExpensesSumGroupedByCategories($user_id, $date_start, $date_end)
     {
-        $sql = 'SELECT eu.name, SUM(e.amount) AS amount_sum
+        $sql = 'SELECT eu.name AS category_name, SUM(e.amount) AS category_amount_sum
                 FROM expenses AS e, expenses_category_assigned_to_users AS eu
                 WHERE e.user_id = :user_id
                 AND e.date_of_expense BETWEEN :date_start AND :date_end
                 AND e.expense_category_assigned_to_user_id = eu.id 
                 GROUP BY eu.name 
-                ORDER BY amount_sum DESC';
+                ORDER BY category_amount_sum DESC';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
@@ -189,7 +217,7 @@ class Expenses extends \Core\Model
         $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
         $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
 
-        $stmt->setFetchMode(PDO::FETCH_NUM);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
         $stmt->execute();
 
@@ -214,6 +242,8 @@ class Expenses extends \Core\Model
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
         $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
         $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
         $stmt->execute();
 

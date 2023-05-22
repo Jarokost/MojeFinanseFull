@@ -56,6 +56,27 @@ class Incomes extends \Core\Model
     public $income_comment;
 
     /**
+     * incomes_category_assigned_to_users table name
+     * 
+     * @var string
+     */
+    public $category_name;
+
+    /**
+     * incomes sum grouped by category
+     * 
+     * @var string
+     */
+    public $category_amount_sum;
+
+    /**
+     * incomes sum total
+     * 
+     * @var string
+     */
+    public $amount_sum;
+
+    /**
      * Error messages
      *
      * @var array
@@ -133,7 +154,7 @@ class Incomes extends \Core\Model
      */
     public static function getIncomes($user_id, $date_start, $date_end) 
     {
-        $sql = 'SELECT i.amount, i.date_of_income, i.income_comment, iu.name
+        $sql = 'SELECT i.amount, i.date_of_income, i.income_comment, iu.name AS category_name
                 FROM incomes AS i, incomes_category_assigned_to_users AS iu
                 WHERE i.user_id = :user_id 
                 AND i.date_of_income BETWEEN :date_start AND :date_end
@@ -146,7 +167,7 @@ class Incomes extends \Core\Model
         $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
         $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
 
-        $stmt->setFetchMode(PDO::FETCH_NUM);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
         $stmt->execute();
 
@@ -160,13 +181,13 @@ class Incomes extends \Core\Model
      */
     public static function getIncomesSumGroupedByCategories($user_id, $date_start, $date_end)
     {
-        $sql = 'SELECT iu.name, SUM(i.amount) AS amount_sum
+        $sql = 'SELECT iu.name AS category_name, SUM(i.amount) AS category_amount_sum
                 FROM incomes AS i, incomes_category_assigned_to_users AS iu
                 WHERE i.user_id = :user_id
                 AND i.date_of_income BETWEEN :date_start AND :date_end
                 AND i.income_category_assigned_to_user_id = iu.id 
                 GROUP BY iu.name 
-                ORDER BY amount_sum DESC';
+                ORDER BY category_amount_sum DESC';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
@@ -175,7 +196,7 @@ class Incomes extends \Core\Model
         $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
         $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
 
-        $stmt->setFetchMode(PDO::FETCH_NUM);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
         $stmt->execute();
 
@@ -200,6 +221,8 @@ class Incomes extends \Core\Model
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
         $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
         $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
         $stmt->execute();
 
