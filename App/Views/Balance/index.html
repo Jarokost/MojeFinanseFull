@@ -2,6 +2,11 @@
 
 {% block title %}Bilans{% endblock %}
 
+{% block link %}
+  <link href="/fontello/css/fontello.css" rel="stylesheet" />
+{% endblock %}
+
+
 {% block modal %}
     <a class="dropdown-item" href="#modalDateSelector" data-bs-toggle="modal">Wybrany zakres dat</a>
 {% endblock %}
@@ -158,16 +163,28 @@
                                         <th scope="col">Kategoria</th>
                                         <th scope="col">Opis</th>
                                         <th scope="col">Kwota</th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for income in balance.incomes %}
                                     <tr>
-                                        <th scope="row">{{ loop.index0+1 }}</th>
+                                        <td>{{ loop.index0+1 }}</td>
                                         <td>{{ income.date_of_income }}</td>
                                         <td>{{ income.category_name }}</td>
                                         <td>{{ income.income_comment }}</td>
                                         <td>{{ income.amount }}</td>
+                                        <td>
+                                          <a class="dropdown-item" href="#modalRemTransaction" data-bs-toggle="modal">
+                                            <i class="icon-pencil"></i>
+                                          </a>
+                                        </td>
+                                        <td>
+                                          <a class="dropdown-item" href="#modalRemTransaction" data-bs-toggle="modal">
+                                            <i class="icon-trash"></i>
+                                          </a></a>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -197,17 +214,29 @@
                                         <th scope="col">Forma płatności</th>
                                         <th scope="col">Opis</th>
                                         <th scope="col">Kwota</th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for expense in balance.expenses %}
                                     <tr>
-                                        <th scope="row">{{ loop.index0+1 }}</th>
+                                        <td>{{ loop.index0+1 }}</td>
                                         <td>{{ expense.date_of_expense }}</td>
                                         <td>{{ expense.category_name }}</td>
                                         <td>{{ expense.payment_method_name }}</td>
                                         <td>{{ expense.expense_comment }}</td>
                                         <td>{{ expense.amount }}</td>
+                                        <td>
+                                          <a class="dropdown-item" href="#modalRemTransaction" data-bs-toggle="modal">
+                                            <i class="icon-pencil"></i>
+                                          </a>
+                                        </td>
+                                        <td>
+                                          <a class="dropdown-item" href="#modalRemTransaction" data-bs-toggle="modal">
+                                            <i class="icon-trash"></i>
+                                          </a>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -223,7 +252,7 @@
         </div>
     </main>
 
-  <!-- MODAL DATE SELECTION -->
+  <!-- MODAL - date selection -->
     <div class="modal fade" id="modalDateSelector" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -269,6 +298,103 @@
                 </div>
             </div>
         </div>
+    </div>
+
+  <!-- MODAL - edit transaction -->
+    <div class="modal fade" id="modalEditAccount" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header p-5 pb-4 border-bottom-0">
+            <h1 class="fw-bold mb-0 fs-2">Edycja wpisu</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+
+          <div class="modal-body p-5 pt-0">
+            <form class="">
+              <small class="text-muted"
+                >Podaj nowe dane, tylko te, które chcesz zmienić. <br />
+                Pozostałe pozostaw puste</small
+              >
+              <hr />
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control rounded-3"
+                  id="floatingName"
+                  placeholder="Zmień imię"
+                />
+                <label for="floatingName">Podaj nowe imię</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input
+                  type="email"
+                  class="form-control rounded-3"
+                  id="floatingEmail"
+                  placeholder="Zmień email"
+                />
+                <label for="floatingEmail">Podaj nowy email</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control rounded-3"
+                  id="floatingPasswordChg"
+                  placeholder="Zmień hasło"
+                />
+                <label for="floatingPasswordChg">Podaj nowe hasło</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control rounded-3"
+                  id="floatingPasswordChg2"
+                  placeholder="Powtórz nowe hasło"
+                />
+                <label for="floatingPasswordChg2">Powtórz nowe hasło</label>
+              </div>
+
+              <button
+                class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white"
+                type="submit"
+              >
+                Dokonaj zmian
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- MODAL - remove transaction -->
+    <div class="modal fade" id="modalRemTransaction" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header p-5 pb-4 border-bottom-0">
+            <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wpisu</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+
+          <div class="modal-body p-5 pt-0">
+            <form class="">
+              <div class="w-100 my-5"></div>
+              <button
+                class="w-100 mb-2 mt-5 btn btn-lg rounded-3 btn-danger"
+                type="submit"
+              >
+                Usuń wpis
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
 {% endblock %}
