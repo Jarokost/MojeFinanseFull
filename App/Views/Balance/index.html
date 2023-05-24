@@ -88,6 +88,40 @@
       }
     </script>
 
+    <script>
+      $(function() {
+        //Take the data from the TR during the event button
+        $('#tableExpenses').on('click', 'a.editingTRbutton',function (ele) {
+
+          // alert('edycja wpisu z tabeli expenses!');
+            //the <tr> variable is use to set the parentNode from "ele
+            var tr = ele.target.parentNode.parentNode.parentNode;
+
+            console.log(tr);
+
+            //I get the value from the cells (td) using the parentNode (var tr)
+            var id = tr.cells[1].textContent;
+            var date = tr.cells[2].textContent;
+            var category = tr.cells[3].textContent;
+            var method = tr.cells[4].textContent;
+            var comment = tr.cells[5].textContent;
+            var amount = tr.cells[6].textContent;
+
+            //Prefill the fields with the gathered information
+            $("#editExpenseId").val(id);
+            $('#editExpenseAmount').val(amount);
+            $('#editExpenseDate').val(date);
+            $('#editExpenseCategory').val(category).attr('selected', 'selected');
+            $('#editExpenseMethod').val(method).attr('selected', 'selected');
+            $('#editExpenseComment').val(comment);
+
+            //If you need to update the form data and change the button link
+            // $("form#ModalForm").attr('action', window.location.href+'/update/'+id);
+            // $("a#saveModalButton").attr('href', window.location.href+'/update/'+id);
+        });
+      });
+    </script>
+
 {% endblock %}
 
 {% block body %}
@@ -100,6 +134,7 @@
                     <div class="h5">BILANS:</div>
                     {% set balance_val = balance.incomes_sum.amount_sum - balance.expenses_sum.amount_sum %}
                     <div class="h4 {{ (balance_val >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance_val }}</div>
+                    <button id="button1">Klikaj w Chuj!</button>
                 </div>
 
                 {% if balance.expenses_sum.amount_sum is null and balance.incomes_sum.amount_sum is null %}
@@ -153,7 +188,7 @@
                   {% if balance.incomes_sum.amount_sum is not null %}
                     <div class="col-xxl-6 d-flex justify-content-center">
                         <div class="table-responsive">
-                            <table class="table caption-top table-success">
+                            <table class="table caption-top table-success" id="tableIncomes">
                                 <caption>
                                     Przychody
                                 </caption>
@@ -179,7 +214,7 @@
                                         <td>{{ income.income_comment }}</td>
                                         <td>{{ income.amount }}</td>
                                         <td>
-                                          <a class="dropdown-item" href="#modalRemTransaction" data-bs-toggle="modal">
+                                          <a class="dropdown-item editingTRbutton" href="#modalEditIncome" data-bs-toggle="modal">
                                             <i class="icon-pencil"></i>
                                           </a>
                                         </td>
@@ -205,10 +240,10 @@
                   {% if balance.expenses_sum.amount_sum is not null %}
                     <div class="col-xxl-6 d-flex justify-content-center">
                         <div class="table-responsive">
-                            <table class="table caption-top table-danger">
-                                <caption>
+                            <table class="table caption-top table-danger" id="tableExpenses">
+                                <!-- <caption>
                                     Wydatki
-                                </caption>
+                                </caption> -->
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
@@ -233,7 +268,7 @@
                                         <td>{{ expense.expense_comment }}</td>
                                         <td>{{ expense.amount }}</td>
                                         <td>
-                                          <a class="dropdown-item" href="#modalRemTransaction" data-bs-toggle="modal">
+                                          <a class="dropdown-item editingTRbutton" href="#modalEditExpense" data-bs-toggle="modal">
                                             <i class="icon-pencil"></i>
                                           </a>
                                         </td>
@@ -306,7 +341,7 @@
     </div>
 
   <!-- MODAL - edit transaction -->
-    <div class="modal fade" id="modalEditAccount" tabindex="-1">
+    <div class="modal fade" id="modalEditExpense" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header p-5 pb-4 border-bottom-0">
@@ -318,48 +353,78 @@
             ></button>
           </div>
 
+          <input type="hidden" name="id" id="editExpenseId" />
+
           <div class="modal-body p-5 pt-0">
             <form class="">
-              <small class="text-muted"
-                >Podaj nowe dane, tylko te, które chcesz zmienić. <br />
-                Pozostałe pozostaw puste</small
-              >
-              <hr />
-              <div class="form-floating mb-3">
+              <!-- JS use class is-invalid when input validation -->
+              <div class="form-floating mb-2 center-block">
                 <input
-                  type="text"
-                  class="form-control rounded-3"
-                  id="floatingName"
-                  placeholder="Zmień imię"
+                  type="number"
+                  class="form-control input-width"
+                  id="editExpenseAmount"
+                  name="amount"
+                  placeholder="0.00"
+                  step="0.01"
                 />
-                <label for="floatingName">Podaj nowe imię</label>
+                <!-- <label for="floatingInputKwota">Kwota [PLN]</label> -->
               </div>
-              <div class="form-floating mb-3">
+
+              <!-- JS use class is-invalid when input validation -->
+              <div class="form-floating mb-2 center-block">
                 <input
-                  type="email"
-                  class="form-control rounded-3"
-                  id="floatingEmail"
-                  placeholder="Zmień email"
+                  type="date"
+                  class="form-control input-width"
+                  id="editExpenseDate"
+                  name="date_of_expense"
+                  placeholder="Data"
+                  value="{{ expense.date_of_expense }}"
                 />
-                <label for="floatingEmail">Podaj nowy email</label>
+                <label for="expenseDate">Data</label>
               </div>
-              <div class="form-floating mb-3">
-                <input
-                  type="text"
-                  class="form-control rounded-3"
-                  id="floatingPasswordChg"
-                  placeholder="Zmień hasło"
-                />
-                <label for="floatingPasswordChg">Podaj nowe hasło</label>
+
+              <!-- JS use class is-invalid when input validation -->
+              <div class="form-floating mb-2 center-block">
+                <select class="form-select input-width" 
+                id="editExpenseCategory"
+                name="expense_category_assigned_to_user_id"
+                >
+                  <option>wybierz</option>
+                  {% for category in expenses_categories %}
+                    <option value="{{ category.id }}"
+                    {{ (category.id==expense.expense_category_assigned_to_user_id) ? 'selected' }}>
+                        {{ category.name }}
+                    </option>
+                  {% endfor %}
+                </select>
+                <!-- <label for="floatingSelect">Kategoria</label> -->
               </div>
-              <div class="form-floating mb-3">
-                <input
-                  type="text"
-                  class="form-control rounded-3"
-                  id="floatingPasswordChg2"
-                  placeholder="Powtórz nowe hasło"
-                />
-                <label for="floatingPasswordChg2">Powtórz nowe hasło</label>
+
+              <!-- JS use class is-invalid when input validation -->
+              <div class="form-floating mb-2 center-block">
+                <select class="form-select input-width" 
+                id="editExpenseMethod"
+                name="payment_method_assigned_to_user_id"
+                >
+                  <option>wybierz</option>
+                  {% for methods in payment_methods %}
+                    <option value="{{ methods.id }}"
+                    {{ (methods.id==expense.payment_method_assigned_to_user_id) ? 'selected' }}>
+                        {{ methods.name }}
+                    </option>
+                  {% endfor %}
+                </select>
+                <!-- <label for="floatingSelect">Kategoria</label> -->
+              </div>
+
+              <div class="form-floating mb-2 center-block">
+                <textarea
+                  class="form-control input-width"
+                  placeholder="Komentarz"
+                  id="editExpenseComment"
+                  name="expense_comment"
+                >{{ expense.expense_comment ?? '' }}</textarea>
+                <label for="floatingTextarea">Komentarz</label>
               </div>
 
               <button
