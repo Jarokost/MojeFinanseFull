@@ -154,11 +154,12 @@ class Incomes extends \Core\Model
      */
     public static function getIncomes($user_id, $date_start, $date_end) 
     {
-        $sql = 'SELECT i.amount, i.date_of_income, i.income_comment, iu.name AS category_name
+        $sql = 'SELECT i.id, i.amount, i.date_of_income, i.income_comment, iu.name AS category_name
                 FROM incomes AS i, incomes_category_assigned_to_users AS iu
                 WHERE i.user_id = :user_id 
                 AND i.date_of_income BETWEEN :date_start AND :date_end
-                AND i.income_category_assigned_to_user_id = iu.id';
+                AND i.income_category_assigned_to_user_id = iu.id
+                ORDER BY i.date_of_income DESC';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);

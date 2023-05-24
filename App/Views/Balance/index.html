@@ -87,6 +87,7 @@
         chart.draw(data, options);
       }
     </script>
+
 {% endblock %}
 
 {% block body %}
@@ -159,6 +160,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
+                                        <th scope="col" hidden>id</th>
                                         <th scope="col">Data</th>
                                         <th scope="col">Kategoria</th>
                                         <th scope="col">Opis</th>
@@ -171,6 +173,7 @@
                                     {% for income in balance.incomes %}
                                     <tr>
                                         <td>{{ loop.index0+1 }}</td>
+                                        <td hidden>{{ income.id }}</td>
                                         <td>{{ income.date_of_income }}</td>
                                         <td>{{ income.category_name }}</td>
                                         <td>{{ income.income_comment }}</td>
@@ -209,6 +212,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
+                                        <th scope="col" hidden>id</th>
                                         <th scope="col">Data</th>
                                         <th scope="col">Kategoria</th>
                                         <th scope="col">Forma płatności</th>
@@ -222,6 +226,7 @@
                                     {% for expense in balance.expenses %}
                                     <tr>
                                         <td>{{ loop.index0+1 }}</td>
+                                        <td hidden>{{ expense.id }}</td>
                                         <td>{{ expense.date_of_expense }}</td>
                                         <td>{{ expense.category_name }}</td>
                                         <td>{{ expense.payment_method_name }}</td>
