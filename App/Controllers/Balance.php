@@ -3,9 +3,11 @@
 namespace App\Controllers;
 
 use \Core\View;
-use \App\Auth;
 use \App\Models\Incomes;
 use \App\Models\Expenses;
+use \App\Models\IncomesCategoryAssignedToUsers;
+use \App\Models\ExpensesCategoryAssignedToUsers;
+use App\Models\PaymentMethodsAssignedToUsers;
 
 /**
  * Balance controller (example)
@@ -57,6 +59,27 @@ class Balance extends Authenticated
     public $expenses_sum;
 
     /**
+     * expenses categories
+     * 
+     * @var array
+     */
+    public $expenses_categories;
+
+    /**
+     * expenses payment methods
+     * 
+     * @var array
+     */
+    public $expenses_payment_methods;
+
+    /**
+     * incomes categories
+     * 
+     * @var array
+     */
+    public $incomes_categories;
+
+    /**
      * Error messages
      *
      * @var array
@@ -71,6 +94,10 @@ class Balance extends Authenticated
     private function queries($date_start, $date_end)
     {
         $user_id = $_SESSION['user_id'];
+
+        $this->expenses_categories = ExpensesCategoryAssignedToUsers::getCategoriesAssignedToUser($user_id);
+        $this->expenses_payment_methods = PaymentMethodsAssignedToUsers::getCategoriesAssignedToUser($user_id);
+        $this->incomes_categories = IncomesCategoryAssignedToUsers::getCategoriesAssignedToUser($user_id);
 
         $this->incomes = Incomes::getIncomes($user_id, $date_start, $date_end);
         $this->expenses = Expenses::getExpenses($user_id, $date_start, $date_end);

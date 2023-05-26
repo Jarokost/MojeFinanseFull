@@ -67,4 +67,9 @@ class Expenses extends Authenticated
         }
     }
 
+    public function updateTableRowAjax()
+    {
+        \App\Models\Expenses::updateTableRowAjax();
+    }
+
 }

@@ -89,36 +89,87 @@
     </script>
 
     <script>
+
+      function setSelectByText(eID,text)
+      { //Loop through sequentially//
+        var ele=document.getElementById(eID);
+        for(var ii=0; ii<ele.length; ii++)
+          if(ele.options[ii].text==text) { //Found!
+            ele.options[ii].selected=true;
+            return true;
+          }
+        return false;
+      }
+
+      var tr = null;
+
       $(function() {
         //Take the data from the TR during the event button
         $('#tableExpenses').on('click', 'a.editingTRbutton',function (ele) {
 
-          // alert('edycja wpisu z tabeli expenses!');
             //the <tr> variable is use to set the parentNode from "ele
-            var tr = ele.target.parentNode.parentNode.parentNode;
-
-            console.log(tr);
+            tr = ele.target.parentNode.parentNode.parentNode;
 
             //I get the value from the cells (td) using the parentNode (var tr)
-            var id = tr.cells[1].textContent;
-            var date = tr.cells[2].textContent;
-            var category = tr.cells[3].textContent;
-            var method = tr.cells[4].textContent;
-            var comment = tr.cells[5].textContent;
-            var amount = tr.cells[6].textContent;
+            var tr_e_id = tr.cells[1].textContent;
+            var tr_e_date = tr.cells[2].textContent;
+            var tr_e_category = tr.cells[3].textContent;
+            var tr_e_method = tr.cells[4].textContent;
+            var tr_e_comment = tr.cells[5].textContent;
+            var tr_e_amount = tr.cells[6].textContent;
+
+            //console.log(tr_e_category, tr_e_method);
 
             //Prefill the fields with the gathered information
-            $("#editExpenseId").val(id);
-            $('#editExpenseAmount').val(amount);
-            $('#editExpenseDate').val(date);
-            $('#editExpenseCategory').val(category).attr('selected', 'selected');
-            $('#editExpenseMethod').val(method).attr('selected', 'selected');
-            $('#editExpenseComment').val(comment);
+            $('#editExpenseId').val(tr_e_id);
+            $('#editExpenseAmount').val(tr_e_amount);
+            $('#editExpenseDate').val(tr_e_date);
+            $('#editExpenseComment').val(tr_e_comment);
+            setSelectByText('editExpenseCategory', tr_e_category);
+            setSelectByText('editExpenseMethod', tr_e_method);
 
             //If you need to update the form data and change the button link
             // $("form#ModalForm").attr('action', window.location.href+'/update/'+id);
             // $("a#saveModalButton").attr('href', window.location.href+'/update/'+id);
         });
+      });
+
+      $("button.button-expense-change").on("click", function(e) {
+        
+        var id = $("#editExpenseId").val();
+        var amount = $("#editExpenseAmount").val();
+        var date_of_expense = $("#editExpenseDate").val();
+        var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
+        var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
+        var expense_comment = $("#editExpenseComment").val();
+
+        tr.cells[1].textContent = id;
+        tr.cells[2].textContent = date_of_expense;
+        tr.cells[3].textContent = expense_comment;
+        tr.cells[4].textContent = $("#editExpenseCategory option:selected").text();
+        tr.cells[5].textContent = $("#editExpenseMethod option:selected").text();
+        tr.cells[6].textContent = amount;
+
+        $.ajax({
+          url: '/Expenses/updateTableRowAjax',
+          type: 'POST',
+          data: {id: id,
+            amount: amount,
+            date_of_expense: date_of_expense,
+            expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
+            payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
+            expense_comment: expense_comment
+          }
+        })
+        .done(function(data) {
+          tr.cells[1].textContent = id;
+          tr.cells[2].textContent = date_of_expense;
+          tr.cells[3].textContent = $("#editExpenseCategory option:selected").text();
+          tr.cells[4].textContent = $("#editExpenseMethod option:selected").text();
+          tr.cells[5].textContent = expense_comment;
+          tr.cells[6].textContent = amount;
+        });
+        //console.log(chg_id, chg_amount, chg_date_of_expense, chg_expense_category_assigned_to_user_id, chg_payment_method_assigned_to_user_id, chg_expense_comment);
       });
     </script>
 
@@ -134,7 +185,6 @@
                     <div class="h5">BILANS:</div>
                     {% set balance_val = balance.incomes_sum.amount_sum - balance.expenses_sum.amount_sum %}
                     <div class="h4 {{ (balance_val >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance_val }}</div>
-                    <button id="button1">Klikaj w Chuj!</button>
                 </div>
 
                 {% if balance.expenses_sum.amount_sum is null and balance.incomes_sum.amount_sum is null %}
@@ -241,9 +291,9 @@
                     <div class="col-xxl-6 d-flex justify-content-center">
                         <div class="table-responsive">
                             <table class="table caption-top table-danger" id="tableExpenses">
-                                <!-- <caption>
+                                <caption>
                                     Wydatki
-                                </caption> -->
+                                </caption>
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
@@ -356,7 +406,7 @@
           <input type="hidden" name="id" id="editExpenseId" />
 
           <div class="modal-body p-5 pt-0">
-            <form class="">
+           <!-- <form class=""> -->
               <!-- JS use class is-invalid when input validation -->
               <div class="form-floating mb-2 center-block">
                 <input
@@ -389,10 +439,8 @@
                 id="editExpenseCategory"
                 name="expense_category_assigned_to_user_id"
                 >
-                  <option>wybierz</option>
-                  {% for category in expenses_categories %}
-                    <option value="{{ category.id }}"
-                    {{ (category.id==expense.expense_category_assigned_to_user_id) ? 'selected' }}>
+                  {% for category in balance.expenses_categories %}
+                    <option value="{{ category.id }}">
                         {{ category.name }}
                     </option>
                   {% endfor %}
@@ -406,10 +454,8 @@
                 id="editExpenseMethod"
                 name="payment_method_assigned_to_user_id"
                 >
-                  <option>wybierz</option>
-                  {% for methods in payment_methods %}
-                    <option value="{{ methods.id }}"
-                    {{ (methods.id==expense.payment_method_assigned_to_user_id) ? 'selected' }}>
+                  {% for methods in balance.expenses_payment_methods %}
+                    <option value="{{ methods.id }}">
                         {{ methods.name }}
                     </option>
                   {% endfor %}
@@ -428,12 +474,13 @@
               </div>
 
               <button
-                class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white"
-                type="submit"
+                class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-expense-change"
+                type="button"
+                data-bs-dismiss="modal"
               >
                 Dokonaj zmian
               </button>
-            </form>
+            <!-- </form> -->
           </div>
         </div>
       </div>
