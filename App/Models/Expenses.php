@@ -91,6 +91,20 @@ class Expenses extends \Core\Model
     public $amount_sum;
 
     /**
+     * date start
+     * 
+     * @var string
+     */
+    public $date_start;
+
+    /**
+     * date start
+     * 
+     * @var string
+     */
+    public $date_end;
+
+    /**
      * Error messages
      *
      * @var array

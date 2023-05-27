@@ -108,6 +108,19 @@
         return false;
       }
 
+      function displayBalance(data)
+      {
+        var balance = data.incomes_sum.amount_sum - data.expenses_sum.amount_sum;
+        $('#displayBalance').html(parseFloat(balance).toFixed(2));
+        if (balance > 0) {
+          $('#displayBalance').addClass("balance_plus");
+          $('#displayBalance').removeClass("balance_minus");
+        } else {
+          $('#displayBalance').removeClass("balance_plus");
+          $('#displayBalance').addClass("balance_minus");
+        }
+      }
+
       var tr = null;
 
       $(document).ready(function() {
@@ -142,6 +155,8 @@
           var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
           var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
           var expense_comment = $("#editExpenseComment").val();
+          var date_start = $("#expenseDateStart").val();
+          var date_end = $("#expenseDateEnd").val();
 
           $.ajax({
             url: '/Expenses/updateTableRowAjax',
@@ -151,7 +166,9 @@
               date_of_expense: date_of_expense,
               expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
               payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
-              expense_comment: expense_comment
+              expense_comment: expense_comment,
+              date_start: date_start,
+              date_end: date_end
             }
           })
           .done(function(data) {
@@ -166,6 +183,8 @@
               tr.cells[4].textContent = $("#editExpenseMethod option:selected").text();
               tr.cells[5].textContent = expense_comment;
               tr.cells[6].textContent = parseFloat(amount).toFixed(2);
+              
+              displayBalance(data);
             }
           });
         });
@@ -198,6 +217,8 @@
           var date_of_income = $("#editIncomeDate").val();
           var income_category_assigned_to_user_id = $("#editIncomeCategory").val();
           var income_comment = $("#editIncomeComment").val();
+          var date_start = $("#incomeDateStart").val();
+          var date_end = $("#incomeDateEnd").val();
 
           $.ajax({
             url: '/Incomes/updateTableRowAjax',
@@ -206,7 +227,9 @@
               amount: amount,
               date_of_income: date_of_income,
               income_category_assigned_to_user_id: income_category_assigned_to_user_id,
-              income_comment: income_comment
+              income_comment: income_comment,
+              date_start: date_start,
+              date_end: date_end
           }
           })
           .done(function(data) {
@@ -220,6 +243,8 @@
               tr.cells[3].textContent = $("#editIncomeCategory option:selected").text();
               tr.cells[4].textContent = income_comment;
               tr.cells[5].textContent = parseFloat(amount).toFixed(2);
+
+              displayBalance(data);
             }
           });
         });
@@ -479,7 +504,7 @@
                     <div class="h5">{{ action }}</div>
                     <div class="h5">BILANS:</div>
                     {% set balance_val = balance.incomes_sum.amount_sum - balance.expenses_sum.amount_sum %}
-                    <div class="h4 {{ (balance_val >= 0) ? 'balance_plus' : 'balance_minus' }}">{{ balance_val }}</div>
+                    <div class="h4 {{ (balance_val >= 0) ? 'balance_plus' : 'balance_minus' }}" id="displayBalance">{{ balance_val }}</div>
                 </div>
 
                 {% if balance.expenses_sum.amount_sum is null and balance.incomes_sum.amount_sum is null %}
@@ -700,7 +725,9 @@
 
         <form method="post" id="formEditExpense" onsubmit="dontSubmit(); return false;">
 
-          <input type="hidden" name="id" id="editExpenseId" />
+          <input type="hidden" name="id" id="editExpenseId"/>
+          <input type="hidden" name="date_start" id="expenseDateStart" value="{{ balance.date_start }}"/>
+          <input type="hidden" name="date_end" id="expenseDateEnd" value="{{ balance.date_end }}"/>
 
           <!-- JS use class is-invalid when input validation -->
           <div class="modal-body p-5 pt-0">
@@ -798,7 +825,9 @@
 
           <form method="post" id="formEditIncome" onsubmit="dontSubmit(); return false;">
 
-            <input type="hidden" name="id" id="editIncomeId" />
+            <input type="hidden" name="id" id="editIncomeId"/>
+            <input type="hidden" name="date_start" id="incomeDateStart" value="{{ balance.date_start }}"/>
+            <input type="hidden" name="date_end" id="incomeDateEnd" value="{{ balance.date_end }}"/>
 
             <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2 center-block">
