@@ -62,4 +62,14 @@ class Incomes extends Authenticated
         }
     }
 
+    public function updateTableRowAjax()
+    {
+        \App\Models\Incomes::updateTableRowAjax();
+    }
+
+    public function removeTableRowAjax()
+    {
+        \App\Models\Incomes::removeTableRowAjax();
+    }
+
 }

@@ -154,11 +154,12 @@ class Incomes extends \Core\Model
      */
     public static function getIncomes($user_id, $date_start, $date_end) 
     {
-        $sql = 'SELECT i.amount, i.date_of_income, i.income_comment, iu.name AS category_name
+        $sql = 'SELECT i.id, i.amount, i.date_of_income, i.income_comment, iu.name AS category_name
                 FROM incomes AS i, incomes_category_assigned_to_users AS iu
                 WHERE i.user_id = :user_id 
                 AND i.date_of_income BETWEEN :date_start AND :date_end
-                AND i.income_category_assigned_to_user_id = iu.id';
+                AND i.income_category_assigned_to_user_id = iu.id
+                ORDER BY i.date_of_income DESC';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
@@ -227,5 +228,50 @@ class Incomes extends \Core\Model
         $stmt->execute();
 
         return $stmt->fetch();
+    }
+
+    /**
+     * Update income
+     * 
+     * @return void
+     */
+    public static function updateTableRowAjax() {
+        $sql = 'UPDATE incomes
+                SET income_category_assigned_to_user_id = :income_category_assigned_to_user_id,
+                    date_of_income = :date_of_income,
+                    income_comment = :income_comment,
+                    amount = :amount
+                WHERE id = :id';
+
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+
+        $stmt->bindValue(':income_category_assigned_to_user_id', $_POST['income_category_assigned_to_user_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':date_of_income', $_POST['date_of_income'], PDO::PARAM_STR);
+        $stmt->bindValue(':income_comment', $_POST['income_comment'], PDO::PARAM_STR);
+        $stmt->bindValue(':amount', $_POST['amount'], PDO::PARAM_STR);
+        $stmt->bindValue(':id', $_POST['id'], PDO::PARAM_INT);
+
+
+        return $stmt->execute();
+    }
+
+    /**
+     * Remove income
+     * 
+     * @return void
+     */
+    public static function removeTableRowAjax() {
+        $sql = 'DELETE FROM incomes
+                WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $_POST['id'], PDO::PARAM_INT);
+
+        return $stmt->execute();
     }
 }

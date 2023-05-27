@@ -2,6 +2,11 @@
 
 {% block title %}Bilans{% endblock %}
 
+{% block link %}
+  <link href="/fontello/css/fontello.css" rel="stylesheet" />
+{% endblock %}
+
+
 {% block modal %}
     <a class="dropdown-item" href="#modalDateSelector" data-bs-toggle="modal">Wybrany zakres dat</a>
 {% endblock %}
@@ -82,6 +87,215 @@
         chart.draw(data, options);
       }
     </script>
+
+    <script>
+
+      function setSelectByText(eID,text)
+      { //Loop through sequentially//
+        var ele=document.getElementById(eID);
+        for(var ii=0; ii<ele.length; ii++)
+          if(ele.options[ii].text==text) { //Found!
+            ele.options[ii].selected=true;
+            return true;
+          }
+        return false;
+      }
+
+      var tr = null;
+
+      // Edit Expense 
+      $("#tableExpenses").on("click", "a.editingTRbutton", function(ele) {
+
+          //table row text data
+          tr = ele.target.parentNode.parentNode.parentNode;
+
+          var id = tr.cells[1].textContent;
+          var date = tr.cells[2].textContent;
+          var category = tr.cells[3].textContent;
+          var method = tr.cells[4].textContent;
+          var comment = tr.cells[5].textContent;
+          var amount = tr.cells[6].textContent;
+
+          //Prefill the fields with the gathered information
+          $('#editExpenseId').val(id);
+          $('#editExpenseAmount').val(amount);
+          $('#editExpenseDate').val(date);
+          $('#editExpenseComment').val(comment);
+          setSelectByText('editExpenseCategory', category);
+          setSelectByText('editExpenseMethod', method);
+
+      });
+
+      $("button.button-expense-change").on("click", function(e) {
+        
+        var id = $("#editExpenseId").val();
+        var amount = $("#editExpenseAmount").val();
+        var date_of_expense = $("#editExpenseDate").val();
+        var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
+        var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
+        var expense_comment = $("#editExpenseComment").val();
+
+        $.ajax({
+          url: '/Expenses/updateTableRowAjax',
+          type: 'POST',
+          data: {id: id,
+            amount: amount,
+            date_of_expense: date_of_expense,
+            expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
+            payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
+            expense_comment: expense_comment
+          }
+        })
+        .done(function(data) {
+          tr.cells[1].textContent = id;
+          tr.cells[2].textContent = date_of_expense;
+          tr.cells[3].textContent = $("#editExpenseCategory option:selected").text();
+          tr.cells[4].textContent = $("#editExpenseMethod option:selected").text();
+          tr.cells[5].textContent = expense_comment;
+          tr.cells[6].textContent = amount;
+        });
+      });
+
+      // Edit Income
+      $("#tableIncomes").on("click", "a.editingTRbutton", function(ele) {
+
+          //table row text data
+          tr = ele.target.parentNode.parentNode.parentNode;
+
+          var id = tr.cells[1].textContent;
+          var date = tr.cells[2].textContent;
+          var category = tr.cells[3].textContent;
+          var comment = tr.cells[4].textContent;
+          var amount = tr.cells[5].textContent;
+
+          //Prefill the fields with the gathered information
+          $('#editIncomeId').val(id);
+          $('#editIncomeAmount').val(amount);
+          $('#editIncomeDate').val(date);
+          $('#editIncomeComment').val(comment);
+          setSelectByText('editIncomeCategory', category);
+
+        });
+
+      $("button.button-income-change").on("click", function(e) {
+
+        var id = $("#editIncomeId").val();
+        var amount = $("#editIncomeAmount").val();
+        var date_of_income = $("#editIncomeDate").val();
+        var income_category_assigned_to_user_id = $("#editIncomeCategory").val();
+        var income_comment = $("#editIncomeComment").val();
+
+        $.ajax({
+          url: '/Incomes/updateTableRowAjax',
+          type: 'POST',
+          data: {id: id,
+            amount: amount,
+            date_of_income: date_of_income,
+            income_category_assigned_to_user_id: income_category_assigned_to_user_id,
+            income_comment: income_comment
+        }
+        })
+        .done(function(data) {
+          tr.cells[1].textContent = id;
+          tr.cells[2].textContent = date_of_income;
+          tr.cells[3].textContent = $("#editIncomeCategory option:selected").text();
+          tr.cells[4].textContent = income_comment;
+          tr.cells[5].textContent = amount;
+        });
+      });
+
+      // Remove Expense
+      $("#tableExpenses").on("click", "a.removingTRbutton", function(ele) {
+
+        //table row text data
+        tr = ele.target.parentNode.parentNode.parentNode;
+
+        var id = tr.cells[1].textContent;
+        var date = tr.cells[2].textContent;
+        var category = tr.cells[3].textContent;
+        var method = tr.cells[4].textContent;
+        var comment = tr.cells[5].textContent;
+        var amount = tr.cells[6].textContent;
+
+        // fill invisible input in modal
+        $('#removeExpenseId').val(id);
+
+        // display record in modal
+        $("#expenseRowToRemove").html("data: " + date 
+                                      + "</br>kategoria: " + category
+                                      + "</br>metada płatności: " + method
+                                      + "</br>opis: " + comment
+                                      + "</br>kwota: " + amount);
+
+      });
+
+      $("button.button-expense-remove").on("click", function(e) {
+
+        var id = $("#removeExpenseId").val();
+
+        $.ajax({
+          url: '/Expenses/removeTableRowAjax',
+          type: 'POST',
+          data: {id: id}
+        })
+        .done(function(data) {
+          // remove table row
+          tr.remove();
+          // renumber index
+          var index = 1;
+          $("tr.expense-item-in-expenses-table").each(function() {
+            $(this)[0].cells[0].textContent = index;
+          index++;
+        });
+        });
+      });
+
+      // Remove Income
+      $("#tableIncomes").on("click", "a.removingTRbutton", function(ele) {
+
+        //table row text data
+        tr = ele.target.parentNode.parentNode.parentNode;
+
+        var id = tr.cells[1].textContent;
+        var date = tr.cells[2].textContent;
+        var category = tr.cells[3].textContent;
+        var comment = tr.cells[5].textContent;
+        var amount = tr.cells[6].textContent;
+
+        // fill invisible input in modal
+        $('#removeIncomeId').val(id);
+
+        // display record in modal
+        $("#incomeRowToRemove").html("data: " + date 
+                                      + "</br>kategoria: " + category
+                                      + "</br>opis: " + comment
+                                      + "</br>kwota: " + amount);
+
+      });
+
+      $("button.button-income-remove").on("click", function(e) {
+
+        var id = $("#removeIncomeId").val();
+
+        $.ajax({
+          url: '/Incomes/removeTableRowAjax',
+          type: 'POST',
+          data: {id: id}
+        })
+        .done(function(data) {
+          // remove table row
+          tr.remove();
+          // renumber index
+          var index = 1;
+          $("tr.income-item-in-incomes-table").each(function() {
+            $(this)[0].cells[0].textContent = index;
+            index++;
+          });
+        });
+      });
+
+    </script>
+
 {% endblock %}
 
 {% block body %}
@@ -147,27 +361,41 @@
                   {% if balance.incomes_sum.amount_sum is not null %}
                     <div class="col-xxl-6 d-flex justify-content-center">
                         <div class="table-responsive">
-                            <table class="table caption-top table-success">
+                            <table class="table caption-top table-success" id="tableIncomes">
                                 <caption>
                                     Przychody
                                 </caption>
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
+                                        <th scope="col" hidden>id</th>
                                         <th scope="col">Data</th>
                                         <th scope="col">Kategoria</th>
                                         <th scope="col">Opis</th>
                                         <th scope="col">Kwota</th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for income in balance.incomes %}
-                                    <tr>
-                                        <th scope="row">{{ loop.index0+1 }}</th>
+                                    <tr class="income-item-in-incomes-table">
+                                        <td>{{ loop.index0+1 }}</td>
+                                        <td hidden>{{ income.id }}</td>
                                         <td>{{ income.date_of_income }}</td>
                                         <td>{{ income.category_name }}</td>
                                         <td>{{ income.income_comment }}</td>
                                         <td>{{ income.amount }}</td>
+                                        <td>
+                                          <a class="dropdown-item editingTRbutton" href="#modalEditIncome" data-bs-toggle="modal">
+                                            <i class="icon-pencil"></i>
+                                          </a>
+                                        </td>
+                                        <td>
+                                          <a class="dropdown-item removingTRbutton" href="#modalRemoveIncome" data-bs-toggle="modal">
+                                            <i class="icon-trash"></i>
+                                          </a></a>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -185,29 +413,43 @@
                   {% if balance.expenses_sum.amount_sum is not null %}
                     <div class="col-xxl-6 d-flex justify-content-center">
                         <div class="table-responsive">
-                            <table class="table caption-top table-danger">
+                            <table class="table caption-top table-danger" id="tableExpenses">
                                 <caption>
                                     Wydatki
                                 </caption>
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
+                                        <th scope="col" hidden>id</th>
                                         <th scope="col">Data</th>
                                         <th scope="col">Kategoria</th>
                                         <th scope="col">Forma płatności</th>
                                         <th scope="col">Opis</th>
                                         <th scope="col">Kwota</th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for expense in balance.expenses %}
-                                    <tr>
-                                        <th scope="row">{{ loop.index0+1 }}</th>
+                                    <tr class="expense-item-in-expenses-table">
+                                        <td>{{ loop.index0+1 }}</td>
+                                        <td hidden>{{ expense.id }}</td>
                                         <td>{{ expense.date_of_expense }}</td>
                                         <td>{{ expense.category_name }}</td>
                                         <td>{{ expense.payment_method_name }}</td>
                                         <td>{{ expense.expense_comment }}</td>
                                         <td>{{ expense.amount }}</td>
+                                        <td>
+                                          <a class="dropdown-item editingTRbutton" href="#modalEditExpense" data-bs-toggle="modal">
+                                            <i class="icon-pencil"></i>
+                                          </a>
+                                        </td>
+                                        <td>
+                                          <a class="dropdown-item removingTRbutton" href="#modalRemoveExpense" data-bs-toggle="modal">
+                                            <i class="icon-trash"></i>
+                                          </a>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -223,52 +465,291 @@
         </div>
     </main>
 
-  <!-- MODAL DATE SELECTION -->
-    <div class="modal fade" id="modalDateSelector" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header p-5 pb-4 border-bottom-0">
-                <h1 class="fw-bold mb-0 fs-2">Wybierz zakres dat</h1>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
-                </div>
+  <!-- MODAL - date selection -->
+  <div class="modal fade" id="modalDateSelector" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header p-5 pb-4 border-bottom-0">
+              <h1 class="fw-bold mb-0 fs-2">Wybierz zakres dat</h1>
+              <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+              ></button>
+              </div>
 
-                <div class="modal-body p-5 pt-0">
-                <form action="/balance/indexSelectedDates" method="post">
-                    <div class="form-floating mb-3">
-                    <input
-                        type="date"
-                        class="form-control rounded-3"
-                        name="dateFrom"
-                        id="floatingDateFrom"
-                        placeholder="Data od"
-                    />
-                    <label for="floatingDateFrom">Data od</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                    <input
-                        type="date"
-                        class="form-control rounded-3"
-                        name="dateTo"
-                        id="floatingDateTo"
-                        placeholder="Data do"
-                    />
-                    <label for="floatingDateTo">Data do</label>
-                    </div>
-                    <button
-                    class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
-                    type="submit"
-                    >
-                    Zatwierdź
-                    </button>
-                </form>
-                </div>
-            </div>
+              <div class="modal-body p-5 pt-0">
+              <form action="/balance/indexSelectedDates" method="post">
+                  <div class="form-floating mb-3">
+                  <input
+                      type="date"
+                      class="form-control rounded-3"
+                      name="dateFrom"
+                      id="floatingDateFrom"
+                      placeholder="Data od"
+                  />
+                  <label for="floatingDateFrom">Data od</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                  <input
+                      type="date"
+                      class="form-control rounded-3"
+                      name="dateTo"
+                      id="floatingDateTo"
+                      placeholder="Data do"
+                  />
+                  <label for="floatingDateTo">Data do</label>
+                  </div>
+                  <button
+                  class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+                  type="submit"
+                  >
+                  Zatwierdź
+                  </button>
+              </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- MODAL - edit expense -->
+  <div class="modal fade" id="modalEditExpense" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Edycja wydatku</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
         </div>
+
+        <input type="hidden" name="id" id="editExpenseId" />
+
+        <div class="modal-body p-5 pt-0">
+          <!-- <form class=""> -->
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <input
+                type="number"
+                class="form-control input-width"
+                id="editExpenseAmount"
+                name="amount"
+                placeholder="0.00"
+                step="0.01"
+              />
+              <!-- <label for="floatingInputKwota">Kwota [PLN]</label> -->
+            </div>
+
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <input
+                type="date"
+                class="form-control input-width"
+                id="editExpenseDate"
+                name="date_of_expense"
+                placeholder="Data"
+                value="{{ expense.date_of_expense }}"
+              />
+              <label for="expenseDate">Data</label>
+            </div>
+
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <select class="form-select input-width" 
+              id="editExpenseCategory"
+              name="expense_category_assigned_to_user_id"
+              >
+                {% for category in balance.expenses_categories %}
+                  <option value="{{ category.id }}">
+                      {{ category.name }}
+                  </option>
+                {% endfor %}
+              </select>
+              <!-- <label for="floatingSelect">Kategoria</label> -->
+            </div>
+
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <select class="form-select input-width" 
+              id="editExpenseMethod"
+              name="payment_method_assigned_to_user_id"
+              >
+                {% for methods in balance.expenses_payment_methods %}
+                  <option value="{{ methods.id }}">
+                      {{ methods.name }}
+                  </option>
+                {% endfor %}
+              </select>
+              <!-- <label for="floatingSelect">Kategoria</label> -->
+            </div>
+
+            <div class="form-floating mb-2 center-block">
+              <textarea
+                class="form-control input-width"
+                placeholder="Komentarz"
+                id="editExpenseComment"
+                name="expense_comment"
+              >{{ expense.expense_comment ?? '' }}</textarea>
+              <label for="floatingTextarea">Komentarz</label>
+            </div>
+
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-expense-change"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Dokonaj zmian
+            </button>
+          <!-- </form> -->
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- MODAL - edit income -->
+  <div class="modal fade" id="modalEditIncome" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Edycja przychodu</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <input type="hidden" name="id" id="editIncomeId" />
+
+        <div class="modal-body p-5 pt-0">
+         <!-- <form class=""> -->
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <input
+                type="number"
+                class="form-control input-width"
+                id="editIncomeAmount"
+                name="amount"
+                placeholder="0.00"
+                step="0.01"
+              />
+              <!-- <label for="floatingInputKwota">Kwota [PLN]</label> -->
+            </div>
+
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <input
+                type="date"
+                class="form-control input-width"
+                id="editIncomeDate"
+                name="date_of_income"
+                placeholder="Data"
+                value="{{ income.date_of_income }}"
+              />
+              <!-- <label for="incomeDate">Data</label> -->
+            </div>
+
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <select class="form-select input-width" 
+              id="editIncomeCategory"
+              name="income_category_assigned_to_user_id"
+              >
+                {% for category in balance.incomes_categories %}
+                  <option value="{{ category.id }}">
+                      {{ category.name }}
+                  </option>
+                {% endfor %}
+              </select>
+              <!-- <label for="floatingSelect">Kategoria</label> -->
+            </div>
+
+            <div class="form-floating mb-2 center-block">
+              <textarea
+                class="form-control input-width"
+                placeholder="Komentarz"
+                id="editIncomeComment"
+                name="income_comment"
+              >{{ income.income_comment ?? '' }}</textarea>
+              <!-- <label for="floatingTextarea">Komentarz</label> -->
+            </div>
+
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-income-change"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Dokonaj zmian
+            </button>
+          <!-- </form> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL - remove expense -->
+  <div class="modal fade" id="modalRemoveExpense" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <input type="hidden" name="id" id="removeExpenseId" />
+
+        <div class="modal-body p-5 pt-0">
+
+            <div class="w-100 my-2 text-center" id="expenseRowToRemove"></div>
+            <button
+              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-expense-remove"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Usuń wydatek
+            </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL - remove income -->
+  <div class="modal fade" id="modalRemoveIncome" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <input type="hidden" name="id" id="removeIncomeId" />
+
+        <div class="modal-body p-5 pt-0">
+
+            <div class="w-100 my-2 text-center" id="incomeRowToRemove"></div>
+            <button
+              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-income-remove"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Usuń wydatek
+            </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock %}

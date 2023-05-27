@@ -174,12 +174,13 @@ class Expenses extends \Core\Model
      */
     public static function getExpenses($user_id, $date_start, $date_end) 
     {
-        $sql = 'SELECT e.amount, e.date_of_expense, e.expense_comment, eu.name AS category_name, pu.name AS payment_method_name
+        $sql = 'SELECT e.id, e.amount, e.date_of_expense, e.expense_comment, eu.name AS category_name, pu.name AS payment_method_name
                 FROM expenses AS e, expenses_category_assigned_to_users AS eu, payment_methods_assigned_to_users AS pu
                 WHERE e.user_id = :user_id 
                 AND e.date_of_expense BETWEEN :date_start AND :date_end
                 AND e.expense_category_assigned_to_user_id = eu.id
-                AND e.payment_method_assigned_to_user_id = pu.id';
+                AND e.payment_method_assigned_to_user_id = pu.id
+                ORDER BY e.date_of_expense DESC';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
@@ -248,5 +249,52 @@ class Expenses extends \Core\Model
         $stmt->execute();
 
         return $stmt->fetch();
+    }
+
+    /**
+     * Update expense
+     * 
+     * @return void
+     */
+    public static function updateTableRowAjax() {
+        $sql = 'UPDATE expenses
+                SET expense_category_assigned_to_user_id = :expense_category_assigned_to_user_id,
+                    payment_method_assigned_to_user_id = :payment_method_assigned_to_user_id,
+                    date_of_expense = :date_of_expense,
+                    expense_comment = :expense_comment,
+                    amount = :amount
+                WHERE id = :id';
+
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+
+        $stmt->bindValue(':expense_category_assigned_to_user_id', $_POST['expense_category_assigned_to_user_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':payment_method_assigned_to_user_id', $_POST['payment_method_assigned_to_user_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':date_of_expense', $_POST['date_of_expense'], PDO::PARAM_STR);
+        $stmt->bindValue(':expense_comment', $_POST['expense_comment'], PDO::PARAM_STR);
+        $stmt->bindValue(':amount', $_POST['amount'], PDO::PARAM_STR);
+        $stmt->bindValue(':id', $_POST['id'], PDO::PARAM_INT);
+
+
+        return $stmt->execute();
+    }
+
+    /**
+     * Remove expense
+     * 
+     * @return void
+     */
+    public static function removeTableRowAjax() {
+        $sql = 'DELETE FROM expenses
+                WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $_POST['id'], PDO::PARAM_INT);
+
+        return $stmt->execute();
     }
 }
