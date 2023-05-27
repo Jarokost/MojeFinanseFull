@@ -229,4 +229,32 @@ class Incomes extends \Core\Model
 
         return $stmt->fetch();
     }
+
+    /**
+     * Update income
+     * 
+     * @return void
+     */
+    public static function updateTableRowAjax() {
+        $sql = 'UPDATE incomes
+                SET income_category_assigned_to_user_id = :income_category_assigned_to_user_id,
+                    date_of_income = :date_of_income,
+                    income_comment = :income_comment,
+                    amount = :amount
+                WHERE id = :id';
+
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+
+        $stmt->bindValue(':income_category_assigned_to_user_id', $_POST['income_category_assigned_to_user_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':date_of_income', $_POST['date_of_income'], PDO::PARAM_STR);
+        $stmt->bindValue(':income_comment', $_POST['income_comment'], PDO::PARAM_STR);
+        $stmt->bindValue(':amount', $_POST['amount'], PDO::PARAM_STR);
+        $stmt->bindValue(':id', $_POST['id'], PDO::PARAM_INT);
+
+
+        return $stmt->execute();
+    }
 }

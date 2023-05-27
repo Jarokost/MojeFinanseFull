@@ -103,35 +103,26 @@
 
       var tr = null;
 
-      $(function() {
-        //Take the data from the TR during the event button
-        $('#tableExpenses').on('click', 'a.editingTRbutton',function (ele) {
+      $("#tableExpenses").on("click", "a.editingTRbutton", function(ele) {
 
-            //the <tr> variable is use to set the parentNode from "ele
-            tr = ele.target.parentNode.parentNode.parentNode;
+          //table row text data
+          tr = ele.target.parentNode.parentNode.parentNode;
 
-            //I get the value from the cells (td) using the parentNode (var tr)
-            var tr_e_id = tr.cells[1].textContent;
-            var tr_e_date = tr.cells[2].textContent;
-            var tr_e_category = tr.cells[3].textContent;
-            var tr_e_method = tr.cells[4].textContent;
-            var tr_e_comment = tr.cells[5].textContent;
-            var tr_e_amount = tr.cells[6].textContent;
+          var id = tr.cells[1].textContent;
+          var date = tr.cells[2].textContent;
+          var category = tr.cells[3].textContent;
+          var method = tr.cells[4].textContent;
+          var comment = tr.cells[5].textContent;
+          var amount = tr.cells[6].textContent;
 
-            //console.log(tr_e_category, tr_e_method);
+          //Prefill the fields with the gathered information
+          $('#editExpenseId').val(id);
+          $('#editExpenseAmount').val(amount);
+          $('#editExpenseDate').val(date);
+          $('#editExpenseComment').val(comment);
+          setSelectByText('editExpenseCategory', category);
+          setSelectByText('editExpenseMethod', method);
 
-            //Prefill the fields with the gathered information
-            $('#editExpenseId').val(tr_e_id);
-            $('#editExpenseAmount').val(tr_e_amount);
-            $('#editExpenseDate').val(tr_e_date);
-            $('#editExpenseComment').val(tr_e_comment);
-            setSelectByText('editExpenseCategory', tr_e_category);
-            setSelectByText('editExpenseMethod', tr_e_method);
-
-            //If you need to update the form data and change the button link
-            // $("form#ModalForm").attr('action', window.location.href+'/update/'+id);
-            // $("a#saveModalButton").attr('href', window.location.href+'/update/'+id);
-        });
       });
 
       $("button.button-expense-change").on("click", function(e) {
@@ -142,13 +133,6 @@
         var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
         var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
         var expense_comment = $("#editExpenseComment").val();
-
-        tr.cells[1].textContent = id;
-        tr.cells[2].textContent = date_of_expense;
-        tr.cells[3].textContent = expense_comment;
-        tr.cells[4].textContent = $("#editExpenseCategory option:selected").text();
-        tr.cells[5].textContent = $("#editExpenseMethod option:selected").text();
-        tr.cells[6].textContent = amount;
 
         $.ajax({
           url: '/Expenses/updateTableRowAjax',
@@ -169,8 +153,55 @@
           tr.cells[5].textContent = expense_comment;
           tr.cells[6].textContent = amount;
         });
-        //console.log(chg_id, chg_amount, chg_date_of_expense, chg_expense_category_assigned_to_user_id, chg_payment_method_assigned_to_user_id, chg_expense_comment);
       });
+
+      $("#tableIncomes").on("click", "a.editingTRbutton", function(ele) {
+
+          //table row text data
+          tr = ele.target.parentNode.parentNode.parentNode;
+
+          var id = tr.cells[1].textContent;
+          var date = tr.cells[2].textContent;
+          var category = tr.cells[3].textContent;
+          var comment = tr.cells[4].textContent;
+          var amount = tr.cells[5].textContent;
+
+          //Prefill the fields with the gathered information
+          $('#editIncomeId').val(id);
+          $('#editIncomeAmount').val(amount);
+          $('#editIncomeDate').val(date);
+          $('#editIncomeComment').val(comment);
+          setSelectByText('editIncomeCategory', category);
+
+        });
+
+        $("button.button-income-change").on("click", function(e) {
+
+          var id = $("#editIncomeId").val();
+          var amount = $("#editIncomeAmount").val();
+          var date_of_income = $("#editIncomeDate").val();
+          var income_category_assigned_to_user_id = $("#editIncomeCategory").val();
+          var income_comment = $("#editIncomeComment").val();
+
+          $.ajax({
+            url: '/Incomes/updateTableRowAjax',
+            type: 'POST',
+            data: {id: id,
+              amount: amount,
+              date_of_income: date_of_income,
+              income_category_assigned_to_user_id: income_category_assigned_to_user_id,
+              income_comment: income_comment
+          }
+          })
+          .done(function(data) {
+            tr.cells[1].textContent = id;
+            tr.cells[2].textContent = date_of_income;
+            tr.cells[3].textContent = $("#editIncomeCategory option:selected").text();
+            tr.cells[4].textContent = income_comment;
+            tr.cells[5].textContent = amount;
+          });
+        });
+
     </script>
 
 {% endblock %}
@@ -343,175 +374,256 @@
     </main>
 
   <!-- MODAL - date selection -->
-    <div class="modal fade" id="modalDateSelector" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header p-5 pb-4 border-bottom-0">
-                <h1 class="fw-bold mb-0 fs-2">Wybierz zakres dat</h1>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
-                </div>
-
-                <div class="modal-body p-5 pt-0">
-                <form action="/balance/indexSelectedDates" method="post">
-                    <div class="form-floating mb-3">
-                    <input
-                        type="date"
-                        class="form-control rounded-3"
-                        name="dateFrom"
-                        id="floatingDateFrom"
-                        placeholder="Data od"
-                    />
-                    <label for="floatingDateFrom">Data od</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                    <input
-                        type="date"
-                        class="form-control rounded-3"
-                        name="dateTo"
-                        id="floatingDateTo"
-                        placeholder="Data do"
-                    />
-                    <label for="floatingDateTo">Data do</label>
-                    </div>
-                    <button
-                    class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
-                    type="submit"
-                    >
-                    Zatwierdź
-                    </button>
-                </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-  <!-- MODAL - edit transaction -->
-    <div class="modal fade" id="modalEditExpense" tabindex="-1">
+  <div class="modal fade" id="modalDateSelector" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header p-5 pb-4 border-bottom-0">
-            <h1 class="fw-bold mb-0 fs-2">Edycja wpisu</h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-
-          <input type="hidden" name="id" id="editExpenseId" />
-
-          <div class="modal-body p-5 pt-0">
-           <!-- <form class=""> -->
-              <!-- JS use class is-invalid when input validation -->
-              <div class="form-floating mb-2 center-block">
-                <input
-                  type="number"
-                  class="form-control input-width"
-                  id="editExpenseAmount"
-                  name="amount"
-                  placeholder="0.00"
-                  step="0.01"
-                />
-                <!-- <label for="floatingInputKwota">Kwota [PLN]</label> -->
-              </div>
-
-              <!-- JS use class is-invalid when input validation -->
-              <div class="form-floating mb-2 center-block">
-                <input
-                  type="date"
-                  class="form-control input-width"
-                  id="editExpenseDate"
-                  name="date_of_expense"
-                  placeholder="Data"
-                  value="{{ expense.date_of_expense }}"
-                />
-                <label for="expenseDate">Data</label>
-              </div>
-
-              <!-- JS use class is-invalid when input validation -->
-              <div class="form-floating mb-2 center-block">
-                <select class="form-select input-width" 
-                id="editExpenseCategory"
-                name="expense_category_assigned_to_user_id"
-                >
-                  {% for category in balance.expenses_categories %}
-                    <option value="{{ category.id }}">
-                        {{ category.name }}
-                    </option>
-                  {% endfor %}
-                </select>
-                <!-- <label for="floatingSelect">Kategoria</label> -->
-              </div>
-
-              <!-- JS use class is-invalid when input validation -->
-              <div class="form-floating mb-2 center-block">
-                <select class="form-select input-width" 
-                id="editExpenseMethod"
-                name="payment_method_assigned_to_user_id"
-                >
-                  {% for methods in balance.expenses_payment_methods %}
-                    <option value="{{ methods.id }}">
-                        {{ methods.name }}
-                    </option>
-                  {% endfor %}
-                </select>
-                <!-- <label for="floatingSelect">Kategoria</label> -->
-              </div>
-
-              <div class="form-floating mb-2 center-block">
-                <textarea
-                  class="form-control input-width"
-                  placeholder="Komentarz"
-                  id="editExpenseComment"
-                  name="expense_comment"
-                >{{ expense.expense_comment ?? '' }}</textarea>
-                <label for="floatingTextarea">Komentarz</label>
-              </div>
-
+          <div class="modal-content">
+              <div class="modal-header p-5 pb-4 border-bottom-0">
+              <h1 class="fw-bold mb-0 fs-2">Wybierz zakres dat</h1>
               <button
-                class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-expense-change"
-                type="button"
-                data-bs-dismiss="modal"
-              >
-                Dokonaj zmian
-              </button>
-            <!-- </form> -->
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+              ></button>
+              </div>
+
+              <div class="modal-body p-5 pt-0">
+              <form action="/balance/indexSelectedDates" method="post">
+                  <div class="form-floating mb-3">
+                  <input
+                      type="date"
+                      class="form-control rounded-3"
+                      name="dateFrom"
+                      id="floatingDateFrom"
+                      placeholder="Data od"
+                  />
+                  <label for="floatingDateFrom">Data od</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                  <input
+                      type="date"
+                      class="form-control rounded-3"
+                      name="dateTo"
+                      id="floatingDateTo"
+                      placeholder="Data do"
+                  />
+                  <label for="floatingDateTo">Data do</label>
+                  </div>
+                  <button
+                  class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+                  type="submit"
+                  >
+                  Zatwierdź
+                  </button>
+              </form>
+              </div>
           </div>
+      </div>
+  </div>
+
+  <!-- MODAL - edit expense -->
+  <div class="modal fade" id="modalEditExpense" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Edycja wpisu</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <input type="hidden" name="id" id="editExpenseId" />
+
+        <div class="modal-body p-5 pt-0">
+          <!-- <form class=""> -->
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <input
+                type="number"
+                class="form-control input-width"
+                id="editExpenseAmount"
+                name="amount"
+                placeholder="0.00"
+                step="0.01"
+              />
+              <!-- <label for="floatingInputKwota">Kwota [PLN]</label> -->
+            </div>
+
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <input
+                type="date"
+                class="form-control input-width"
+                id="editExpenseDate"
+                name="date_of_expense"
+                placeholder="Data"
+                value="{{ expense.date_of_expense }}"
+              />
+              <label for="expenseDate">Data</label>
+            </div>
+
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <select class="form-select input-width" 
+              id="editExpenseCategory"
+              name="expense_category_assigned_to_user_id"
+              >
+                {% for category in balance.expenses_categories %}
+                  <option value="{{ category.id }}">
+                      {{ category.name }}
+                  </option>
+                {% endfor %}
+              </select>
+              <!-- <label for="floatingSelect">Kategoria</label> -->
+            </div>
+
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <select class="form-select input-width" 
+              id="editExpenseMethod"
+              name="payment_method_assigned_to_user_id"
+              >
+                {% for methods in balance.expenses_payment_methods %}
+                  <option value="{{ methods.id }}">
+                      {{ methods.name }}
+                  </option>
+                {% endfor %}
+              </select>
+              <!-- <label for="floatingSelect">Kategoria</label> -->
+            </div>
+
+            <div class="form-floating mb-2 center-block">
+              <textarea
+                class="form-control input-width"
+                placeholder="Komentarz"
+                id="editExpenseComment"
+                name="expense_comment"
+              >{{ expense.expense_comment ?? '' }}</textarea>
+              <label for="floatingTextarea">Komentarz</label>
+            </div>
+
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-expense-change"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Dokonaj zmian
+            </button>
+          <!-- </form> -->
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- MODAL - edit income -->
+  <div class="modal fade" id="modalEditIncome" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Edycja wpisu</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <input type="hidden" name="id" id="editIncomeId" />
+
+        <div class="modal-body p-5 pt-0">
+         <!-- <form class=""> -->
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <input
+                type="number"
+                class="form-control input-width"
+                id="editIncomeAmount"
+                name="amount"
+                placeholder="0.00"
+                step="0.01"
+              />
+              <!-- <label for="floatingInputKwota">Kwota [PLN]</label> -->
+            </div>
+
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <input
+                type="date"
+                class="form-control input-width"
+                id="editIncomeDate"
+                name="date_of_income"
+                placeholder="Data"
+                value="{{ income.date_of_income }}"
+              />
+              <!-- <label for="incomeDate">Data</label> -->
+            </div>
+
+            <!-- JS use class is-invalid when input validation -->
+            <div class="form-floating mb-2 center-block">
+              <select class="form-select input-width" 
+              id="editIncomeCategory"
+              name="income_category_assigned_to_user_id"
+              >
+                {% for category in balance.incomes_categories %}
+                  <option value="{{ category.id }}">
+                      {{ category.name }}
+                  </option>
+                {% endfor %}
+              </select>
+              <!-- <label for="floatingSelect">Kategoria</label> -->
+            </div>
+
+            <div class="form-floating mb-2 center-block">
+              <textarea
+                class="form-control input-width"
+                placeholder="Komentarz"
+                id="editIncomeComment"
+                name="income_comment"
+              >{{ income.income_comment ?? '' }}</textarea>
+              <!-- <label for="floatingTextarea">Komentarz</label> -->
+            </div>
+
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-income-change"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Dokonaj zmian
+            </button>
+          <!-- </form> -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL - remove transaction -->
-    <div class="modal fade" id="modalRemTransaction" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header p-5 pb-4 border-bottom-0">
-            <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wpisu</h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
+  <div class="modal fade" id="modalRemTransaction" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wpisu</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
 
-          <div class="modal-body p-5 pt-0">
-            <form class="">
-              <div class="w-100 my-5"></div>
-              <button
-                class="w-100 mb-2 mt-5 btn btn-lg rounded-3 btn-danger"
-                type="submit"
-              >
-                Usuń wpis
-              </button>
-            </form>
-          </div>
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="w-100 my-5"></div>
+            <button
+              class="w-100 mb-2 mt-5 btn btn-lg rounded-3 btn-danger"
+              type="submit"
+            >
+              Usuń wpis
+            </button>
+          </form>
         </div>
       </div>
     </div>
+  </div>
 
 {% endblock %}
