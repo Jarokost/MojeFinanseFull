@@ -64,7 +64,11 @@ class Incomes extends Authenticated
 
     public function updateTableRowAjax()
     {
-        \App\Models\Incomes::updateTableRowAjax();
+        $incomes = new \App\Models\Incomes($_POST);
+        $data['success'] = $incomes->updateTableRowAjax();
+        $data['errors'] = $incomes->errors;
+        echo json_encode($data);
+        exit;
     }
 
     public function removeTableRowAjax()

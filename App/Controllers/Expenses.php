@@ -69,7 +69,11 @@ class Expenses extends Authenticated
 
     public function updateTableRowAjax()
     {
-        \App\Models\Expenses::updateTableRowAjax();
+        $expenses = new \App\Models\Expenses($_POST);
+        $data['success'] = $expenses->updateTableRowAjax();;
+        $data['errors'] = $expenses->errors;
+        echo json_encode($data);
+        exit;
     }
 
     public function removeTableRowAjax()

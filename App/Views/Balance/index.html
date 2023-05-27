@@ -155,12 +155,18 @@
             }
           })
           .done(function(data) {
-            tr.cells[1].textContent = id;
-            tr.cells[2].textContent = date_of_expense;
-            tr.cells[3].textContent = $("#editExpenseCategory option:selected").text();
-            tr.cells[4].textContent = $("#editExpenseMethod option:selected").text();
-            tr.cells[5].textContent = expense_comment;
-            tr.cells[6].textContent = amount;
+            var data = $.parseJSON(data);
+            console.log(data.success);
+            if (data.success == false) {
+              alert(data.errors);
+            } else {
+              tr.cells[1].textContent = id;
+              tr.cells[2].textContent = date_of_expense;
+              tr.cells[3].textContent = $("#editExpenseCategory option:selected").text();
+              tr.cells[4].textContent = $("#editExpenseMethod option:selected").text();
+              tr.cells[5].textContent = expense_comment;
+              tr.cells[6].textContent = parseFloat(amount).toFixed(2);
+            }
           });
         });
 
@@ -204,11 +210,17 @@
           }
           })
           .done(function(data) {
-            tr.cells[1].textContent = id;
-            tr.cells[2].textContent = date_of_income;
-            tr.cells[3].textContent = $("#editIncomeCategory option:selected").text();
-            tr.cells[4].textContent = income_comment;
-            tr.cells[5].textContent = amount;
+            var data = $.parseJSON(data);
+            console.log(data.success);
+            if (data.success == false) {
+              alert(data.errors);
+            } else {
+              tr.cells[1].textContent = id;
+              tr.cells[2].textContent = date_of_income;
+              tr.cells[3].textContent = $("#editIncomeCategory option:selected").text();
+              tr.cells[4].textContent = income_comment;
+              tr.cells[5].textContent = parseFloat(amount).toFixed(2);
+            }
           });
         });
 
@@ -330,6 +342,9 @@
             income_category_assigned_to_user_id: {
               required: "Wybierz kategorię"
             }
+          },
+          submitHandler: function(form) {
+            $('#modalEditIncome').modal('toggle');
           }
         });
 
@@ -369,6 +384,9 @@
               required: "Wybierz metodę płatności",
               validCategory: "Wybierz metodę płatności"
             }
+          },
+          submitHandler: function(form) {
+            $('#modalEditExpense').modal('toggle');
           }
         });
 
@@ -684,6 +702,7 @@
 
           <input type="hidden" name="id" id="editExpenseId" />
 
+          <!-- JS use class is-invalid when input validation -->
           <div class="modal-body p-5 pt-0">
             <div class="form-floating mb-2 center-block">
               <input
@@ -694,8 +713,10 @@
                 placeholder="0.00"
                 step="0.01"
               />
+              <!-- <label id="editExpenseAmountLabel" for="editExpenseAmount">Kwota [PLN]</label> -->
             </div>
 
+            <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2 center-block">
               <input
                 type="date"
@@ -705,9 +726,10 @@
                 placeholder="Data"
                 value="{{ expense.date_of_expense }}"
               />
-              <label for="expenseDate">Data</label>
+              <!-- <label id="editExpenseDateLabel" for="editExpenseDate">Kwota [PLN]</label> -->
             </div>
 
+            <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2 center-block">
               <select class="form-select input-width" 
               id="editExpenseCategory"
@@ -719,8 +741,10 @@
                   </option>
                 {% endfor %}
               </select>
+              <!-- <label id="editExpenseCategory" for="editExpenseCategory">Kwota [PLN]</label> -->
             </div>
 
+            <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2 center-block">
               <select class="form-select input-width" 
               id="editExpenseMethod"
@@ -732,6 +756,7 @@
                   </option>
                 {% endfor %}
               </select>
+              <!-- <label id="editExpenseMethodLabel" for="editExpenseMethod">Kwota [PLN]</label> -->
             </div>
 
             <div class="form-floating mb-2 center-block">
@@ -746,8 +771,7 @@
 
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-expense-change"
-              type="button"
-              data-bs-dismiss="modal"
+              type="submit"
             >
               Dokonaj zmian
             </button>
@@ -786,7 +810,7 @@
                 placeholder="0.00"
                 step="0.01"
               />
-              <!-- <label for="floatingInputKwota">Kwota [PLN]</label> -->
+              <!-- <label id="editIncomeAmountLabel" for="editIncomeAmount">Kwota [PLN]</label> -->
             </div>
 
             <!-- JS use class is-invalid when input validation -->
@@ -799,7 +823,7 @@
                 placeholder="Data"
                 value="{{ income.date_of_income }}"
               />
-              <!-- <label for="incomeDate">Data</label> -->
+              <!-- <label id="editIncomeDateLabel" for="editIncomeDate">Data</label> -->
             </div>
 
             <!-- JS use class is-invalid when input validation -->
@@ -814,7 +838,7 @@
                   </option>
                 {% endfor %}
               </select>
-              <!-- <label for="floatingSelect">Kategoria</label> -->
+              <!-- <label id="editIncomeCategoryLable" for="editIncomeCategory">Kategoria</label> -->
             </div>
 
             <div class="form-floating mb-2 center-block">
@@ -829,8 +853,7 @@
 
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-income-change"
-              type="button"
-              data-bs-dismiss="modal"
+              type="submit"
             >
               Dokonaj zmian
             </button>
