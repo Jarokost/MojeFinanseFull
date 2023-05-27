@@ -72,4 +72,9 @@ class Expenses extends Authenticated
         \App\Models\Expenses::updateTableRowAjax();
     }
 
+    public function removeTableRowAjax()
+    {
+        \App\Models\Expenses::removeTableRowAjax();
+    }
+
 }

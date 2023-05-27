@@ -103,6 +103,7 @@
 
       var tr = null;
 
+      // Edit Expense 
       $("#tableExpenses").on("click", "a.editingTRbutton", function(ele) {
 
           //table row text data
@@ -155,6 +156,7 @@
         });
       });
 
+      // Edit Income
       $("#tableIncomes").on("click", "a.editingTRbutton", function(ele) {
 
           //table row text data
@@ -175,82 +177,122 @@
 
         });
 
-        $("button.button-income-change").on("click", function(e) {
+      $("button.button-income-change").on("click", function(e) {
 
-          var id = $("#editIncomeId").val();
-          var amount = $("#editIncomeAmount").val();
-          var date_of_income = $("#editIncomeDate").val();
-          var income_category_assigned_to_user_id = $("#editIncomeCategory").val();
-          var income_comment = $("#editIncomeComment").val();
-
-          $.ajax({
-            url: '/Incomes/updateTableRowAjax',
-            type: 'POST',
-            data: {id: id,
-              amount: amount,
-              date_of_income: date_of_income,
-              income_category_assigned_to_user_id: income_category_assigned_to_user_id,
-              income_comment: income_comment
-          }
-          })
-          .done(function(data) {
-            tr.cells[1].textContent = id;
-            tr.cells[2].textContent = date_of_income;
-            tr.cells[3].textContent = $("#editIncomeCategory option:selected").text();
-            tr.cells[4].textContent = income_comment;
-            tr.cells[5].textContent = amount;
-          });
-        });
-
-        $("#tableExpenses").on("click", "a.removingTRbutton", function(ele) {
-
-          //table row text data
-          tr = ele.target.parentNode.parentNode.parentNode;
-
-          var id = tr.cells[1].textContent;
-          var date = tr.cells[2].textContent;
-          var category = tr.cells[3].textContent;
-          var method = tr.cells[4].textContent;
-          var comment = tr.cells[5].textContent;
-          var amount = tr.cells[6].textContent;
-
-          $("#expenseRowToRemove").html("data: " + date 
-                                        + "</br>kategoria: " + category
-                                        + "</br>metada płatności: " + method
-                                        + "</br>opis: " + comment
-                                        + "</br>kwota: " + amount);
-
-        });
-
-        $("button.button-expense-remove").on("click", function(e) {
-
-        var id = $("#editExpenseId").val();
-        var amount = $("#editExpenseAmount").val();
-        var date_of_expense = $("#editExpenseDate").val();
-        var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
-        var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
-        var expense_comment = $("#editExpenseComment").val();
+        var id = $("#editIncomeId").val();
+        var amount = $("#editIncomeAmount").val();
+        var date_of_income = $("#editIncomeDate").val();
+        var income_category_assigned_to_user_id = $("#editIncomeCategory").val();
+        var income_comment = $("#editIncomeComment").val();
 
         $.ajax({
-        url: '/Expenses/updateTableRowAjax',
-        type: 'POST',
-        data: {id: id,
-          amount: amount,
-          date_of_expense: date_of_expense,
-          expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
-          payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
-          expense_comment: expense_comment
+          url: '/Incomes/updateTableRowAjax',
+          type: 'POST',
+          data: {id: id,
+            amount: amount,
+            date_of_income: date_of_income,
+            income_category_assigned_to_user_id: income_category_assigned_to_user_id,
+            income_comment: income_comment
         }
         })
         .done(function(data) {
-        tr.cells[1].textContent = id;
-        tr.cells[2].textContent = date_of_expense;
-        tr.cells[3].textContent = $("#editExpenseCategory option:selected").text();
-        tr.cells[4].textContent = $("#editExpenseMethod option:selected").text();
-        tr.cells[5].textContent = expense_comment;
-        tr.cells[6].textContent = amount;
+          tr.cells[1].textContent = id;
+          tr.cells[2].textContent = date_of_income;
+          tr.cells[3].textContent = $("#editIncomeCategory option:selected").text();
+          tr.cells[4].textContent = income_comment;
+          tr.cells[5].textContent = amount;
+        });
+      });
+
+      // Remove Expense
+      $("#tableExpenses").on("click", "a.removingTRbutton", function(ele) {
+
+        //table row text data
+        tr = ele.target.parentNode.parentNode.parentNode;
+
+        var id = tr.cells[1].textContent;
+        var date = tr.cells[2].textContent;
+        var category = tr.cells[3].textContent;
+        var method = tr.cells[4].textContent;
+        var comment = tr.cells[5].textContent;
+        var amount = tr.cells[6].textContent;
+
+        // fill invisible input in modal
+        $('#removeExpenseId').val(id);
+
+        // display record in modal
+        $("#expenseRowToRemove").html("data: " + date 
+                                      + "</br>kategoria: " + category
+                                      + "</br>metada płatności: " + method
+                                      + "</br>opis: " + comment
+                                      + "</br>kwota: " + amount);
+
+      });
+
+      $("button.button-expense-remove").on("click", function(e) {
+
+        var id = $("#removeExpenseId").val();
+
+        $.ajax({
+          url: '/Expenses/removeTableRowAjax',
+          type: 'POST',
+          data: {id: id}
+        })
+        .done(function(data) {
+          // remove table row
+          tr.remove();
+          // renumber index
+          var index = 1;
+          $("tr.expense-item-in-expenses-table").each(function() {
+            $(this)[0].cells[0].textContent = index;
+          index++;
         });
         });
+      });
+
+      // Remove Income
+      $("#tableIncomes").on("click", "a.removingTRbutton", function(ele) {
+
+        //table row text data
+        tr = ele.target.parentNode.parentNode.parentNode;
+
+        var id = tr.cells[1].textContent;
+        var date = tr.cells[2].textContent;
+        var category = tr.cells[3].textContent;
+        var comment = tr.cells[5].textContent;
+        var amount = tr.cells[6].textContent;
+
+        // fill invisible input in modal
+        $('#removeIncomeId').val(id);
+
+        // display record in modal
+        $("#incomeRowToRemove").html("data: " + date 
+                                      + "</br>kategoria: " + category
+                                      + "</br>opis: " + comment
+                                      + "</br>kwota: " + amount);
+
+      });
+
+      $("button.button-income-remove").on("click", function(e) {
+
+        var id = $("#removeIncomeId").val();
+
+        $.ajax({
+          url: '/Incomes/removeTableRowAjax',
+          type: 'POST',
+          data: {id: id}
+        })
+        .done(function(data) {
+          // remove table row
+          tr.remove();
+          // renumber index
+          var index = 1;
+          $("tr.income-item-in-incomes-table").each(function() {
+            $(this)[0].cells[0].textContent = index;
+            index++;
+          });
+        });
+      });
 
     </script>
 
@@ -337,7 +379,7 @@
                                 </thead>
                                 <tbody>
                                     {% for income in balance.incomes %}
-                                    <tr>
+                                    <tr class="income-item-in-incomes-table">
                                         <td>{{ loop.index0+1 }}</td>
                                         <td hidden>{{ income.id }}</td>
                                         <td>{{ income.date_of_income }}</td>
@@ -390,7 +432,7 @@
                                 </thead>
                                 <tbody>
                                     {% for expense in balance.expenses %}
-                                    <tr>
+                                    <tr class="expense-item-in-expenses-table">
                                         <td>{{ loop.index0+1 }}</td>
                                         <td hidden>{{ expense.id }}</td>
                                         <td>{{ expense.date_of_expense }}</td>
@@ -668,6 +710,37 @@
             <div class="w-100 my-2 text-center" id="expenseRowToRemove"></div>
             <button
               class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-expense-remove"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Usuń wydatek
+            </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL - remove income -->
+  <div class="modal fade" id="modalRemoveIncome" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <input type="hidden" name="id" id="removeIncomeId" />
+
+        <div class="modal-body p-5 pt-0">
+
+            <div class="w-100 my-2 text-center" id="incomeRowToRemove"></div>
+            <button
+              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-income-remove"
               type="button"
               data-bs-dismiss="modal"
             >

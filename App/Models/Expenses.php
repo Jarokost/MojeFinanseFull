@@ -252,7 +252,7 @@ class Expenses extends \Core\Model
     }
 
     /**
-     * Update income
+     * Update expense
      * 
      * @return void
      */
@@ -277,6 +277,23 @@ class Expenses extends \Core\Model
         $stmt->bindValue(':amount', $_POST['amount'], PDO::PARAM_STR);
         $stmt->bindValue(':id', $_POST['id'], PDO::PARAM_INT);
 
+
+        return $stmt->execute();
+    }
+
+    /**
+     * Remove expense
+     * 
+     * @return void
+     */
+    public static function removeTableRowAjax() {
+        $sql = 'DELETE FROM expenses
+                WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $_POST['id'], PDO::PARAM_INT);
 
         return $stmt->execute();
     }
