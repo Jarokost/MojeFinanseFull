@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block footer %}
+<!-- pie chart incomes -->
     <script
       type="text/javascript"
       src="https://www.gstatic.com/charts/loader.js"
@@ -49,7 +50,7 @@
         chart.draw(data, options);
       }
     </script>
-
+<!-- pie chart expenses -->
     <script
       type="text/javascript"
       src="https://www.gstatic.com/charts/loader.js"
@@ -88,7 +89,13 @@
       }
     </script>
 
+    <script src="/js/app.js"></script>
+<!-- edit / remove -->
     <script>
+
+      function dontSubmit() {
+        //return false;
+      }
 
       function setSelectByText(eID,text)
       { //Loop through sequentially//
@@ -103,8 +110,110 @@
 
       var tr = null;
 
-      // Edit Expense 
-      $("#tableExpenses").on("click", "a.editingTRbutton", function(ele) {
+      $(document).ready(function() {
+        // Edit Expense 
+        $("#tableExpenses").on("click", "a.editingTRbutton", function(ele) {
+
+            //table row text data
+            tr = ele.target.parentNode.parentNode.parentNode;
+
+            var id = tr.cells[1].textContent;
+            var date = tr.cells[2].textContent;
+            var category = tr.cells[3].textContent;
+            var method = tr.cells[4].textContent;
+            var comment = tr.cells[5].textContent;
+            var amount = tr.cells[6].textContent;
+
+            //Prefill the fields with the gathered information
+            $('#editExpenseId').val(id);
+            $('#editExpenseAmount').val(amount);
+            $('#editExpenseDate').val(date);
+            $('#editExpenseComment').val(comment);
+            setSelectByText('editExpenseCategory', category);
+            setSelectByText('editExpenseMethod', method);
+
+        });
+
+        $("button.button-expense-change").on("click", function(e) {
+          
+          var id = $("#editExpenseId").val();
+          var amount = $("#editExpenseAmount").val();
+          var date_of_expense = $("#editExpenseDate").val();
+          var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
+          var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
+          var expense_comment = $("#editExpenseComment").val();
+
+          $.ajax({
+            url: '/Expenses/updateTableRowAjax',
+            type: 'POST',
+            data: {id: id,
+              amount: amount,
+              date_of_expense: date_of_expense,
+              expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
+              payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
+              expense_comment: expense_comment
+            }
+          })
+          .done(function(data) {
+            tr.cells[1].textContent = id;
+            tr.cells[2].textContent = date_of_expense;
+            tr.cells[3].textContent = $("#editExpenseCategory option:selected").text();
+            tr.cells[4].textContent = $("#editExpenseMethod option:selected").text();
+            tr.cells[5].textContent = expense_comment;
+            tr.cells[6].textContent = amount;
+          });
+        });
+
+        // Edit Income
+        $("#tableIncomes").on("click", "a.editingTRbutton", function(ele) {
+
+            //table row text data
+            tr = ele.target.parentNode.parentNode.parentNode;
+
+            var id = tr.cells[1].textContent;
+            var date = tr.cells[2].textContent;
+            var category = tr.cells[3].textContent;
+            var comment = tr.cells[4].textContent;
+            var amount = tr.cells[5].textContent;
+
+            //Prefill the fields with the gathered information
+            $('#editIncomeId').val(id);
+            $('#editIncomeAmount').val(amount);
+            $('#editIncomeDate').val(date);
+            $('#editIncomeComment').val(comment);
+            setSelectByText('editIncomeCategory', category);
+
+          });
+
+        $("button.button-income-change").on("click", function(e) {
+
+          var id = $("#editIncomeId").val();
+          var amount = $("#editIncomeAmount").val();
+          var date_of_income = $("#editIncomeDate").val();
+          var income_category_assigned_to_user_id = $("#editIncomeCategory").val();
+          var income_comment = $("#editIncomeComment").val();
+
+          $.ajax({
+            url: '/Incomes/updateTableRowAjax',
+            type: 'POST',
+            data: {id: id,
+              amount: amount,
+              date_of_income: date_of_income,
+              income_category_assigned_to_user_id: income_category_assigned_to_user_id,
+              income_comment: income_comment
+          }
+          })
+          .done(function(data) {
+            tr.cells[1].textContent = id;
+            tr.cells[2].textContent = date_of_income;
+            tr.cells[3].textContent = $("#editIncomeCategory option:selected").text();
+            tr.cells[4].textContent = income_comment;
+            tr.cells[5].textContent = amount;
+          });
+        });
+
+        // Remove Expense
+        $("#tableExpenses").on("click", "a.removingTRbutton", function(ele) {
 
           //table row text data
           tr = ele.target.parentNode.parentNode.parentNode;
@@ -116,48 +225,41 @@
           var comment = tr.cells[5].textContent;
           var amount = tr.cells[6].textContent;
 
-          //Prefill the fields with the gathered information
-          $('#editExpenseId').val(id);
-          $('#editExpenseAmount').val(amount);
-          $('#editExpenseDate').val(date);
-          $('#editExpenseComment').val(comment);
-          setSelectByText('editExpenseCategory', category);
-          setSelectByText('editExpenseMethod', method);
+          // fill invisible input in modal
+          $('#removeExpenseId').val(id);
 
-      });
+          // display record in modal
+          $("#expenseRowToRemove").html("data: " + date 
+                                        + "</br>kategoria: " + category
+                                        + "</br>metada płatności: " + method
+                                        + "</br>opis: " + comment
+                                        + "</br>kwota: " + amount);
 
-      $("button.button-expense-change").on("click", function(e) {
-        
-        var id = $("#editExpenseId").val();
-        var amount = $("#editExpenseAmount").val();
-        var date_of_expense = $("#editExpenseDate").val();
-        var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
-        var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
-        var expense_comment = $("#editExpenseComment").val();
-
-        $.ajax({
-          url: '/Expenses/updateTableRowAjax',
-          type: 'POST',
-          data: {id: id,
-            amount: amount,
-            date_of_expense: date_of_expense,
-            expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
-            payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
-            expense_comment: expense_comment
-          }
-        })
-        .done(function(data) {
-          tr.cells[1].textContent = id;
-          tr.cells[2].textContent = date_of_expense;
-          tr.cells[3].textContent = $("#editExpenseCategory option:selected").text();
-          tr.cells[4].textContent = $("#editExpenseMethod option:selected").text();
-          tr.cells[5].textContent = expense_comment;
-          tr.cells[6].textContent = amount;
         });
-      });
 
-      // Edit Income
-      $("#tableIncomes").on("click", "a.editingTRbutton", function(ele) {
+        $("button.button-expense-remove").on("click", function(e) {
+
+          var id = $("#removeExpenseId").val();
+
+          $.ajax({
+            url: '/Expenses/removeTableRowAjax',
+            type: 'POST',
+            data: {id: id}
+          })
+          .done(function(data) {
+            // remove table row
+            tr.remove();
+            // renumber index
+            var index = 1;
+            $("tr.expense-item-in-expenses-table").each(function() {
+              $(this)[0].cells[0].textContent = index;
+            index++;
+          });
+          });
+        });
+
+        // Remove Income
+        $("#tableIncomes").on("click", "a.removingTRbutton", function(ele) {
 
           //table row text data
           tr = ele.target.parentNode.parentNode.parentNode;
@@ -165,115 +267,21 @@
           var id = tr.cells[1].textContent;
           var date = tr.cells[2].textContent;
           var category = tr.cells[3].textContent;
-          var comment = tr.cells[4].textContent;
-          var amount = tr.cells[5].textContent;
+          var comment = tr.cells[5].textContent;
+          var amount = tr.cells[6].textContent;
 
-          //Prefill the fields with the gathered information
-          $('#editIncomeId').val(id);
-          $('#editIncomeAmount').val(amount);
-          $('#editIncomeDate').val(date);
-          $('#editIncomeComment').val(comment);
-          setSelectByText('editIncomeCategory', category);
+          // fill invisible input in modal
+          $('#removeIncomeId').val(id);
+
+          // display record in modal
+          $("#incomeRowToRemove").html("data: " + date 
+                                        + "</br>kategoria: " + category
+                                        + "</br>opis: " + comment
+                                        + "</br>kwota: " + amount);
 
         });
 
-      $("button.button-income-change").on("click", function(e) {
-
-        var id = $("#editIncomeId").val();
-        var amount = $("#editIncomeAmount").val();
-        var date_of_income = $("#editIncomeDate").val();
-        var income_category_assigned_to_user_id = $("#editIncomeCategory").val();
-        var income_comment = $("#editIncomeComment").val();
-
-        $.ajax({
-          url: '/Incomes/updateTableRowAjax',
-          type: 'POST',
-          data: {id: id,
-            amount: amount,
-            date_of_income: date_of_income,
-            income_category_assigned_to_user_id: income_category_assigned_to_user_id,
-            income_comment: income_comment
-        }
-        })
-        .done(function(data) {
-          tr.cells[1].textContent = id;
-          tr.cells[2].textContent = date_of_income;
-          tr.cells[3].textContent = $("#editIncomeCategory option:selected").text();
-          tr.cells[4].textContent = income_comment;
-          tr.cells[5].textContent = amount;
-        });
-      });
-
-      // Remove Expense
-      $("#tableExpenses").on("click", "a.removingTRbutton", function(ele) {
-
-        //table row text data
-        tr = ele.target.parentNode.parentNode.parentNode;
-
-        var id = tr.cells[1].textContent;
-        var date = tr.cells[2].textContent;
-        var category = tr.cells[3].textContent;
-        var method = tr.cells[4].textContent;
-        var comment = tr.cells[5].textContent;
-        var amount = tr.cells[6].textContent;
-
-        // fill invisible input in modal
-        $('#removeExpenseId').val(id);
-
-        // display record in modal
-        $("#expenseRowToRemove").html("data: " + date 
-                                      + "</br>kategoria: " + category
-                                      + "</br>metada płatności: " + method
-                                      + "</br>opis: " + comment
-                                      + "</br>kwota: " + amount);
-
-      });
-
-      $("button.button-expense-remove").on("click", function(e) {
-
-        var id = $("#removeExpenseId").val();
-
-        $.ajax({
-          url: '/Expenses/removeTableRowAjax',
-          type: 'POST',
-          data: {id: id}
-        })
-        .done(function(data) {
-          // remove table row
-          tr.remove();
-          // renumber index
-          var index = 1;
-          $("tr.expense-item-in-expenses-table").each(function() {
-            $(this)[0].cells[0].textContent = index;
-          index++;
-        });
-        });
-      });
-
-      // Remove Income
-      $("#tableIncomes").on("click", "a.removingTRbutton", function(ele) {
-
-        //table row text data
-        tr = ele.target.parentNode.parentNode.parentNode;
-
-        var id = tr.cells[1].textContent;
-        var date = tr.cells[2].textContent;
-        var category = tr.cells[3].textContent;
-        var comment = tr.cells[5].textContent;
-        var amount = tr.cells[6].textContent;
-
-        // fill invisible input in modal
-        $('#removeIncomeId').val(id);
-
-        // display record in modal
-        $("#incomeRowToRemove").html("data: " + date 
-                                      + "</br>kategoria: " + category
-                                      + "</br>opis: " + comment
-                                      + "</br>kwota: " + amount);
-
-      });
-
-      $("button.button-income-remove").on("click", function(e) {
+        $("button.button-income-remove").on("click", function(e) {
 
         var id = $("#removeIncomeId").val();
 
@@ -292,6 +300,152 @@
             index++;
           });
         });
+      });
+
+        $('#formEditIncome').validate({
+          errorClass: "is-invalid",
+          rules: {
+              amount: { 
+                required: true,
+                range: [0.01, 999999.99]
+              },
+              date_of_income: {
+                required: true,
+                date: true
+              },
+              income_category_assigned_to_user_id: {
+                required: true,
+                validCategory: true
+              }
+          },
+          messages: {
+            amount: {
+              required: "Podaj kwotę",
+              range: "Podaj kwotę z zakresu od 0,01 do 999999,99"
+            },
+            date_of_income: {
+              required: "Podaj datę",
+              date: "Niepoprawny format daty dd.mm.rrrr"
+            },
+            income_category_assigned_to_user_id: {
+              required: "Wybierz kategorię"
+            }
+          }
+        });
+
+        $('#formEditExpense').validate({
+          errorClass: "is-invalid",
+          rules: {
+              amount: { 
+                required: true,
+                range: [0.01, 999999.99]
+              },
+              date_of_expense: {
+                required: true,
+                date: true
+              },
+              expense_category_assigned_to_user_id: {
+                required: true,
+                validCategory: true
+              },
+              payment_method_assigned_to_user_id: {
+                required: true,
+                validCategory: true
+              }
+          },
+          messages: {
+            amount: {
+              required: "Podaj kwotę",
+              range: "Podaj kwotę z zakresu od 0,01 do 999999,99"
+            },
+            date_of_expense: {
+              required: "Podaj datę",
+              date: "Niepoprawny format daty dd.mm.rrrr"
+            },
+            expense_category_assigned_to_user_id: {
+              required: "Wybierz kategorię"
+            },
+            payment_method_assigned_to_user_id: {
+              required: "Wybierz metodę płatności",
+              validCategory: "Wybierz metodę płatności"
+            }
+          }
+        });
+
+        setInterval(removeDefaultLabelOnValidateError, 1);
+
+        function removeDefaultLabelOnValidateError() {
+          if ($("#editIncomeAmount").hasClass("is-invalid")) {
+            $("#editIncomeAmountLabel").remove();
+          } else {
+            if (document.getElementById("editIncomeAmountLabel") === null) {
+              $("#editIncomeAmount").after(
+                '<label id="editIncomeAmountLabel" for="editIncomeAmount">Kwota [PLN]</label>'
+              );
+            }
+          }
+
+          if ($("#editIncomeCategory").hasClass("is-invalid")) {
+            $("#editIncomeCategoryLabel").remove();
+          } else {
+            if (document.getElementById("editIncomeCategoryLabel") === null) {
+              $("#editIncomeCategory").after(
+                '<label id="editIncomeCategoryLabel" for="editIncomeCategory">Wybierz kategorię</label>'
+              );
+            }
+          }
+
+          if ($("#editIncomeDate").hasClass("is-invalid")) {
+            $("#editIncomeDateLabel").remove();
+          } else {
+            if (document.getElementById("editIncomeDateLabel") === null) {
+              $("#editIncomeDate").after(
+                '<label id="editIncomeDateLabel" for="editIncomeDate">Data</label>'
+              );
+            }
+          }
+
+          if ($("#editExpenseAmount").hasClass("is-invalid")) {
+            $("#editExpenseAmountLabel").remove();
+          } else {
+            if (document.getElementById("editExpenseAmountLabel") === null) {
+              $("#editExpenseAmount").after(
+                '<label id="editExpenseAmountLabel" for="editExpenseAmount">Kwota [PLN]</label>'
+              );
+            }
+          }
+
+          if ($("#editExpenseCategory").hasClass("is-invalid")) {
+            $("#editExpenseCategoryLabel").remove();
+          } else {
+            if (document.getElementById("editExpenseCategoryLabel") === null) {
+              $("#editExpenseCategory").after(
+                '<label id="editExpenseCategoryLabel" for="editExpenseCategory">Wybierz kategorię</label>'
+              );
+            }
+          }
+
+          if ($("#editExpenseMethod").hasClass("is-invalid")) {
+            $("#editExpenseMethodLabel").remove();
+          } else {
+            if (document.getElementById("editExpenseMethodLabel") === null) {
+              $("#editExpenseMethod").after(
+                '<label id="editExpenseMethodLabel" for="editExpenseMethod">Data</label>'
+              );
+            }
+          }
+
+          if ($("#editExpenseDate").hasClass("is-invalid")) {
+            $("#editExpenseDateLabel").remove();
+          } else {
+            if (document.getElementById("editExpenseDateLabel") === null) {
+              $("#editExpenseDate").after(
+                '<label id="editExpenseDateLabel" for="editExpenseDate">Data</label>'
+              );
+            }
+          }
+        }
+      
       });
 
     </script>
@@ -526,11 +680,11 @@
           ></button>
         </div>
 
-        <input type="hidden" name="id" id="editExpenseId" />
+        <form method="post" id="formEditExpense" onsubmit="dontSubmit(); return false;">
 
-        <div class="modal-body p-5 pt-0">
-          <!-- <form class=""> -->
-            <!-- JS use class is-invalid when input validation -->
+          <input type="hidden" name="id" id="editExpenseId" />
+
+          <div class="modal-body p-5 pt-0">
             <div class="form-floating mb-2 center-block">
               <input
                 type="number"
@@ -540,10 +694,8 @@
                 placeholder="0.00"
                 step="0.01"
               />
-              <!-- <label for="floatingInputKwota">Kwota [PLN]</label> -->
             </div>
 
-            <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2 center-block">
               <input
                 type="date"
@@ -556,7 +708,6 @@
               <label for="expenseDate">Data</label>
             </div>
 
-            <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2 center-block">
               <select class="form-select input-width" 
               id="editExpenseCategory"
@@ -568,10 +719,8 @@
                   </option>
                 {% endfor %}
               </select>
-              <!-- <label for="floatingSelect">Kategoria</label> -->
             </div>
 
-            <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2 center-block">
               <select class="form-select input-width" 
               id="editExpenseMethod"
@@ -583,7 +732,6 @@
                   </option>
                 {% endfor %}
               </select>
-              <!-- <label for="floatingSelect">Kategoria</label> -->
             </div>
 
             <div class="form-floating mb-2 center-block">
@@ -593,7 +741,7 @@
                 id="editExpenseComment"
                 name="expense_comment"
               >{{ expense.expense_comment ?? '' }}</textarea>
-              <label for="floatingTextarea">Komentarz</label>
+              <label for="editExpenseComment">Komentarz</label>
             </div>
 
             <button
@@ -603,7 +751,7 @@
             >
               Dokonaj zmian
             </button>
-          <!-- </form> -->
+          </form>
         </div>
       </div>
     </div>
@@ -622,10 +770,12 @@
           ></button>
         </div>
 
-        <input type="hidden" name="id" id="editIncomeId" />
-
         <div class="modal-body p-5 pt-0">
-         <!-- <form class=""> -->
+
+          <form method="post" id="formEditIncome" onsubmit="dontSubmit(); return false;">
+
+            <input type="hidden" name="id" id="editIncomeId" />
+
             <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2 center-block">
               <input
@@ -674,7 +824,7 @@
                 id="editIncomeComment"
                 name="income_comment"
               >{{ income.income_comment ?? '' }}</textarea>
-              <!-- <label for="floatingTextarea">Komentarz</label> -->
+              <label for="editIncomeComment">Komentarz</label>
             </div>
 
             <button
@@ -684,7 +834,7 @@
             >
               Dokonaj zmian
             </button>
-          <!-- </form> -->
+          </form>
         </div>
       </div>
     </div>
