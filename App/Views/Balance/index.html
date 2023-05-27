@@ -202,6 +202,56 @@
           });
         });
 
+        $("#tableExpenses").on("click", "a.removingTRbutton", function(ele) {
+
+          //table row text data
+          tr = ele.target.parentNode.parentNode.parentNode;
+
+          var id = tr.cells[1].textContent;
+          var date = tr.cells[2].textContent;
+          var category = tr.cells[3].textContent;
+          var method = tr.cells[4].textContent;
+          var comment = tr.cells[5].textContent;
+          var amount = tr.cells[6].textContent;
+
+          $("#expenseRowToRemove").html("data: " + date 
+                                        + "</br>kategoria: " + category
+                                        + "</br>metada płatności: " + method
+                                        + "</br>opis: " + comment
+                                        + "</br>kwota: " + amount);
+
+        });
+
+        $("button.button-expense-remove").on("click", function(e) {
+
+        var id = $("#editExpenseId").val();
+        var amount = $("#editExpenseAmount").val();
+        var date_of_expense = $("#editExpenseDate").val();
+        var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
+        var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
+        var expense_comment = $("#editExpenseComment").val();
+
+        $.ajax({
+        url: '/Expenses/updateTableRowAjax',
+        type: 'POST',
+        data: {id: id,
+          amount: amount,
+          date_of_expense: date_of_expense,
+          expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
+          payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
+          expense_comment: expense_comment
+        }
+        })
+        .done(function(data) {
+        tr.cells[1].textContent = id;
+        tr.cells[2].textContent = date_of_expense;
+        tr.cells[3].textContent = $("#editExpenseCategory option:selected").text();
+        tr.cells[4].textContent = $("#editExpenseMethod option:selected").text();
+        tr.cells[5].textContent = expense_comment;
+        tr.cells[6].textContent = amount;
+        });
+        });
+
     </script>
 
 {% endblock %}
@@ -300,7 +350,7 @@
                                           </a>
                                         </td>
                                         <td>
-                                          <a class="dropdown-item" href="#modalRemTransaction" data-bs-toggle="modal">
+                                          <a class="dropdown-item removingTRbutton" href="#modalRemoveIncome" data-bs-toggle="modal">
                                             <i class="icon-trash"></i>
                                           </a></a>
                                         </td>
@@ -354,7 +404,7 @@
                                           </a>
                                         </td>
                                         <td>
-                                          <a class="dropdown-item" href="#modalRemTransaction" data-bs-toggle="modal">
+                                          <a class="dropdown-item removingTRbutton" href="#modalRemoveExpense" data-bs-toggle="modal">
                                             <i class="icon-trash"></i>
                                           </a>
                                         </td>
@@ -426,7 +476,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Edycja wpisu</h1>
+          <h1 class="fw-bold mb-0 fs-2">Edycja wydatku</h1>
           <button
             type="button"
             class="btn-close"
@@ -522,7 +572,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Edycja wpisu</h1>
+          <h1 class="fw-bold mb-0 fs-2">Edycja przychodu</h1>
           <button
             type="button"
             class="btn-close"
@@ -598,12 +648,12 @@
     </div>
   </div>
 
-  <!-- MODAL - remove transaction -->
-  <div class="modal fade" id="modalRemTransaction" tabindex="-1">
+  <!-- MODAL - remove expense -->
+  <div class="modal fade" id="modalRemoveExpense" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wpisu</h1>
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
           <button
             type="button"
             class="btn-close"
@@ -611,16 +661,19 @@
           ></button>
         </div>
 
+        <input type="hidden" name="id" id="removeExpenseId" />
+
         <div class="modal-body p-5 pt-0">
-          <form class="">
-            <div class="w-100 my-5"></div>
+
+            <div class="w-100 my-2 text-center" id="expenseRowToRemove"></div>
             <button
-              class="w-100 mb-2 mt-5 btn btn-lg rounded-3 btn-danger"
-              type="submit"
+              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-expense-remove"
+              type="button"
+              data-bs-dismiss="modal"
             >
-              Usuń wpis
+              Usuń wydatek
             </button>
-          </form>
+
         </div>
       </div>
     </div>
