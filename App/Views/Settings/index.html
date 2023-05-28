@@ -1,0 +1,603 @@
+{% extends 'base.html' %} 
+
+{% block title %}Home{% endblock %} 
+
+{% block footer %}
+{% endblock %}
+
+{% block body %}
+<main class="container">
+    <div class="bg-light px-5 py-4 mb-5 rounded">
+      <div class="row">
+        <div
+          class="w-100 h2 mb-3 text-center bg-dark rounded text-secondary py-2 mt-3"
+        >
+          Opcje edycji
+        </div>
+        <hr class="hr-edit" />
+        <div class="w-100 h5 mb-2 text-center">zmiana nazwy kategorii</div>
+        <div class="row mb-3 row-edit">
+          <div
+            class="col-12 col-md-4 btn btn-primary py-2 btn-edit-first fw-bold"
+            href="#modalChgCatNameIncomes"
+            data-bs-toggle="modal"
+          >
+            Przychody
+          </div>
+          <div
+            class="col-12 col-md-4 btn btn-primary py-2 btn-edit-mid fw-bold"
+            href="#modalChgCatNameOutcomes"
+            data-bs-toggle="modal"
+          >
+            Wydatki
+          </div>
+          <div
+            class="col-12 col-md-4 btn btn-primary py-2 btn-edit-last fw-bold"
+            href="#modalChgCatNamePayment"
+            data-bs-toggle="modal"
+          >
+            Sposoby płatności
+          </div>
+        </div>
+        <hr class="hr-edit" />
+        <div class="w-100 h5 mb-2 text-center">dodanie kategorii</div>
+        <div class="row mb-3 row-edit">
+          <div
+            class="col-12 col-md-4 btn btn-success py-2 btn-edit-first fw-bold"
+            href="#modalAddCatNameIncomes"
+            data-bs-toggle="modal"
+          >
+            Przychody
+          </div>
+          <div
+            class="col-12 col-md-4 btn btn-success py-2 btn-edit-mid fw-bold"
+            href="#modalAddCatNameOutcomes"
+            data-bs-toggle="modal"
+          >
+            Wydatki
+          </div>
+          <div
+            class="col-12 col-md-4 btn btn-success py-2 btn-edit-last fw-bold"
+            href="#modalAddCatNamePayment"
+            data-bs-toggle="modal"
+          >
+            Sposoby płatności
+          </div>
+        </div>
+        <hr class="hr-edit" />
+        <div class="w-100 h5 mb-2 text-center">usuwanie kategorii</div>
+        <div class="row mb-3 row-edit">
+          <div
+            class="col-12 col-md-4 btn btn-danger py-2 btn-edit-first fw-bold"
+            href="#modalRemCatNameIncomes"
+            data-bs-toggle="modal"
+          >
+            Przychody
+          </div>
+          <div
+            class="col-12 col-md-4 btn btn-danger py-2 btn-edit-mid fw-bold"
+            href="#modalRemCatNameOutcomes"
+            data-bs-toggle="modal"
+          >
+            Wydatki
+          </div>
+          <div
+            class="col-12 col-md-4 btn btn-danger py-2 btn-edit-last fw-bold"
+            href="#modalRemCatNamePayment"
+            data-bs-toggle="modal"
+          >
+            Sposoby płatności
+          </div>
+        </div>
+        <hr class="hr-edit" />
+        <div class="w-100 h5 mb-2 text-center">edycja konta</div>
+        <div class="row mb-3 row-edit">
+          <div
+            class="col-12 btn btn-warning text-white py-2 mb-2 fw-bold"
+            href="#modalEditAccount"
+            data-bs-toggle="modal"
+          >
+            <i class="icon-tools"></i>dane użytkownika
+          </div>
+          <div
+            class="col-12 btn btn-danger py-2 fw-bold"
+            href="#modalRemAccount"
+            data-bs-toggle="modal"
+          >
+            <i class="icon-cancel-squared"></i>usuń konto
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- change category name incomes -->
+  <div class="modal fade" id="modalChgCatNameIncomes" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Edycja nazwy kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="form-floating mb-3">
+              <select
+                class="form-select"
+                id="floatingSelectChgCatNameIncomes"
+              >
+                <option selected>Wybierz kategorię</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+              <label for="floatingSelectChgCatNameIncomes"
+                >Kategoria przychodów</label
+              >
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="floatingChgCatNameIncomes"
+                placeholder="Nowa nazwa kategorii"
+              />
+              <label for="floatingChgCatNameIncomes"
+                >Nowa nazwa kategorii przychodów</label
+              >
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              type="submit"
+            >
+              Zmień
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- change category name outcomes -->
+  <div class="modal fade" id="modalChgCatNameOutcomes" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Edycja nazwy kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="form-floating mb-3">
+              <select
+                class="form-select"
+                id="floatingSelectChgCatNameOutcomes"
+              >
+                <option selected>Wybierz kategorię</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+              <label for="floatingSelectChgCatNameOutcomes"
+                >Kategoria wydatków</label
+              >
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="floatingChgCatNameOutcomes"
+                placeholder="Nowa nazwa kategorii"
+              />
+              <label for="floatingChgCatNameOutcomes"
+                >Nowa nazwa kategorii wydatków</label
+              >
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              type="submit"
+            >
+              Zmień
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- change category name payment -->
+  <div class="modal fade" id="modalChgCatNamePayment" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Edycja nazwy kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="form-floating mb-3">
+              <select
+                class="form-select"
+                id="floatingSelectChgCatNamePayment"
+              >
+                <option selected>Wybierz kategorię</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+              <label for="floatingSelectChgCatNamePayment"
+                >Kategoria sposobów płatności</label
+              >
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="floatingChgCatNamePayment"
+                placeholder="Nowa nazwa kategorii"
+              />
+              <label for="floatingChgCatNamePayment"
+                >Nowa nazwa kategorii płatności</label
+              >
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              type="submit"
+            >
+              Zmień
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- add category name incomes -->
+  <div class="modal fade" id="modalAddCatNameIncomes" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Dodawanie kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="floatingAddCatNameIncomes"
+                placeholder="Nazwa kategorii"
+              />
+              <label for="floatingAddCatNameIncomes"
+                >Nazwa kategorii przychodów</label
+              >
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
+              type="submit"
+            >
+              Dodaj
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- add category name outcomes -->
+  <div class="modal fade" id="modalAddCatNameOutcomes" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Dodawanie kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="floatingAddCatNameOutcomes"
+                placeholder="Nazwa kategorii"
+              />
+              <label for="floatingAddCatNameOutcomes"
+                >Nazwa kategorii wydatków</label
+              >
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
+              type="submit"
+            >
+              Dodaj
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- add category name payment -->
+  <div class="modal fade" id="modalAddCatNamePayment" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Dodawanie kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="floatingAddCatNamePayment"
+                placeholder="Nazwa kategorii"
+              />
+              <label for="floatingAddCatNamePayment"
+                >Nazwa kategorii sposobów płatności</label
+              >
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
+              type="submit"
+            >
+              Dodaj
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- remove category name incomes -->
+  <div class="modal fade" id="modalRemCatNameIncomes" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="form-floating mb-3">
+              <select
+                class="form-select"
+                id="floatingSelectRemCatNameIncomes"
+              >
+                <option selected>Wybierz kategorię</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+              <label for="floatingSelectRemCatNameIncomes"
+                >Kategoria przychodów</label
+              >
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
+              type="submit"
+            >
+              Usuń
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- remove category name outcomes -->
+  <div class="modal fade" id="modalRemCatNameOutcomes" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="form-floating mb-3">
+              <select
+                class="form-select"
+                id="floatingSelectRemCatNameOutcomes"
+              >
+                <option selected>Wybierz kategorię</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+              <label for="floatingSelectRemCatNameOutcomes"
+                >Kategoria wydatków</label
+              >
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
+              type="submit"
+            >
+              Usuń
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- remove category name payment -->
+  <div class="modal fade" id="modalRemCatNamePayment" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="form-floating mb-3">
+              <select
+                class="form-select"
+                id="floatingSelectRemCatNamePayment"
+              >
+                <option selected>Wybierz kategorię</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+              <label for="floatingSelectRemCatNamePayment"
+                >Kategoria sposobów płatności</label
+              >
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
+              type="submit"
+            >
+              Usuń
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- edit account -->
+  <div class="modal fade" id="modalEditAccount" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2">Edycja konta</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <small class="text-muted"
+              >Podaj nowe dane, tylko te, które chcesz zmienić. <br />
+              Pozostałe pozostaw puste</small
+            >
+            <hr />
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="floatingName"
+                placeholder="Zmień imię"
+              />
+              <label for="floatingName">Podaj nowe imię</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="email"
+                class="form-control rounded-3"
+                id="floatingEmail"
+                placeholder="Zmień email"
+              />
+              <label for="floatingEmail">Podaj nowy email</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="floatingPasswordChg"
+                placeholder="Zmień hasło"
+              />
+              <label for="floatingPasswordChg">Podaj nowe hasło</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="floatingPasswordChg2"
+                placeholder="Powtórz nowe hasło"
+              />
+              <label for="floatingPasswordChg2">Powtórz nowe hasło</label>
+            </div>
+
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white"
+              type="submit"
+            >
+              Dokonaj zmian
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- remove category name payment -->
+  <div class="modal fade" id="modalRemAccount" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie Konta</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="w-100 my-5"></div>
+            <button
+              class="w-100 mb-2 mt-5 btn btn-lg rounded-3 btn-danger"
+              type="submit"
+            >
+              Usuń Konto
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
