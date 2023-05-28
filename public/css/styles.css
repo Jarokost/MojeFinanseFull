@@ -188,3 +188,8 @@ body {
   .signup-success {
     color: #93c01f;
   }
+
+  textarea {
+    resize: none;
+    min-height: calc(1.5em + 4.75rem + 2px) !important;
+  }

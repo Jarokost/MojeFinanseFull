@@ -91,6 +91,20 @@ class Expenses extends \Core\Model
     public $amount_sum;
 
     /**
+     * date start
+     * 
+     * @var string
+     */
+    public $date_start;
+
+    /**
+     * date start
+     * 
+     * @var string
+     */
+    public $date_end;
+
+    /**
      * Error messages
      *
      * @var array
@@ -254,31 +268,36 @@ class Expenses extends \Core\Model
     /**
      * Update expense
      * 
-     * @return void
+     * @return bool
      */
-    public static function updateTableRowAjax() {
-        $sql = 'UPDATE expenses
-                SET expense_category_assigned_to_user_id = :expense_category_assigned_to_user_id,
-                    payment_method_assigned_to_user_id = :payment_method_assigned_to_user_id,
-                    date_of_expense = :date_of_expense,
-                    expense_comment = :expense_comment,
-                    amount = :amount
-                WHERE id = :id';
+    public function updateTableRowAjax() 
+    {
+        $this->validate();
 
+        if (empty($this->errors)) {
 
-        $db = static::getDB();
-        $stmt = $db->prepare($sql);
+            $sql = 'UPDATE expenses
+                    SET expense_category_assigned_to_user_id = :expense_category_assigned_to_user_id,
+                        payment_method_assigned_to_user_id = :payment_method_assigned_to_user_id,
+                        date_of_expense = :date_of_expense,
+                        expense_comment = :expense_comment,
+                        amount = :amount
+                    WHERE id = :id';
 
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
 
-        $stmt->bindValue(':expense_category_assigned_to_user_id', $_POST['expense_category_assigned_to_user_id'], PDO::PARAM_INT);
-        $stmt->bindValue(':payment_method_assigned_to_user_id', $_POST['payment_method_assigned_to_user_id'], PDO::PARAM_INT);
-        $stmt->bindValue(':date_of_expense', $_POST['date_of_expense'], PDO::PARAM_STR);
-        $stmt->bindValue(':expense_comment', $_POST['expense_comment'], PDO::PARAM_STR);
-        $stmt->bindValue(':amount', $_POST['amount'], PDO::PARAM_STR);
-        $stmt->bindValue(':id', $_POST['id'], PDO::PARAM_INT);
+            $stmt->bindValue(':expense_category_assigned_to_user_id', $this->expense_category_assigned_to_user_id, PDO::PARAM_INT);
+            $stmt->bindValue(':payment_method_assigned_to_user_id', $this->payment_method_assigned_to_user_id, PDO::PARAM_INT);
+            $stmt->bindValue(':date_of_expense', $this->date_of_expense, PDO::PARAM_STR);
+            $stmt->bindValue(':expense_comment', $this->expense_comment, PDO::PARAM_STR);
+            $stmt->bindValue(':amount', $this->amount, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
 
+            return $stmt->execute();
+        }
 
-        return $stmt->execute();
+        return false;
     }
 
     /**

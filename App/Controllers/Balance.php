@@ -80,6 +80,20 @@ class Balance extends Authenticated
     public $incomes_categories;
 
     /**
+     * date start
+     * 
+     * @var string
+     */
+    public $date_start;
+
+    /**
+     * date start
+     * 
+     * @var string
+     */
+    public $date_end;
+
+    /**
      * Error messages
      *
      * @var array
@@ -94,6 +108,8 @@ class Balance extends Authenticated
     private function queries($date_start, $date_end)
     {
         $user_id = $_SESSION['user_id'];
+        $this->date_start = $date_start;
+        $this->date_end = $date_end;
 
         $this->expenses_categories = ExpensesCategoryAssignedToUsers::getCategoriesAssignedToUser($user_id);
         $this->expenses_payment_methods = PaymentMethodsAssignedToUsers::getCategoriesAssignedToUser($user_id);
@@ -180,5 +196,21 @@ class Balance extends Authenticated
             'balance' => $this,
             'action' => $date_start . ' - ' . $date_end 
         ]);
+    }
+
+    /**
+     * 
+     */
+    public function foo()
+    {
+        $user_id = $_SESSION['user_id'];
+        $date_start = $_POST['date_start'];
+        $date_end = $_POST['date_end'];
+
+        $data['incomes_category_sum'] = Incomes::getIncomesSumGroupedByCategories($user_id, $date_start, $date_end);
+        $data['expenses_category_sum'] = Expenses::getExpensesSumGroupedByCategories($user_id, $date_start, $date_end);
+
+        echo json_encode($data);
+        exit;
     }
 }
