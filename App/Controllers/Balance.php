@@ -197,4 +197,20 @@ class Balance extends Authenticated
             'action' => $date_start . ' - ' . $date_end 
         ]);
     }
+
+    /**
+     * 
+     */
+    public function foo()
+    {
+        $user_id = $_SESSION['user_id'];
+        $date_start = $_POST['date_start'];
+        $date_end = $_POST['date_end'];
+
+        $data['incomes_category_sum'] = Incomes::getIncomesSumGroupedByCategories($user_id, $date_start, $date_end);
+        $data['expenses_category_sum'] = Expenses::getExpensesSumGroupedByCategories($user_id, $date_start, $date_end);
+
+        echo json_encode($data);
+        exit;
+    }
 }

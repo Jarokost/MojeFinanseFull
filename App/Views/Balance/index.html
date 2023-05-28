@@ -13,19 +13,30 @@
 
 {% block footer %}
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script src="/js/app.js"></script>
+
     <script>
+
+      var tr = null;
+      var expenses_categories_sum_table = [["Wydatki", "Wartość"]];
+      var incomes_categories_sum_table = [["Przychody", "Wartość"]];
+      var chart_expenses = null;
+      var chart_incomes = null;
+      var chart_data_expenses = null;
+      var chart_data_incomes = null;
+      var chart_options_expenses = null;
+      var chart_options_incomes = null;
+
       google.charts.load("current", { packages: ["corechart"] });
+
       google.charts.setOnLoadCallback(drawChartIncomes);
       google.charts.setOnLoadCallback(drawChartExpenses);
-      function drawChartIncomes() {
-        var data = google.visualization.arrayToDataTable([
-          ["Przychody", "Wartość"],
-          {% for income_category in balance.incomes_sum_cat %}
-            ["{{ income_category.category_name }}", {{ income_category.category_amount_sum }}],
-          {% endfor %}
-        ]);
 
-        var options = {
+      function drawChartIncomes() {
+        chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
+
+        chart_options_incomes = {
           title: "Przychody",
           titleTextStyle: {
             // color: <string>,    // any HTML string color ('red', '#cc00cc')
@@ -41,21 +52,16 @@
           height: 400,
         };
 
-        var chart = new google.visualization.PieChart(
+        chart_incomes = new google.visualization.PieChart(
           document.getElementById("incomesDonutChart")
         );
-        chart.draw(data, options);
+        //chart_incomes.draw(chart_data_incomes, chart_options_incomes);
       }
 
       function drawChartExpenses() {
-        var data = google.visualization.arrayToDataTable([
-          ["Wydatki", "Wartość"],
-          {% for expense_category in balance.expenses_sum_cat %}
-            ["{{ expense_category.category_name }}", {{ expense_category.category_amount_sum }}],
-          {% endfor %}
-        ]);
+        chart_data_expenses = google.visualization.arrayToDataTable(expenses_categories_sum_table);
 
-        var options = {
+        chart_options_expenses = {
           title: "Wydatki",
           titleTextStyle: {
             // color: <string>,    // any HTML string color ('red', '#cc00cc')
@@ -71,49 +77,11 @@
           height: 400,
         };
 
-        var chart = new google.visualization.PieChart(
+        chart_expenses = new google.visualization.PieChart(
           document.getElementById("expensesDonutChart")
         );
-        chart.draw(data, options);
+        //chart_expenses.draw(chart_data_expenses, chart_options_expenses);
       }
-    </script>
-    <!-- <script>
-      google.charts.load("current", { packages: ["corechart"] });
-      google.charts.setOnLoadCallback(drawChartExpenses);
-      function drawChartExpenses() {
-        var data = google.visualization.arrayToDataTable([
-          ["Wydatki", "Wartość"],
-          {% for expense_category in balance.expenses_sum_cat %}
-            ["{{ expense_category.category_name }}", {{ expense_category.category_amount_sum }}],
-          {% endfor %}
-        ]);
-
-        var options = {
-          title: "Wydatki",
-          titleTextStyle: {
-            // color: <string>,    // any HTML string color ('red', '#cc00cc')
-            // fontName: <string>, // i.e. 'Times New Roman'
-            fontSize: 18, // 12, 18 whatever you want (don't specify px)
-            // bold: <boolean>,    // true or false
-            // italic: <boolean>   // true of false
-          },
-          pieHole: 0.3,
-          legend: "none",
-          backgroundColor: "transparent",
-          width: 400,
-          height: 400,
-        };
-
-        var chart = new google.visualization.PieChart(
-          document.getElementById("expensesDonutChart")
-        );
-        chart.draw(data, options);
-      }
-    </script> -->
-
-    <script src="/js/app.js"></script>
-
-    <script>
 
       function dontSubmit() {
         //return false;
@@ -130,23 +98,61 @@
         return false;
       }
 
-      function displayBalance(data)
+      function updateBalanceData(data)
       {
         var balance = data.incomes_sum.amount_sum - data.expenses_sum.amount_sum;
-        $('#displayBalance').html(parseFloat(balance).toFixed(2));
+        $('#updateBalanceData').html(parseFloat(balance).toFixed(2));
         if (balance > 0) {
-          $('#displayBalance').addClass("balance_plus");
-          $('#displayBalance').removeClass("balance_minus");
+          $('#updateBalanceData').addClass("balance_plus");
+          $('#updateBalanceData').removeClass("balance_minus");
         } else {
-          $('#displayBalance').removeClass("balance_plus");
-          $('#displayBalance').addClass("balance_minus");
+          $('#updateBalanceData').removeClass("balance_plus");
+          $('#updateBalanceData').addClass("balance_minus");
         }
       }
 
-      var tr = null;
+      function updateGraphsData() {
+        var date_start = $("#balanceDateStart").html();
+        var date_end = $("#balanceDateEnd").html();
+
+        $.ajax({
+          url: '/Balance/foo',
+          type: 'POST',
+          data: { 
+                  date_start: date_start,
+                  date_end: date_end
+                }
+        })
+        .done(function(data) {
+            var data = $.parseJSON(data);
+            
+            // clean table
+            incomes_categories_sum_table = [["Przychody", "Wartość"]];
+            // fill table with AJAX requested data
+            for(var i=0; i < data.incomes_category_sum.length; i++) {
+              incomes_categories_sum_table.push([data.incomes_category_sum[i].category_name, parseFloat(data.incomes_category_sum[i].category_amount_sum)]);
+            }
+            // pass new data and redraw graph
+            chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
+            chart_incomes.draw(chart_data_incomes, chart_options_incomes);
+
+            // clean table
+            expenses_categories_sum_table = [["Wydatki", "Wartość"]];
+            // fill table with AJAX requested data
+            for(var i=0; i < data.expenses_category_sum.length; i++) {
+              expenses_categories_sum_table.push([data.expenses_category_sum[i].category_name, parseFloat(data.expenses_category_sum[i].category_amount_sum)]);
+            }
+            // pass new data and redraw graph
+            chart_data_expenses = google.visualization.arrayToDataTable(expenses_categories_sum_table);
+            chart_expenses.draw(chart_data_expenses, chart_options_expenses);
+
+        });
+      }
 
       $(document).ready(function() {
-        
+        $( window ).on( "load", function() {
+          updateGraphsData();
+        });
         // Edit Expense 
         $("#tableExpenses").on("click", "a.editingTRbutton", function(ele) {
 
@@ -178,8 +184,8 @@
           var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
           var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
           var expense_comment = $("#editExpenseComment").val();
-          var date_start = $("#expenseEditDateStart").val();
-          var date_end = $("#expenseEditDateEnd").val();
+          var date_start = $("#balanceDateStart").html();
+          var date_end = $("#balanceDateEnd").html();
 
           $.ajax({
             url: '/Expenses/updateTableRowAjax',
@@ -206,9 +212,8 @@
               tr.cells[5].textContent = expense_comment;
               tr.cells[6].textContent = parseFloat(amount).toFixed(2);
               
-              displayBalance(data);
-
-              console.log(data.expenses_category_sum);
+              updateBalanceData(data);
+              updateGraphsData();
             }
           });
         });
@@ -241,8 +246,8 @@
           var date_of_income = $("#editIncomeDate").val();
           var income_category_assigned_to_user_id = $("#editIncomeCategory").val();
           var income_comment = $("#editIncomeComment").val();
-          var date_start = $("#incomeEditDateStart").val();
-          var date_end = $("#incomeEditDateEnd").val();
+          var date_start = $("#balanceDateStart").html();
+          var date_end = $("#balanceDateEnd").html();
 
           $.ajax({
             url: '/Incomes/updateTableRowAjax',
@@ -267,7 +272,8 @@
               tr.cells[4].textContent = income_comment;
               tr.cells[5].textContent = parseFloat(amount).toFixed(2);
 
-              displayBalance(data);
+              updateBalanceData(data);
+              updateGraphsData();
             }
           });
         });
@@ -300,8 +306,8 @@
         $("button.button-expense-remove").on("click", function(e) {
 
           var id = $("#removeExpenseId").val();
-          var date_start = $("#expenseRemoveDateStart").val();
-          var date_end = $("#expenseRemoveDateEnd").val();
+          var date_start = $("#balanceDateStart").html();
+          var date_end = $("#balanceDateEnd").html();
 
           $.ajax({
             url: '/Expenses/removeTableRowAjax',
@@ -322,7 +328,8 @@
             });
             // redisplay balance value
             var data = $.parseJSON(data);
-            displayBalance(data);
+            updateBalanceData(data);
+            updateGraphsData();
           });
         });
 
@@ -352,8 +359,8 @@
         $("button.button-income-remove").on("click", function(e) {
 
         var id = $("#removeIncomeId").val();
-        var date_start = $("#incomeRemoveDateStart").val();
-        var date_end = $("#incomeRemoveDateEnd").val();
+        var date_start = $("#balanceDateStart").html();
+        var date_end = $("#balanceDateEnd").html();
 
         $.ajax({
           url: '/Incomes/removeTableRowAjax',
@@ -374,7 +381,8 @@
           });
           // redisplay balance value
           var data = $.parseJSON(data);
-          displayBalance(data);
+          updateBalanceData(data);
+          updateGraphsData();
         });
       });
 
@@ -543,7 +551,9 @@
                     <div class="h5">{{ action }}</div>
                     <div class="h5">BILANS:</div>
                     {% set balance_val = balance.incomes_sum.amount_sum - balance.expenses_sum.amount_sum %}
-                    <div class="h4 {{ (balance_val >= 0) ? 'balance_plus' : 'balance_minus' }}" id="displayBalance">{{ balance_val }}</div>
+                    <div class="h4 {{ (balance_val >= 0) ? 'balance_plus' : 'balance_minus' }}" id="updateBalanceData">{{ balance_val }}</div>
+                    <div hidden id="balanceDateStart">{{ balance.date_start }}</div>
+                    <div hidden id="balanceDateEnd">{{ balance.date_end }}</div>
                 </div>
 
                 {% if balance.expenses_sum.amount_sum is null and balance.incomes_sum.amount_sum is null %}
@@ -765,8 +775,6 @@
         <form method="post" id="formEditExpense" onsubmit="dontSubmit(); return false;">
 
           <input type="hidden" name="id" id="editExpenseId"/>
-          <input type="hidden" name="date_start" id="expenseEditDateStart" value="{{ balance.date_start }}"/>
-          <input type="hidden" name="date_end" id="expenseEditDateEnd" value="{{ balance.date_end }}"/>
 
           <!-- JS use class is-invalid when input validation -->
           <div class="modal-body p-5 pt-0">
@@ -865,8 +873,6 @@
           <form method="post" id="formEditIncome" onsubmit="dontSubmit(); return false;">
 
             <input type="hidden" name="id" id="editIncomeId"/>
-            <input type="hidden" name="date_start" id="incomeEditDateStart" value="{{ balance.date_start }}"/>
-            <input type="hidden" name="date_end" id="incomeEditDateEnd" value="{{ balance.date_end }}"/>
 
             <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2 center-block">
@@ -949,8 +955,6 @@
           <form method="post" id="formRemoveExpense" onsubmit="dontSubmit(); return false;">
 
             <input type="hidden" name="id" id="removeExpenseId"/>
-            <input type="hidden" name="date_start" id="expenseRemoveDateStart" value="{{ balance.date_start }}"/>
-            <input type="hidden" name="date_end" id="expenseRemoveDateEnd" value="{{ balance.date_end }}"/>
 
             <div class="w-100 my-2 text-center" id="expenseRowToRemove"></div>
             <button
@@ -984,8 +988,6 @@
           <form method="post" id="formRemoveIncome" onsubmit="dontSubmit(); return false;">
 
             <input type="hidden" name="id" id="removeIncomeId"/>
-            <input type="hidden" name="date_start" id="incomeRemoveDateStart" value="{{ balance.date_start }}"/>
-            <input type="hidden" name="date_end" id="incomeRemoveDateEnd" value="{{ balance.date_end }}"/>
 
             <div class="w-100 my-2 text-center" id="incomeRowToRemove"></div>
             <button
