@@ -12,15 +12,12 @@
 {% endblock %}
 
 {% block footer %}
-<!-- pie chart incomes -->
-    <script
-      type="text/javascript"
-      src="https://www.gstatic.com/charts/loader.js"
-    ></script>
-    <script type="text/javascript">
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
       google.charts.load("current", { packages: ["corechart"] });
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.charts.setOnLoadCallback(drawChartIncomes);
+      google.charts.setOnLoadCallback(drawChartExpenses);
+      function drawChartIncomes() {
         var data = google.visualization.arrayToDataTable([
           ["Przychody", "Wartość"],
           {% for income_category in balance.incomes_sum_cat %}
@@ -45,20 +42,12 @@
         };
 
         var chart = new google.visualization.PieChart(
-          document.getElementById("incomesdonutchart")
+          document.getElementById("incomesDonutChart")
         );
         chart.draw(data, options);
       }
-    </script>
-<!-- pie chart expenses -->
-    <script
-      type="text/javascript"
-      src="https://www.gstatic.com/charts/loader.js"
-    ></script>
-    <script type="text/javascript">
-      google.charts.load("current", { packages: ["corechart"] });
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
+
+      function drawChartExpenses() {
         var data = google.visualization.arrayToDataTable([
           ["Wydatki", "Wartość"],
           {% for expense_category in balance.expenses_sum_cat %}
@@ -83,14 +72,47 @@
         };
 
         var chart = new google.visualization.PieChart(
-          document.getElementById("outcomesdonutchart")
+          document.getElementById("expensesDonutChart")
         );
         chart.draw(data, options);
       }
     </script>
+    <!-- <script>
+      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.setOnLoadCallback(drawChartExpenses);
+      function drawChartExpenses() {
+        var data = google.visualization.arrayToDataTable([
+          ["Wydatki", "Wartość"],
+          {% for expense_category in balance.expenses_sum_cat %}
+            ["{{ expense_category.category_name }}", {{ expense_category.category_amount_sum }}],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title: "Wydatki",
+          titleTextStyle: {
+            // color: <string>,    // any HTML string color ('red', '#cc00cc')
+            // fontName: <string>, // i.e. 'Times New Roman'
+            fontSize: 18, // 12, 18 whatever you want (don't specify px)
+            // bold: <boolean>,    // true or false
+            // italic: <boolean>   // true of false
+          },
+          pieHole: 0.3,
+          legend: "none",
+          backgroundColor: "transparent",
+          width: 400,
+          height: 400,
+        };
+
+        var chart = new google.visualization.PieChart(
+          document.getElementById("expensesDonutChart")
+        );
+        chart.draw(data, options);
+      }
+    </script> -->
 
     <script src="/js/app.js"></script>
-<!-- edit / remove -->
+
     <script>
 
       function dontSubmit() {
@@ -124,6 +146,7 @@
       var tr = null;
 
       $(document).ready(function() {
+        
         // Edit Expense 
         $("#tableExpenses").on("click", "a.editingTRbutton", function(ele) {
 
@@ -155,25 +178,24 @@
           var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
           var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
           var expense_comment = $("#editExpenseComment").val();
-          var date_start = $("#expenseDateStart").val();
-          var date_end = $("#expenseDateEnd").val();
+          var date_start = $("#expenseEditDateStart").val();
+          var date_end = $("#expenseEditDateEnd").val();
 
           $.ajax({
             url: '/Expenses/updateTableRowAjax',
             type: 'POST',
             data: {id: id,
-              amount: amount,
-              date_of_expense: date_of_expense,
-              expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
-              payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
-              expense_comment: expense_comment,
-              date_start: date_start,
-              date_end: date_end
+                  amount: amount,
+                  date_of_expense: date_of_expense,
+                  expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
+                  payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
+                  expense_comment: expense_comment,
+                  date_start: date_start,
+                  date_end: date_end
             }
           })
           .done(function(data) {
             var data = $.parseJSON(data);
-            console.log(data.success);
             if (data.success == false) {
               alert(data.errors);
             } else {
@@ -185,6 +207,8 @@
               tr.cells[6].textContent = parseFloat(amount).toFixed(2);
               
               displayBalance(data);
+
+              console.log(data.expenses_category_sum);
             }
           });
         });
@@ -217,24 +241,23 @@
           var date_of_income = $("#editIncomeDate").val();
           var income_category_assigned_to_user_id = $("#editIncomeCategory").val();
           var income_comment = $("#editIncomeComment").val();
-          var date_start = $("#incomeDateStart").val();
-          var date_end = $("#incomeDateEnd").val();
+          var date_start = $("#incomeEditDateStart").val();
+          var date_end = $("#incomeEditDateEnd").val();
 
           $.ajax({
             url: '/Incomes/updateTableRowAjax',
             type: 'POST',
             data: {id: id,
-              amount: amount,
-              date_of_income: date_of_income,
-              income_category_assigned_to_user_id: income_category_assigned_to_user_id,
-              income_comment: income_comment,
-              date_start: date_start,
-              date_end: date_end
+                  amount: amount,
+                  date_of_income: date_of_income,
+                  income_category_assigned_to_user_id: income_category_assigned_to_user_id,
+                  income_comment: income_comment,
+                  date_start: date_start,
+                  date_end: date_end
           }
           })
           .done(function(data) {
             var data = $.parseJSON(data);
-            console.log(data.success);
             if (data.success == false) {
               alert(data.errors);
             } else {
@@ -277,11 +300,16 @@
         $("button.button-expense-remove").on("click", function(e) {
 
           var id = $("#removeExpenseId").val();
+          var date_start = $("#expenseRemoveDateStart").val();
+          var date_end = $("#expenseRemoveDateEnd").val();
 
           $.ajax({
             url: '/Expenses/removeTableRowAjax',
             type: 'POST',
-            data: {id: id}
+            data: {id: id,
+                  date_start: date_start,
+                  date_end: date_end
+            }
           })
           .done(function(data) {
             // remove table row
@@ -290,8 +318,11 @@
             var index = 1;
             $("tr.expense-item-in-expenses-table").each(function() {
               $(this)[0].cells[0].textContent = index;
-            index++;
-          });
+              index++;
+            });
+            // redisplay balance value
+            var data = $.parseJSON(data);
+            displayBalance(data);
           });
         });
 
@@ -321,11 +352,16 @@
         $("button.button-income-remove").on("click", function(e) {
 
         var id = $("#removeIncomeId").val();
+        var date_start = $("#incomeRemoveDateStart").val();
+        var date_end = $("#incomeRemoveDateEnd").val();
 
         $.ajax({
           url: '/Incomes/removeTableRowAjax',
           type: 'POST',
-          data: {id: id}
+          data: {id: id,
+                date_start: date_start,
+                date_end: date_end
+          }
         })
         .done(function(data) {
           // remove table row
@@ -336,6 +372,9 @@
             $(this)[0].cells[0].textContent = index;
             index++;
           });
+          // redisplay balance value
+          var data = $.parseJSON(data);
+          displayBalance(data);
         });
       });
 
@@ -531,7 +570,7 @@
                 {% endif %}
                     {% if balance.incomes_sum.amount_sum is not null %}
                       <div class="col-lg-6 d-flex justify-content-center">
-                          <div id="incomesdonutchart" class=""></div>
+                          <div id="incomesDonutChart" class=""></div>
                       </div>
                     {% endif %}
                 {% if balance.expenses_sum.amount_sum is null %}
@@ -543,7 +582,7 @@
                 {% endif %}
                     {% if balance.expenses_sum.amount_sum is not null %}
                       <div class="col-lg-6 d-flex justify-content-center">
-                          <div id="outcomesdonutchart" class=""></div>
+                          <div id="expensesDonutChart" class=""></div>
                       </div>
                     {% endif %}
                 {% if balance.incomes_sum.amount_sum is null %}
@@ -726,8 +765,8 @@
         <form method="post" id="formEditExpense" onsubmit="dontSubmit(); return false;">
 
           <input type="hidden" name="id" id="editExpenseId"/>
-          <input type="hidden" name="date_start" id="expenseDateStart" value="{{ balance.date_start }}"/>
-          <input type="hidden" name="date_end" id="expenseDateEnd" value="{{ balance.date_end }}"/>
+          <input type="hidden" name="date_start" id="expenseEditDateStart" value="{{ balance.date_start }}"/>
+          <input type="hidden" name="date_end" id="expenseEditDateEnd" value="{{ balance.date_end }}"/>
 
           <!-- JS use class is-invalid when input validation -->
           <div class="modal-body p-5 pt-0">
@@ -826,8 +865,8 @@
           <form method="post" id="formEditIncome" onsubmit="dontSubmit(); return false;">
 
             <input type="hidden" name="id" id="editIncomeId"/>
-            <input type="hidden" name="date_start" id="incomeDateStart" value="{{ balance.date_start }}"/>
-            <input type="hidden" name="date_end" id="incomeDateEnd" value="{{ balance.date_end }}"/>
+            <input type="hidden" name="date_start" id="incomeEditDateStart" value="{{ balance.date_start }}"/>
+            <input type="hidden" name="date_end" id="incomeEditDateEnd" value="{{ balance.date_end }}"/>
 
             <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2 center-block">
@@ -905,9 +944,13 @@
           ></button>
         </div>
 
-        <input type="hidden" name="id" id="removeExpenseId" />
-
         <div class="modal-body p-5 pt-0">
+
+          <form method="post" id="formRemoveExpense" onsubmit="dontSubmit(); return false;">
+
+            <input type="hidden" name="id" id="removeExpenseId"/>
+            <input type="hidden" name="date_start" id="expenseRemoveDateStart" value="{{ balance.date_start }}"/>
+            <input type="hidden" name="date_end" id="expenseRemoveDateEnd" value="{{ balance.date_end }}"/>
 
             <div class="w-100 my-2 text-center" id="expenseRowToRemove"></div>
             <button
@@ -917,7 +960,7 @@
             >
               Usuń wydatek
             </button>
-
+          </form>
         </div>
       </div>
     </div>
@@ -936,9 +979,13 @@
           ></button>
         </div>
 
-        <input type="hidden" name="id" id="removeIncomeId" />
-
         <div class="modal-body p-5 pt-0">
+
+          <form method="post" id="formRemoveIncome" onsubmit="dontSubmit(); return false;">
+
+            <input type="hidden" name="id" id="removeIncomeId"/>
+            <input type="hidden" name="date_start" id="incomeRemoveDateStart" value="{{ balance.date_start }}"/>
+            <input type="hidden" name="date_end" id="incomeRemoveDateEnd" value="{{ balance.date_end }}"/>
 
             <div class="w-100 my-2 text-center" id="incomeRowToRemove"></div>
             <button
@@ -948,7 +995,7 @@
             >
               Usuń wydatek
             </button>
-
+          </form>
         </div>
       </div>
     </div>
