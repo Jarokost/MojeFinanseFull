@@ -34,7 +34,7 @@ class Settings extends Authenticated
     }
 
     /**
-     * Balance index
+     * Settings index
      *
      * @return void
      */
@@ -46,11 +46,11 @@ class Settings extends Authenticated
     }
 
     /**
-     * Balance 
+     * Settings update account informations
      * 
      * @return void
      */
-    public function accountAction()
+    public function updateAccountAction()
     {
 
         if ($this->user->updateProfile($_POST)) {
@@ -68,5 +68,17 @@ class Settings extends Authenticated
             ]);
 
         }
+    }
+
+    /**
+     * Settings remove account
+     * 
+     * @return void
+     */
+    public function removeAccountAction()
+    {
+        $this->user->removeProfile();
+
+        $this->redirect('/logout');
     }
 }

@@ -7,7 +7,7 @@
 
 <script>
     $(document).ready(function () {
-        $("#formAccount").validate({
+        $("#formUpdateAccount").validate({
         errorClass: "is-invalid",
             rules: {
                 //name: "required",
@@ -608,7 +608,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" action="/settings/account" id="formAccount">
+          <form class="" method="post" action="/settings/updateAccount" id="formUpdateAccount">
             <!-- <small class="text-muted"
               >Podaj nowe dane, tylko te, które chcesz zmienić. <br />
               Pozostałe pozostaw puste</small
@@ -686,7 +686,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="">
+          <form class="" method="post" action="/settings/removeAccount" id="formRemoveAccount">
             <div class="w-100 my-5"></div>
             <button
               class="w-100 mb-2 mt-5 btn btn-lg rounded-3 btn-danger"
