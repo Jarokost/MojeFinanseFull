@@ -90,9 +90,30 @@ class Settings extends Authenticated
         $this->redirect('/logout');
     }
 
+    /**
+     * Settings update category name AJAX request
+     * 
+     * @return void
+     */
     public function updateIncomeCategoryAction()
     {
         IncomesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+        $data['incomes_categories'] = IncomesCategoryAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+
+        echo json_encode($data);
+        exit;
+    }
+
+    /**
+     * Settings remove category AJAX request
+     * 
+     * @return void
+     */
+    public function deleteIncomeCategoryAction()
+    {
+        IncomesCategoryAssignedToUsers::removeCategory($_POST['id']);
 
         $data['incomes_categories'] = IncomesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);

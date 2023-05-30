@@ -85,4 +85,22 @@ class IncomesCategoryAssignedToUsers extends \Core\Model
 
         $stmt->execute();
     }
+
+    /**
+     * remove category
+     * 
+     * @return void
+     */
+    public static function removeCategory($id)
+    {
+        $sql = 'DELETE FROM incomes_category_assigned_to_users
+                WHERE id = :id'; 
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+    }
 }
