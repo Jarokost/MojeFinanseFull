@@ -6,6 +6,7 @@ use \Core\View;
 use \App\Flash;
 use \App\Auth;
 use \App\Models\IncomesCategoryAssignedToUsers;
+use \App\Models\ExpensesCategoryAssignedToUsers;
 
 /**
  * Settings controller
@@ -42,10 +43,13 @@ class Settings extends Authenticated
     {
         $incomes_categories = IncomesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
+        $expenses_categories = ExpensesCategoryAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
 
         View::renderTemplate('Settings/index.html', [
             'user' => $this->user,
-            'incomes_categories' => $incomes_categories
+            'incomes_categories' => $incomes_categories,
+            'expenses_categories' => $expenses_categories
         ]);
     }
 
@@ -69,10 +73,13 @@ class Settings extends Authenticated
 
             $incomes_categories = IncomesCategoryAssignedToUsers::
             getCategoriesAssignedToUser($_SESSION['user_id']);
+            $expenses_categories = ExpensesCategoryAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
 
             View::renderTemplate('Settings/index.html', [
                 'user' => $this->user,
-                'incomes_categories' => $incomes_categories
+                'incomes_categories' => $incomes_categories,
+                'expenses_categories' => $expenses_categories
             ]);
 
         }
@@ -102,7 +109,7 @@ class Settings extends Authenticated
         $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
         $data['flash_message_type'][0] = 'info';
 
-        $data['incomes_categories'] = IncomesCategoryAssignedToUsers::
+        $data['categories'] = IncomesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
 
         echo json_encode($data);
@@ -122,7 +129,7 @@ class Settings extends Authenticated
         $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
         $data['flash_message_type'][0] = 'info';
 
-        $data['incomes_categories'] = IncomesCategoryAssignedToUsers::
+        $data['categories'] = IncomesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
 
         echo json_encode($data);
@@ -142,7 +149,66 @@ class Settings extends Authenticated
         $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
         $data['flash_message_type'][0] = 'info';
 
-        $data['incomes_categories'] = IncomesCategoryAssignedToUsers::
+        $data['categories'] = IncomesCategoryAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+
+        echo json_encode($data);
+        exit;
+    }
+
+    /**
+     * Settings update category name AJAX request
+     * 
+     * @return void
+     */
+    public function addExpenseCategoryAction()
+    {
+        ExpensesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+
+        $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
+        $data['flash_message_type'][0] = 'info';
+
+        $data['categories'] = ExpensesCategoryAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+
+        echo json_encode($data);
+        exit;
+    }
+
+    /**
+     * Settings update category name AJAX request
+     * 
+     * @return void
+     */
+    public function updateExpenseCategoryAction()
+    {
+        $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($_POST['id']);
+        ExpensesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+        $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+        $data['flash_message_type'][0] = 'info';
+
+        $data['categories'] = ExpensesCategoryAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+
+        echo json_encode($data);
+        exit;
+    }
+
+    /**
+     * Settings remove category AJAX request
+     * 
+     * @return void
+     */
+    public function deleteExpenseCategoryAction()
+    {
+        $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($_POST['id']);
+        ExpensesCategoryAssignedToUsers::removeCategory($_POST['id']);
+
+        $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
+        $data['flash_message_type'][0] = 'info';
+
+        $data['categories'] = ExpensesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
 
         echo json_encode($data);

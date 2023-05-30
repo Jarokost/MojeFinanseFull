@@ -19,14 +19,15 @@
 
     function updateIncomesCategoryList(data)
     {
+      console.log(data);
       // Update List
       // remove select options
       $("#floatingSelectChgCatNameIncomes")
         .find('option').remove().end()
         .append('<option value="">wybierz</option>').val('');  
       // fill with updated category options
-      for (var i = 0; i < data.incomes_categories.length; i++) {
-        $('#floatingSelectChgCatNameIncomes').append('<option value="' + data.incomes_categories[i].id + '">' + data.incomes_categories[i].name + '</option>');
+      for (var i = 0; i < data.categories.length; i++) {
+        $('#floatingSelectChgCatNameIncomes').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
       }
 
       // Remove List
@@ -35,8 +36,32 @@
         .find('option').remove().end()
         .append('<option value="">wybierz</option>').val(''); 
       // fill with updated category options
-      for (var i = 0; i < data.incomes_categories.length; i++) {
-        $('#floatingSelectRemCatNameIncomes').append('<option value="' + data.incomes_categories[i].id + '">' + data.incomes_categories[i].name + '</option>');
+      for (var i = 0; i < data.categories.length; i++) {
+        $('#floatingSelectRemCatNameIncomes').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
+      }
+    }
+
+    function updateExpensesCategoryList(data)
+    {
+      console.log(data);
+      // Update List
+      // remove select options
+      $("#floatingSelectChgCatNameExpenses")
+        .find('option').remove().end()
+        .append('<option value="">wybierz</option>').val('');  
+      // fill with updated category options
+      for (var i = 0; i < data.categories.length; i++) {
+        $('#floatingSelectChgCatNameExpenses').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
+      }
+
+      // Remove List
+      // remove select options
+      $("#floatingSelectRemCatNameExpenses")
+        .find('option').remove().end()
+        .append('<option value="">wybierz</option>').val(''); 
+      // fill with updated category options
+      for (var i = 0; i < data.categories.length; i++) {
+        $('#floatingSelectRemCatNameExpenses').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
       }
     }
 
@@ -147,6 +172,61 @@
           });
         });
 
+        $("#buttonAddExpensesCategory").on("click", function(e) {
+          
+          var name = $("#floatingAddCatNameExpenses").val();
+
+          $.ajax({
+            url: '/Settings/addExpenseCategory',
+            type: 'POST',
+            data: { name: name }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateExpensesCategoryList(data);
+            // clear text input
+            $("#floatingAddCatNameExpenses").val('');
+            printFlashMessages(data);
+          });
+        });
+
+        $("#buttonUpdateExpensesCategory").on("click", function(e) {
+          
+          var id = $("#floatingSelectChgCatNameExpenses").val();
+          var name = $("#floatingChgCatNameExpenses").val();
+
+          $.ajax({
+            url: '/Settings/updateExpenseCategory',
+            type: 'POST',
+            data: { id: id,
+                    name: name
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateExpensesCategoryList(data);
+            // clear text input
+            $("#floatingChgCatNameExpenses").val('');
+            printFlashMessages(data);
+          });
+        });
+
+        $("#buttonRemoveExpensesCategory").on("click", function(e) {
+          
+          var id = $("#floatingSelectRemCatNameExpenses").val();
+
+          $.ajax({
+            url: '/Settings/deleteExpenseCategory',
+            type: 'POST',
+            data: { id: id }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateExpensesCategoryList(data);
+            printFlashMessages(data);
+          });
+        });
+
         setInterval(removeDefaultLabelOnValidateError, 1);
     });
 
@@ -214,7 +294,7 @@
           </div>
           <div
             class="col-12 col-md-4 btn btn-primary py-2 btn-edit-mid fw-bold"
-            href="#modalChgCatNameOutcomes"
+            href="#modalChgCatNameExpenses"
             data-bs-toggle="modal"
           >
             Wydatki
@@ -239,7 +319,7 @@
           </div>
           <div
             class="col-12 col-md-4 btn btn-success py-2 btn-edit-mid fw-bold"
-            href="#modalAddCatNameOutcomes"
+            href="#modalAddCatNameExpenses"
             data-bs-toggle="modal"
           >
             Wydatki
@@ -264,7 +344,7 @@
           </div>
           <div
             class="col-12 col-md-4 btn btn-danger py-2 btn-edit-mid fw-bold"
-            href="#modalRemCatNameOutcomes"
+            href="#modalRemCatNameExpenses"
             data-bs-toggle="modal"
           >
             Wydatki
@@ -381,18 +461,20 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="">
+          <form class="" method="post" id="formUpdateExpenseCategory" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
               <select
                 class="form-select"
-                id="floatingSelectChgCatNameOutcomes"
+                id="floatingSelectChgCatNameExpenses"
               >
                 <option selected>Wybierz kategorię</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {% for category in expenses_categories %}
+                  <option value="{{ category.id }}">
+                    {{ category.name }}
+                  </option>
+                {% endfor %}
               </select>
-              <label for="floatingSelectChgCatNameOutcomes"
+              <label for="floatingSelectChgCatNameExpenses"
                 >Kategoria wydatków</label
               >
             </div>
@@ -400,7 +482,7 @@
               <input
                 type="text"
                 class="form-control rounded-3"
-                id="floatingChgCatNameOutcomes"
+                id="floatingChgCatNameExpenses"
                 placeholder="Nowa nazwa kategorii"
               />
               <label for="floatingChgCatNameOutcomes"
@@ -410,6 +492,8 @@
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
               type="submit"
+              id="buttonUpdateExpensesCategory"
+              data-bs-dismiss="modal"
             >
               Zmień
             </button>
@@ -525,21 +609,23 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="">
+          <form class="" method="post" id="formAddExpenseCategory" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
               <input
                 type="text"
                 class="form-control rounded-3"
-                id="floatingAddCatNameOutcomes"
+                id="floatingAddCatNameExpenses"
                 placeholder="Nazwa kategorii"
               />
-              <label for="floatingAddCatNameOutcomes"
+              <label for="floatingAddCatNameExpenses"
                 >Nazwa kategorii wydatków</label
               >
             </div>
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
               type="submit"
+              id="buttonAddExpensesCategory"
+              data-bs-dismiss="modal"
             >
               Dodaj
             </button>
@@ -650,20 +736,24 @@
             <div class="form-floating mb-3">
               <select
                 class="form-select"
-                id="floatingSelectRemCatNameOutcomes"
+                id="floatingSelectRemCatNameExpenses"
               >
                 <option selected>Wybierz kategorię</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {% for category in expenses_categories %}
+                  <option value="{{ category.id }}">
+                    {{ category.name }}
+                  </option>
+                {% endfor %}
               </select>
-              <label for="floatingSelectRemCatNameOutcomes"
+              <label for="floatingSelectRemCatNameExpenses"
                 >Kategoria wydatków</label
               >
             </div>
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
               type="submit"
+              id="buttonRemoveExpensesCategory"
+              data-bs-dismiss="modal"
             >
               Usuń
             </button>
