@@ -111,13 +111,21 @@ class Settings extends Authenticated
      */
     public function addIncomeCategoryAction()
     {
-        IncomesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+        if( IncomesCategoryAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
 
-        $data['categories'] = IncomesCategoryAssignedToUsers::
-        getCategoriesAssignedToUser($_SESSION['user_id']);
+        } else {
+        
+            IncomesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
+
+        $data['categories'] = IncomesCategoryAssignedToUsers::getCategoriesAssignedToUser($_SESSION['user_id']);
 
         echo json_encode($data);
         exit;
@@ -130,14 +138,22 @@ class Settings extends Authenticated
      */
     public function updateIncomeCategoryAction()
     {
-        $category_name = IncomesCategoryAssignedToUsers::getCategoryName($_POST['id']);
-        IncomesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+        if( IncomesCategoryAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
 
-        $data['categories'] = IncomesCategoryAssignedToUsers::
-        getCategoriesAssignedToUser($_SESSION['user_id']);
+        } else {
+
+            $category_name = IncomesCategoryAssignedToUsers::getCategoryName($_POST['id']);
+            IncomesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+            
+        }
+
+        $data['categories'] = IncomesCategoryAssignedToUsers::getCategoriesAssignedToUser($_SESSION['user_id']);
 
         echo json_encode($data);
         exit;
@@ -170,10 +186,19 @@ class Settings extends Authenticated
      */
     public function addExpenseCategoryAction()
     {
-        ExpensesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+        if( ExpensesCategoryAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
+
+        } else {
+
+            ExpensesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
 
         $data['categories'] = ExpensesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
@@ -189,11 +214,20 @@ class Settings extends Authenticated
      */
     public function updateExpenseCategoryAction()
     {
-        $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($_POST['id']);
-        ExpensesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+        if( ExpensesCategoryAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
+
+        } else {
+
+            $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($_POST['id']);
+            ExpensesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
 
         $data['categories'] = ExpensesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
@@ -229,10 +263,19 @@ class Settings extends Authenticated
      */
     public function addPaymentMethodAction()
     {
-        PaymentMethodsAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+        if( PaymentMethodsAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
+
+        } else {
+
+            PaymentMethodsAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
 
         $data['categories'] = PaymentMethodsAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
@@ -248,11 +291,20 @@ class Settings extends Authenticated
      */
     public function updatePaymentMethodAction()
     {
-        $category_name = PaymentMethodsAssignedToUsers::getCategoryName($_POST['id']);
-        PaymentMethodsAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+        if( PaymentMethodsAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
+
+        } else {
+
+            $category_name = PaymentMethodsAssignedToUsers::getCategoryName($_POST['id']);
+            PaymentMethodsAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+            
+        }
 
         $data['categories'] = PaymentMethodsAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
