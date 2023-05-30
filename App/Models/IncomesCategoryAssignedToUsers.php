@@ -80,10 +80,10 @@ class IncomesCategoryAssignedToUsers extends \Core\Model
      */
     public static function categoryExists($name, $ignore_id = null)
     {
-        $income_category = static::findCategoryByName($name);
+        $category = static::findCategoryByName($name);
 
-        if ($income_category) {
-            if ($income_category->id != $ignore_id) {
+        if ($category) {
+            if ($category->id != $ignore_id) {
                 return true;
             }
         }

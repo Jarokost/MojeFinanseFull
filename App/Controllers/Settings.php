@@ -263,10 +263,19 @@ class Settings extends Authenticated
      */
     public function addPaymentMethodAction()
     {
-        PaymentMethodsAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+        if( PaymentMethodsAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
+
+        } else {
+
+            PaymentMethodsAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
 
         $data['categories'] = PaymentMethodsAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
@@ -282,11 +291,20 @@ class Settings extends Authenticated
      */
     public function updatePaymentMethodAction()
     {
-        $category_name = PaymentMethodsAssignedToUsers::getCategoryName($_POST['id']);
-        PaymentMethodsAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+        if( PaymentMethodsAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
+
+        } else {
+
+            $category_name = PaymentMethodsAssignedToUsers::getCategoryName($_POST['id']);
+            PaymentMethodsAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+            
+        }
 
         $data['categories'] = PaymentMethodsAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
