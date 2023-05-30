@@ -52,6 +52,24 @@ class IncomesCategoryAssignedToUsers extends \Core\Model
 
     }
 
+    public static function getCategoryName($id)
+    {
+        $sql = 'SELECT name FROM incomes_category_assigned_to_users
+                WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+
+    }
+
     public static function fillCategoriesAssignedToUserWithDefault($user_id)
     {
         $sql = 'INSERT INTO incomes_category_assigned_to_users (user_id, name)

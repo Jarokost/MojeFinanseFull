@@ -127,6 +127,7 @@
             updateIncomesCategoryList(data);
             // clear text input
             $("#floatingChgCatNameIncomes").val('');
+            printFlashMessages(data);
           });
         });
 
@@ -142,6 +143,7 @@
           .done(function(data) {
             var data = $.parseJSON(data);
             updateIncomesCategoryList(data);
+            printFlashMessages(data);
           });
         });
 

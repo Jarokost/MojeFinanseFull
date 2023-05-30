@@ -116,7 +116,11 @@ class Settings extends Authenticated
      */
     public function updateIncomeCategoryAction()
     {
+        $category_name = IncomesCategoryAssignedToUsers::getCategoryName($_POST['id']);
         IncomesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+        $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+        $data['flash_message_type'][0] = 'info';
 
         $data['incomes_categories'] = IncomesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
@@ -132,7 +136,11 @@ class Settings extends Authenticated
      */
     public function deleteIncomeCategoryAction()
     {
+        $category_name = IncomesCategoryAssignedToUsers::getCategoryName($_POST['id']);
         IncomesCategoryAssignedToUsers::removeCategory($_POST['id']);
+
+        $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
+        $data['flash_message_type'][0] = 'info';
 
         $data['incomes_categories'] = IncomesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
