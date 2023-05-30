@@ -111,13 +111,21 @@ class Settings extends Authenticated
      */
     public function addIncomeCategoryAction()
     {
-        IncomesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+        if( IncomesCategoryAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
 
-        $data['categories'] = IncomesCategoryAssignedToUsers::
-        getCategoriesAssignedToUser($_SESSION['user_id']);
+        } else {
+        
+            IncomesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
+
+        $data['categories'] = IncomesCategoryAssignedToUsers::getCategoriesAssignedToUser($_SESSION['user_id']);
 
         echo json_encode($data);
         exit;
@@ -130,14 +138,22 @@ class Settings extends Authenticated
      */
     public function updateIncomeCategoryAction()
     {
-        $category_name = IncomesCategoryAssignedToUsers::getCategoryName($_POST['id']);
-        IncomesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+        if( IncomesCategoryAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
 
-        $data['categories'] = IncomesCategoryAssignedToUsers::
-        getCategoriesAssignedToUser($_SESSION['user_id']);
+        } else {
+
+            $category_name = IncomesCategoryAssignedToUsers::getCategoryName($_POST['id']);
+            IncomesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+            
+        }
+
+        $data['categories'] = IncomesCategoryAssignedToUsers::getCategoriesAssignedToUser($_SESSION['user_id']);
 
         echo json_encode($data);
         exit;
