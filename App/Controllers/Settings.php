@@ -7,6 +7,7 @@ use \App\Flash;
 use \App\Auth;
 use \App\Models\IncomesCategoryAssignedToUsers;
 use \App\Models\ExpensesCategoryAssignedToUsers;
+use \App\Models\PaymentMethodsAssignedToUsers;
 
 /**
  * Settings controller
@@ -45,11 +46,14 @@ class Settings extends Authenticated
         getCategoriesAssignedToUser($_SESSION['user_id']);
         $expenses_categories = ExpensesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
+        $payment_methods = PaymentMethodsAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
 
         View::renderTemplate('Settings/index.html', [
             'user' => $this->user,
             'incomes_categories' => $incomes_categories,
-            'expenses_categories' => $expenses_categories
+            'expenses_categories' => $expenses_categories,
+            'payment_methods' => $payment_methods
         ]);
     }
 
@@ -75,11 +79,14 @@ class Settings extends Authenticated
             getCategoriesAssignedToUser($_SESSION['user_id']);
             $expenses_categories = ExpensesCategoryAssignedToUsers::
             getCategoriesAssignedToUser($_SESSION['user_id']);
+            $payment_methods = PaymentMethodsAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
 
             View::renderTemplate('Settings/index.html', [
                 'user' => $this->user,
                 'incomes_categories' => $incomes_categories,
-                'expenses_categories' => $expenses_categories
+                'expenses_categories' => $expenses_categories,
+                'payment_methods' => $payment_methods
             ]);
 
         }
@@ -209,6 +216,65 @@ class Settings extends Authenticated
         $data['flash_message_type'][0] = 'info';
 
         $data['categories'] = ExpensesCategoryAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+
+        echo json_encode($data);
+        exit;
+    }
+
+    /**
+     * Settings update category name AJAX request
+     * 
+     * @return void
+     */
+    public function addPaymentMethodAction()
+    {
+        PaymentMethodsAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+
+        $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
+        $data['flash_message_type'][0] = 'info';
+
+        $data['categories'] = PaymentMethodsAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+
+        echo json_encode($data);
+        exit;
+    }
+
+    /**
+     * Settings update category name AJAX request
+     * 
+     * @return void
+     */
+    public function updatePaymentMethodAction()
+    {
+        $category_name = PaymentMethodsAssignedToUsers::getCategoryName($_POST['id']);
+        PaymentMethodsAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+        $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+        $data['flash_message_type'][0] = 'info';
+
+        $data['categories'] = PaymentMethodsAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+
+        echo json_encode($data);
+        exit;
+    }
+
+    /**
+     * Settings remove category AJAX request
+     * 
+     * @return void
+     */
+    public function deletePaymentMethodAction()
+    {
+        $category_name = PaymentMethodsAssignedToUsers::getCategoryName($_POST['id']);
+        PaymentMethodsAssignedToUsers::removeCategory($_POST['id']);
+
+        $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
+        $data['flash_message_type'][0] = 'info';
+
+        $data['categories'] = PaymentMethodsAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
 
         echo json_encode($data);

@@ -65,6 +65,30 @@
       }
     }
 
+    function updatePaymentMethodsList(data)
+    {
+      console.log(data);
+      // Update List
+      // remove select options
+      $("#floatingSelectChgCatNamePayment")
+        .find('option').remove().end()
+        .append('<option value="">wybierz</option>').val('');  
+      // fill with updated category options
+      for (var i = 0; i < data.categories.length; i++) {
+        $('#floatingSelectChgCatNamePayment').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
+      }
+
+      // Remove List
+      // remove select options
+      $("#floatingSelectRemCatNamePayment")
+        .find('option').remove().end()
+        .append('<option value="">wybierz</option>').val(''); 
+      // fill with updated category options
+      for (var i = 0; i < data.categories.length; i++) {
+        $('#floatingSelectRemCatNamePayment').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
+      }
+    }
+
     function printFlashMessages(data)
     {
       // remove flash messages
@@ -223,6 +247,61 @@
           .done(function(data) {
             var data = $.parseJSON(data);
             updateExpensesCategoryList(data);
+            printFlashMessages(data);
+          });
+        });
+
+        $("#buttonAddPaymentMethod").on("click", function(e) {
+          
+          var name = $("#floatingAddCatNamePayment").val();
+
+          $.ajax({
+            url: '/Settings/addPaymentMethod',
+            type: 'POST',
+            data: { name: name }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updatePaymentMethodsList(data);
+            // clear text input
+            $("#floatingAddCatNamePayment").val('');
+            printFlashMessages(data);
+          });
+        });
+
+        $("#buttonUpdatePaymentMethod").on("click", function(e) {
+          
+          var id = $("#floatingSelectChgCatNamePayment").val();
+          var name = $("#floatingChgCatNamePayment").val();
+
+          $.ajax({
+            url: '/Settings/updatePaymentMethod',
+            type: 'POST',
+            data: { id: id,
+                    name: name
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updatePaymentMethodsList(data);
+            // clear text input
+            $("#floatingChgCatNamePayment").val('');
+            printFlashMessages(data);
+          });
+        });
+
+        $("#buttonRemovePaymentMethod").on("click", function(e) {
+          
+          var id = $("#floatingSelectRemCatNamePayment").val();
+
+          $.ajax({
+            url: '/Settings/deletePaymentMethod',
+            type: 'POST',
+            data: { id: id }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updatePaymentMethodsList(data);
             printFlashMessages(data);
           });
         });
@@ -466,6 +545,7 @@
               <select
                 class="form-select"
                 id="floatingSelectChgCatNameExpenses"
+                name="id"
               >
                 <option selected>Wybierz kategorię</option>
                 {% for category in expenses_categories %}
@@ -484,6 +564,7 @@
                 class="form-control rounded-3"
                 id="floatingChgCatNameExpenses"
                 placeholder="Nowa nazwa kategorii"
+                name="name"
               />
               <label for="floatingChgCatNameOutcomes"
                 >Nowa nazwa kategorii wydatków</label
@@ -517,16 +598,19 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="">
+          <form class="" method="post" id="formUpdatePaymentMethod" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
               <select
                 class="form-select"
                 id="floatingSelectChgCatNamePayment"
+                name="id"
               >
                 <option selected>Wybierz kategorię</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {% for methods in payment_methods %}
+                  <option value="{{ methods.id }}">
+                    {{ methods.name }}
+                  </option>
+                {% endfor %}
               </select>
               <label for="floatingSelectChgCatNamePayment"
                 >Kategoria sposobów płatności</label
@@ -538,6 +622,7 @@
                 class="form-control rounded-3"
                 id="floatingChgCatNamePayment"
                 placeholder="Nowa nazwa kategorii"
+                name="name"
               />
               <label for="floatingChgCatNamePayment"
                 >Nowa nazwa kategorii płatności</label
@@ -546,6 +631,8 @@
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
               type="submit"
+              id="buttonUpdatePaymentMethod"
+              data-bs-dismiss="modal"
             >
               Zmień
             </button>
@@ -576,6 +663,7 @@
                 class="form-control rounded-3"
                 id="floatingAddCatNameIncomes"
                 placeholder="Nazwa kategorii"
+                name="name"
               />
               <label for="floatingAddCatNameIncomes"
                 >Nazwa kategorii przychodów</label
@@ -616,6 +704,7 @@
                 class="form-control rounded-3"
                 id="floatingAddCatNameExpenses"
                 placeholder="Nazwa kategorii"
+                name="name"
               />
               <label for="floatingAddCatNameExpenses"
                 >Nazwa kategorii wydatków</label
@@ -649,13 +738,14 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="">
+          <form class="" method="post" id="formAddPaymentMethod" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
               <input
                 type="text"
                 class="form-control rounded-3"
                 id="floatingAddCatNamePayment"
                 placeholder="Nazwa kategorii"
+                name="name"
               />
               <label for="floatingAddCatNamePayment"
                 >Nazwa kategorii sposobów płatności</label
@@ -664,6 +754,8 @@
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
               type="submit"
+              id="buttonAddPaymentMethod"
+              data-bs-dismiss="modal"
             >
               Dodaj
             </button>
@@ -692,6 +784,7 @@
               <select
                 class="form-select"
                 id="floatingSelectRemCatNameIncomes"
+                name="id"
               >
                 <option selected>Wybierz kategorię</option>
                 {% for category in incomes_categories %}
@@ -737,6 +830,7 @@
               <select
                 class="form-select"
                 id="floatingSelectRemCatNameExpenses"
+                name="id"
               >
                 <option selected>Wybierz kategorię</option>
                 {% for category in expenses_categories %}
@@ -777,16 +871,19 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="">
+          <form class="" method="post" id="formRemovePaymentMethod" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
               <select
                 class="form-select"
                 id="floatingSelectRemCatNamePayment"
+                name="id"
               >
                 <option selected>Wybierz kategorię</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {% for methods in payment_methods %}
+                  <option value="{{ methods.id }}">
+                    {{ methods.name }}
+                  </option>
+                {% endfor %}
               </select>
               <label for="floatingSelectRemCatNamePayment"
                 >Kategoria sposobów płatności</label
@@ -795,6 +892,8 @@
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
               type="submit"
+              id="buttonRemovePaymentMethod"
+              data-bs-dismiss="modal"
             >
               Usuń
             </button>

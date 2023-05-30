@@ -52,6 +52,24 @@ class PaymentMethodsAssignedToUsers extends \Core\Model
 
     }
 
+    public static function getCategoryName($id)
+    {
+        $sql = 'SELECT name FROM payment_methods_assigned_to_users
+                WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+
+    }
+
     public static function fillCategoriesAssignedToUserWithDefault($user_id)
     {
         $sql = 'INSERT INTO payment_methods_assigned_to_users (user_id, name)
@@ -64,5 +82,62 @@ class PaymentMethodsAssignedToUsers extends \Core\Model
 
         $stmt->execute();
 
+    }
+
+    /**
+     * add new category
+     * 
+     * @return void
+     */
+    public static function addCategory($user_id, $name)
+    {
+        $sql = 'INSERT INTO payment_methods_assigned_to_users (user_id, name)
+                VALUES (:user_id, :name)';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+
+        $stmt->execute();
+    }
+
+    /**
+     * update category name
+     * 
+     * @return void
+     */
+    public static function updateCategory($id, $name)
+    {
+        $sql = 'UPDATE payment_methods_assigned_to_users
+                SET name = :name
+                WHERE id = :id'; 
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+
+        $stmt->execute();
+    }
+
+    /**
+     * remove category
+     * 
+     * @return void
+     */
+    public static function removeCategory($id)
+    {
+        $sql = 'DELETE FROM payment_methods_assigned_to_users
+                WHERE id = :id'; 
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $stmt->execute();
     }
 }
