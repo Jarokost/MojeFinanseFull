@@ -6,6 +6,10 @@
 <script src="/js/app.js"></script>
 
 <script>
+    function dontSubmit() {
+      //return false;
+    }
+
     $(document).ready(function () {
         $("#formUpdateAccount").validate({
         errorClass: "is-invalid",
@@ -37,6 +41,33 @@
                 validPassword: "Hasło musi zawierać litery i min 1 cyfrę",
                 }
             },
+        });
+        
+        $("#buttonUpdateIncomesCategory").on("click", function(e) {
+          
+          var id = $("#floatingSelectChgCatNameIncomes").val();
+          var name = $("#floatingChgCatNameIncomes").val();
+
+          $.ajax({
+            url: '/Settings/updateIncomeCategory',
+            type: 'POST',
+            data: { id: id,
+                    name: name
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            // remove select options
+            $("#floatingSelectChgCatNameIncomes")
+              .find('option').remove().end()
+              .append('<option value="">wybierz</option>').val('');
+            // clear text input
+            $("#floatingChgCatNameIncomes").val('');  
+            // fill with updated category options
+            for (var i = 0; i < data.incomes_categories.length; i++) {
+              $('#floatingSelectChgCatNameIncomes').append('<option value="' + data.incomes_categories[i].id + '">' + data.incomes_categories[i].name + '</option>');
+            }
+          });
         });
 
         setInterval(removeDefaultLabelOnValidateError, 1);
@@ -215,16 +246,19 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="">
+          <form class="" method="post" id="formUpdateIncomeCategory" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
               <select
                 class="form-select"
                 id="floatingSelectChgCatNameIncomes"
+                name="id"
               >
-                <option selected>Wybierz kategorię</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option>wybierz</option>
+                {% for category in incomes_categories %}
+                  <option value="{{ category.id }}">
+                    {{ category.name }}
+                  </option>
+                {% endfor %}
               </select>
               <label for="floatingSelectChgCatNameIncomes"
                 >Kategoria przychodów</label
@@ -236,6 +270,7 @@
                 class="form-control rounded-3"
                 id="floatingChgCatNameIncomes"
                 placeholder="Nowa nazwa kategorii"
+                name="name"
               />
               <label for="floatingChgCatNameIncomes"
                 >Nowa nazwa kategorii przychodów</label
@@ -243,7 +278,9 @@
             </div>
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              id="buttonUpdateIncomesCategory"
               type="submit"
+              data-bs-dismiss="modal"
             >
               Zmień
             </button>
@@ -253,7 +290,7 @@
     </div>
   </div>
 
-  <!-- modal - change category name outcomes -->
+  <!-- modal - change category name expenses -->
   <div class="modal fade" id="modalChgCatNameExpenses" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -395,7 +432,7 @@
     </div>
   </div>
 
-  <!-- modal - add category name outcomes -->
+  <!-- modal - add category name expenses -->
   <div class="modal fade" id="modalAddCatNameExpenses" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -512,7 +549,7 @@
     </div>
   </div>
 
-  <!-- modal - remove category name outcomes -->
+  <!-- modal - remove category name expenses -->
   <div class="modal fade" id="modalRemCatNameExpenses" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">

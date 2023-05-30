@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Flash;
-use \App\Models\User;
 use \App\Auth;
+use \App\Models\IncomesCategoryAssignedToUsers;
 
 /**
  * Settings controller
@@ -40,8 +40,12 @@ class Settings extends Authenticated
      */
     public function indexAction()
     {
+        $incomes_categories = IncomesCategoryAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+
         View::renderTemplate('Settings/index.html', [
-            'user' => $this->user
+            'user' => $this->user,
+            'incomes_categories' => $incomes_categories
         ]);
     }
 
@@ -63,8 +67,12 @@ class Settings extends Authenticated
 
             Flash::addMessage('Formularz zawiera błędy', 'warning');
 
+            $incomes_categories = IncomesCategoryAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+
             View::renderTemplate('Settings/index.html', [
-                'user' => $this->user
+                'user' => $this->user,
+                'incomes_categories' => $incomes_categories
             ]);
 
         }
@@ -80,5 +88,16 @@ class Settings extends Authenticated
         $this->user->removeProfile();
 
         $this->redirect('/logout');
+    }
+
+    public function updateIncomeCategoryAction()
+    {
+        IncomesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+        $data['incomes_categories'] = IncomesCategoryAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+
+        echo json_encode($data);
+        exit;
     }
 }

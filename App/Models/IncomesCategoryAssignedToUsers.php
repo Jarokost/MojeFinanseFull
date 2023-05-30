@@ -65,4 +65,24 @@ class IncomesCategoryAssignedToUsers extends \Core\Model
         $stmt->execute();
 
     }
+
+    /**
+     * update category name
+     * 
+     * @return void
+     */
+    public static function updateCategory($id, $name)
+    {
+        $sql = 'UPDATE incomes_category_assigned_to_users
+                SET name = :name
+                WHERE id = :id'; 
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+
+        $stmt->execute();
+    }
 }
