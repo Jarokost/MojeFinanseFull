@@ -66,7 +66,7 @@
 
                 </li>
                 <li class="nav-item m-1 m-xl-0">
-                <a class="nav-link border rounded" href="settings.html">Ustawienia</a>
+                <a class="nav-link border rounded {{ (controllerType[0]=='settings') ? 'active' }}" href="/settings/index">Ustawienia</a>
                 </li>
                 <li class="nav-item m-1 m-xl-0">
                     <a class="nav-link border rounded" href="/logout">Wyloguj się</a>
@@ -117,14 +117,16 @@
 
     <div class="container">
 
-        {% for message in flash_messages %}
-            <div class="alert alert-{{ message.type }}">
-                {{ message.body }}
-            </div>
-        {% endfor %}
+      <div class="flash_messages_print_from_ajax">
+      {% for message in flash_messages %}
+          <div class="flash_messages alert alert-{{ message.type }}">
+              {{ message.body }}
+          </div>
+      {% endfor %}
+      </div>
 
-        {% block body %}
-        {% endblock %}
+      {% block body %}
+      {% endblock %}
 
     </div>
 

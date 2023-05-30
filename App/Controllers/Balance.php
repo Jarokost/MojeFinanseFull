@@ -7,7 +7,7 @@ use \App\Models\Incomes;
 use \App\Models\Expenses;
 use \App\Models\IncomesCategoryAssignedToUsers;
 use \App\Models\ExpensesCategoryAssignedToUsers;
-use App\Models\PaymentMethodsAssignedToUsers;
+use \App\Models\PaymentMethodsAssignedToUsers;
 
 /**
  * Balance controller (example)
