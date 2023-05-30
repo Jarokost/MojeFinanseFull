@@ -186,10 +186,19 @@ class Settings extends Authenticated
      */
     public function addExpenseCategoryAction()
     {
-        ExpensesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+        if( ExpensesCategoryAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
+
+        } else {
+
+            ExpensesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
 
         $data['categories'] = ExpensesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
@@ -205,11 +214,20 @@ class Settings extends Authenticated
      */
     public function updateExpenseCategoryAction()
     {
-        $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($_POST['id']);
-        ExpensesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+        if( ExpensesCategoryAssignedToUsers::categoryExists($_POST['name']) ) {
 
-        $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
-        $data['flash_message_type'][0] = 'info';
+            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+            $data['flash_message_type'][0] = 'warning';
+
+        } else {
+
+            $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($_POST['id']);
+            ExpensesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+
+            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
 
         $data['categories'] = ExpensesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
