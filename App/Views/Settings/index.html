@@ -16,9 +16,7 @@
       // remove select options
       $("#floatingSelectChgCatNameIncomes")
         .find('option').remove().end()
-        .append('<option value="">wybierz</option>').val('');
-      // clear text input
-      $("#floatingChgCatNameIncomes").val('');  
+        .append('<option value="">wybierz</option>').val('');  
       // fill with updated category options
       for (var i = 0; i < data.incomes_categories.length; i++) {
         $('#floatingSelectChgCatNameIncomes').append('<option value="' + data.incomes_categories[i].id + '">' + data.incomes_categories[i].name + '</option>');
@@ -28,9 +26,7 @@
       // remove select options
       $("#floatingSelectRemCatNameIncomes")
         .find('option').remove().end()
-        .append('<option value="">wybierz</option>').val('');
-      // clear text input
-      $("#floatingRemCatNameIncomes").val('');  
+        .append('<option value="">wybierz</option>').val(''); 
       // fill with updated category options
       for (var i = 0; i < data.incomes_categories.length; i++) {
         $('#floatingSelectRemCatNameIncomes').append('<option value="' + data.incomes_categories[i].id + '">' + data.incomes_categories[i].name + '</option>');
@@ -69,7 +65,24 @@
                 }
             },
         });
-        
+
+        $("#buttonAddIncomesCategory").on("click", function(e) {
+          
+          var name = $("#floatingAddCatNameIncomes").val();
+
+          $.ajax({
+            url: '/Settings/addIncomeCategory',
+            type: 'POST',
+            data: { name: name }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateIncomesCategoryList(data);
+            // clear text input
+            $("#floatingAddCatNameIncomes").val('');
+          });
+        });
+
         $("#buttonUpdateIncomesCategory").on("click", function(e) {
           
           var id = $("#floatingSelectChgCatNameIncomes").val();
@@ -85,6 +98,8 @@
           .done(function(data) {
             var data = $.parseJSON(data);
             updateIncomesCategoryList(data);
+            // clear text input
+            $("#floatingChgCatNameIncomes").val('');
           });
         });
 
@@ -441,7 +456,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="">
+          <form class="" method="post" id="formAddIncomeCategory" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
               <input
                 type="text"
@@ -456,6 +471,8 @@
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
               type="submit"
+              id="buttonAddIncomesCategory"
+              data-bs-dismiss="modal"
             >
               Dodaj
             </button>

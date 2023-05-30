@@ -95,6 +95,22 @@ class Settings extends Authenticated
      * 
      * @return void
      */
+    public function addIncomeCategoryAction()
+    {
+        IncomesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+
+        $data['incomes_categories'] = IncomesCategoryAssignedToUsers::
+        getCategoriesAssignedToUser($_SESSION['user_id']);
+
+        echo json_encode($data);
+        exit;
+    }
+
+    /**
+     * Settings update category name AJAX request
+     * 
+     * @return void
+     */
     public function updateIncomeCategoryAction()
     {
         IncomesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);

@@ -67,6 +67,25 @@ class IncomesCategoryAssignedToUsers extends \Core\Model
     }
 
     /**
+     * add new category
+     * 
+     * @return void
+     */
+    public static function addCategory($user_id, $name)
+    {
+        $sql = 'INSERT INTO incomes_category_assigned_to_users (user_id, name)
+                VALUES (:user_id, :name)';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+
+        $stmt->execute();
+    }
+
+    /**
      * update category name
      * 
      * @return void
