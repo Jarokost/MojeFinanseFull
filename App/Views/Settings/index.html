@@ -6,6 +6,13 @@
 <script src="/js/app.js"></script>
 
 <script>
+
+    var flash_message_id = 0;
+
+    setTimeout(function(){
+          $('.flash_messages').remove();
+        }, 3000);
+
     function dontSubmit() {
       //return false;
     }
@@ -30,6 +37,25 @@
       // fill with updated category options
       for (var i = 0; i < data.incomes_categories.length; i++) {
         $('#floatingSelectRemCatNameIncomes').append('<option value="' + data.incomes_categories[i].id + '">' + data.incomes_categories[i].name + '</option>');
+      }
+    }
+
+    function printFlashMessages(data)
+    {
+      // remove flash messages
+      //$(".alert").remove();
+      var flash_id;
+      // print new alerts
+      for (var i = 0; i< data.flash_message_body.length; i++) {
+        flash_id = 'flash_message_id' + flash_message_id;
+        $(".flash_messages_print_from_ajax").append('<div id="' + flash_id + '" class="alert alert-' + data.flash_message_type[0] + '">'
+                                  + data.flash_message_body[0] +
+                                '</div>');
+        setTimeout(function(){
+          $('#' + flash_id).remove();
+        }, 8000);
+
+        flash_message_id++;
       }
     }
 
@@ -80,6 +106,7 @@
             updateIncomesCategoryList(data);
             // clear text input
             $("#floatingAddCatNameIncomes").val('');
+            printFlashMessages(data);
           });
         });
 

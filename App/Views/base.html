@@ -117,14 +117,16 @@
 
     <div class="container">
 
-        {% for message in flash_messages %}
-            <div class="alert alert-{{ message.type }}">
-                {{ message.body }}
-            </div>
-        {% endfor %}
+      <div class="flash_messages_print_from_ajax">
+      {% for message in flash_messages %}
+          <div class="flash_messages alert alert-{{ message.type }}">
+              {{ message.body }}
+          </div>
+      {% endfor %}
+      </div>
 
-        {% block body %}
-        {% endblock %}
+      {% block body %}
+      {% endblock %}
 
     </div>
 

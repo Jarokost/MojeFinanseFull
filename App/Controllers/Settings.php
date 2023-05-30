@@ -99,6 +99,9 @@ class Settings extends Authenticated
     {
         IncomesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
 
+        $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
+        $data['flash_message_type'][0] = 'info';
+
         $data['incomes_categories'] = IncomesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
 
