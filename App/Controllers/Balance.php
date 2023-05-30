@@ -150,7 +150,7 @@ class Balance extends Authenticated
     public function indexCurrentMonthAction()
     {
         $date_start = date("Y-m-01");
-        $date_end = date("Y-m-d");
+        $date_end = date("Y-m-t");
 
         $this->queries($date_start, $date_end);
 
