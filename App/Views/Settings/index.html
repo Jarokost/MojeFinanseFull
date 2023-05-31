@@ -109,6 +109,7 @@
     }
 
     $(document).ready(function () {
+
         $("#formUpdateAccount").validate({
         errorClass: "is-invalid",
             rules: {
@@ -183,11 +184,39 @@
         $("#buttonRemoveIncomesCategory").on("click", function(e) {
           
           var id = $("#floatingSelectRemCatNameIncomes").val();
+          var force = 'n';
 
           $.ajax({
             url: '/Settings/deleteIncomeCategory',
             type: 'POST',
-            data: { id: id }
+            data: { id: id,
+                    force: force
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateIncomesCategoryList(data);
+            printFlashMessages(data);
+            if(data.flash_message_type[0] === 'warning')
+            {
+              $("#modalRemCatNameIncomesAccept").modal('show');
+              $("#RemoveIncomeCategoryAccept").val(id);
+              $("#RemoveIncomeCategoryAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
+            }
+          });
+        });
+
+        $("#buttonRemoveIncomesCategoryAccept").on("click", function(e) {
+          
+          var id = $("#RemoveIncomeCategoryAccept").val();
+          var force = 'y';
+
+          $.ajax({
+            url: '/Settings/deleteIncomeCategory',
+            type: 'POST',
+            data: { id: id,
+                    force: force
+                  }
           })
           .done(function(data) {
             var data = $.parseJSON(data);
@@ -896,6 +925,39 @@
               data-bs-dismiss="modal"
             >
               Usuń
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal - remove category name incomes accept -->
+  <div class="modal fade" id="modalRemCatNameIncomesAccept" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="" method="post" id="formRemoveIncomeCategoryAccept" onsubmit="dontSubmit(); return false;">
+            <div class="form-floating mb-3" id="RemoveIncomeCategoryAcceptNote">
+              <input type="hidden" name="id" id="RemoveIncomeCategoryAccept"/>
+              wybrana kategoria zawiera wpisy, usunięcie kategorii spowoduje usunięcie transakcji z tą kategorią
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
+              type="submit"
+              id="buttonRemoveIncomesCategoryAccept"
+              data-bs-dismiss="modal"
+            >
+              Usuń mimo to
             </button>
           </form>
         </div>

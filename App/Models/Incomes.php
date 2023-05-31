@@ -292,4 +292,33 @@ class Incomes extends \Core\Model
 
         return $stmt->execute();
     }
+
+    /**
+     * check if any transaction exists for this category
+     * 
+     * @param int category_id to look for
+     * 
+     * @return mixed
+     */
+    public static function transactionsSumForSelectedCategory($user_id, $category_id)
+    {
+        $sql = 'SELECT iu.name AS category_name, COUNT(i.id) AS transactions
+                FROM incomes AS i, incomes_category_assigned_to_users AS iu
+                WHERE i.user_id = :user_id
+                AND i.income_category_assigned_to_user_id = :category_id
+                AND i.income_category_assigned_to_user_id = iu.id
+                GROUP BY iu.name';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
 }
