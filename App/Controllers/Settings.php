@@ -180,7 +180,7 @@ class Settings extends Authenticated
 
         } else {
 
-            //IncomesCategoryAssignedToUsers::removeCategory($_POST['id']);
+            IncomesCategoryAssignedToUsers::removeCategory($_POST['id']);
 
             $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
             $data['flash_message_type'][0] = 'info';
@@ -272,7 +272,7 @@ class Settings extends Authenticated
 
         } else {
 
-            //ExpensesCategoryAssignedToUsers::removeCategory($_POST['id']);
+            ExpensesCategoryAssignedToUsers::removeCategory($_POST['id']);
 
             $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
             $data['flash_message_type'][0] = 'info';
@@ -364,7 +364,7 @@ class Settings extends Authenticated
 
         } else {
 
-            //PaymentMethodsAssignedToUsers::removeCategory($_POST['id']);
+            PaymentMethodsAssignedToUsers::removeCategory($_POST['id']);
 
             $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
             $data['flash_message_type'][0] = 'info';
