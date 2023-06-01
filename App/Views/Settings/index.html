@@ -8,6 +8,7 @@
 <script>
 
     var flash_message_id = 0;
+    var id_to_delete = 0;
 
     setTimeout(function(){
           $('.flash_messages').remove();
@@ -183,17 +184,13 @@
 
         $("#buttonRemoveIncomesCategory").on("click", function(e) {
           
-          var id = $("#floatingSelectRemCatNameIncomes").val();
+          id_to_delete = $("#floatingSelectRemCatNameIncomes").val();
           var force = 'n';
-
-          $("#RemoveIncomeCategoryAccepts").val(id);
-          var ids = $("#RemoveIncomeCategoryAccepts").val();
-          console.log(ids);
 
           $.ajax({
             url: '/Settings/deleteIncomeCategory',
             type: 'POST',
-            data: { id: id,
+            data: { id: id_to_delete,
                     force: force
                   }
           })
@@ -203,26 +200,20 @@
             printFlashMessages(data);
             if(data.flash_message_type[0] === 'warning')
             {
-              $("#RemoveIncomeCategoryAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
-              //$("#RemoveIncomeCategoryAccepts").val(id);
               $("#modalRemCatNameIncomesAccept").modal('show');
+              $("#RemoveIncomeCategoryAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
             }
           });
         });
 
-//buttonRemoveIncomesCategoryAccept
-        $("#btnRemIncCatA").on("click", function(e) {
-          
-          var idg = $("#RemoveIncomeCategoryAccepts").val();
-          //document.getElementById("RemoveIncomeCategoryAccepts").value;
-          var force = 'y';
+        $("#buttonRemoveIncomesCategoryAccept").on("click", function(e) {
 
-          console.log(idg);
+          var force = 'y';
 
           $.ajax({
             url: '/Settings/deleteIncomeCategory',
             type: 'POST',
-            data: { id: idg,
+            data: { id: id_to_delete,
                     force: force
                   }
           })
@@ -233,171 +224,167 @@
           });
         });
 
-        // $("#buttonAddExpensesCategory").on("click", function(e) {
+        $("#buttonAddExpensesCategory").on("click", function(e) {
           
-        //   var name = $("#floatingAddCatNameExpenses").val();
+          var name = $("#floatingAddCatNameExpenses").val();
 
-        //   $.ajax({
-        //     url: '/Settings/addExpenseCategory',
-        //     type: 'POST',
-        //     data: { name: name }
-        //   })
-        //   .done(function(data) {
-        //     var data = $.parseJSON(data);
-        //     updateExpensesCategoryList(data);
-        //     // clear text input
-        //     $("#floatingAddCatNameExpenses").val('');
-        //     printFlashMessages(data);
-        //   });
-        // });
+          $.ajax({
+            url: '/Settings/addExpenseCategory',
+            type: 'POST',
+            data: { name: name }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateExpensesCategoryList(data);
+            // clear text input
+            $("#floatingAddCatNameExpenses").val('');
+            printFlashMessages(data);
+          });
+        });
 
-        // $("#buttonUpdateExpensesCategory").on("click", function(e) {
+        $("#buttonUpdateExpensesCategory").on("click", function(e) {
           
-        //   var id = $("#floatingSelectChgCatNameExpenses").val();
-        //   var name = $("#floatingChgCatNameExpenses").val();
+          var id = $("#floatingSelectChgCatNameExpenses").val();
+          var name = $("#floatingChgCatNameExpenses").val();
 
-        //   $.ajax({
-        //     url: '/Settings/updateExpenseCategory',
-        //     type: 'POST',
-        //     data: { id: id,
-        //             name: name
-        //           }
-        //   })
-        //   .done(function(data) {
-        //     var data = $.parseJSON(data);
-        //     updateExpensesCategoryList(data);
-        //     // clear text input
-        //     $("#floatingChgCatNameExpenses").val('');
-        //     printFlashMessages(data);
-        //   });
-        // });
+          $.ajax({
+            url: '/Settings/updateExpenseCategory',
+            type: 'POST',
+            data: { id: id,
+                    name: name
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateExpensesCategoryList(data);
+            // clear text input
+            $("#floatingChgCatNameExpenses").val('');
+            printFlashMessages(data);
+          });
+        });
 
-        // $("#buttonRemoveExpensesCategory").on("click", function(e) {
+        $("#buttonRemoveExpensesCategory").on("click", function(e) {
           
-        //   var id = $("#floatingSelectRemCatNameExpenses").val();
-        //   var force = 'n';
+          id_to_delete = $("#floatingSelectRemCatNameExpenses").val();
+          var force = 'n';
           
-        //   $.ajax({
-        //     url: '/Settings/deleteExpenseCategory',
-        //     type: 'POST',
-        //     data: { id: id,
-        //             force: force
-        //           }
-        //   })
-        //   .done(function(data) {
-        //     var data = $.parseJSON(data);
-        //     updateExpensesCategoryList(data);
-        //     printFlashMessages(data);
-        //     // if(data.flash_message_type[0] === 'warning')
-        //     // {
-        //     //   $("#modalRemCatNameExpensesAccept").modal('show');
-        //     //   $("#RemoveExpenseCategoryAccept").val(id);
-        //     //   $("#RemoveExpenseCategoryAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
-        //     // }
-        //   });
-        // });
+          $.ajax({
+            url: '/Settings/deleteExpenseCategory',
+            type: 'POST',
+            data: { id: id_to_delete,
+                    force: force
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateExpensesCategoryList(data);
+            printFlashMessages(data);
+            if(data.flash_message_type[0] === 'warning')
+            {
+              $("#RemoveExpenseCategoryAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
+              $("#modalRemCatNameExpensesAccept").modal('show');
+            }
+          });
+        });
 
-        // // $("#buttonRemoveExpensesCategoryAccept").on("click", function(e) {
+        $("#buttonRemoveExpensesCategoryAccept").on("click", function(e) {
           
-        // //   var id = $("#RemoveExpensesCategoryAccept").val();
-        // //   var force = 'y';
+          var force = 'y';
 
-        // //   $.ajax({
-        // //     url: '/Settings/deleteExpenseCategory',
-        // //     type: 'POST',
-        // //     data: { id: id,
-        // //             force: force
-        // //           }
-        // //   })
-        // //   .done(function(data) {
-        // //     var data = $.parseJSON(data);
-        // //     updateIncomesCategoryList(data);
-        // //     printFlashMessages(data);
-        // //   });
-        // // });
+          $.ajax({
+            url: '/Settings/deleteExpenseCategory',
+            type: 'POST',
+            data: { id: id_to_delete,
+                    force: force
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateExpensesCategoryList(data);
+            printFlashMessages(data);
+          });
+        });
 
-        // $("#buttonAddPaymentMethod").on("click", function(e) {
+        $("#buttonAddPaymentMethod").on("click", function(e) {
           
-        //   var name = $("#floatingAddCatNamePayment").val();
+          var name = $("#floatingAddCatNamePayment").val();
 
-        //   $.ajax({
-        //     url: '/Settings/addPaymentMethod',
-        //     type: 'POST',
-        //     data: { name: name }
-        //   })
-        //   .done(function(data) {
-        //     var data = $.parseJSON(data);
-        //     updatePaymentMethodsList(data);
-        //     // clear text input
-        //     $("#floatingAddCatNamePayment").val('');
-        //     printFlashMessages(data);
-        //   });
-        // });
+          $.ajax({
+            url: '/Settings/addPaymentMethod',
+            type: 'POST',
+            data: { name: name }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updatePaymentMethodsList(data);
+            // clear text input
+            $("#floatingAddCatNamePayment").val('');
+            printFlashMessages(data);
+          });
+        });
 
-        // $("#buttonUpdatePaymentMethod").on("click", function(e) {
+        $("#buttonUpdatePaymentMethod").on("click", function(e) {
           
-        //   var id = $("#floatingSelectChgCatNamePayment").val();
-        //   var name = $("#floatingChgCatNamePayment").val();
+          var id = $("#floatingSelectChgCatNamePayment").val();
+          var name = $("#floatingChgCatNamePayment").val();
 
-        //   $.ajax({
-        //     url: '/Settings/updatePaymentMethod',
-        //     type: 'POST',
-        //     data: { id: id,
-        //             name: name
-        //           }
-        //   })
-        //   .done(function(data) {
-        //     var data = $.parseJSON(data);
-        //     updatePaymentMethodsList(data);
-        //     // clear text input
-        //     $("#floatingChgCatNamePayment").val('');
-        //     printFlashMessages(data);
-        //   });
-        // });
+          $.ajax({
+            url: '/Settings/updatePaymentMethod',
+            type: 'POST',
+            data: { id: id,
+                    name: name
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updatePaymentMethodsList(data);
+            // clear text input
+            $("#floatingChgCatNamePayment").val('');
+            printFlashMessages(data);
+          });
+        });
 
-        // $("#buttonRemovePaymentMethod").on("click", function(e) {
+        $("#buttonRemovePaymentMethod").on("click", function(e) {
           
-        //   var id = $("#floatingSelectRemCatNamePayment").val();
-        //   var force = 'n';
+          id_to_delete = $("#floatingSelectRemCatNamePayment").val();
+          var force = 'n';
 
-        //   $.ajax({
-        //     url: '/Settings/deletePaymentMethod',
-        //     type: 'POST',
-        //     data: { id: id,
-        //             force: force
-        //           }
-        //   })
-        //   .done(function(data) {
-        //     var data = $.parseJSON(data);
-        //     updatePaymentMethodsList(data);
-        //     printFlashMessages(data);
-        //     // if(data.flash_message_type[0] === 'warning')
-        //     // {
-        //     //   $("#modalRemCatNamePaymentAccept").modal('show');
-        //     //   $("#RemovePaymentMethodAccept").val(id);
-        //     //   $("#RemovePaymentMethodAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
-        //     // }
-        //   });
-        // });
+          $.ajax({
+            url: '/Settings/deletePaymentMethod',
+            type: 'POST',
+            data: { id: id_to_delete,
+                    force: force
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updatePaymentMethodsList(data);
+            printFlashMessages(data);
+            if(data.flash_message_type[0] === 'warning')
+            {
+              $("#RemovePaymentMethodAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
+              $("#modalRemCatNamePaymentAccept").modal('show');
+            }
+          });
+        });
 
-        // $("#buttonRemovePaymentMethodAccept").on("click", function(e) {
+        $("#buttonRemovePaymentMethodAccept").on("click", function(e) {
           
-        //   var id = $("#RemovePaymentMethodAccept").val();
-        //   var force = 'y';
+          var force = 'y';
 
-        //   $.ajax({
-        //     url: '/Settings/deletePaymentMethod',
-        //     type: 'POST',
-        //     data: { id: id,
-        //             force: force
-        //           }
-        //   })
-        //   .done(function(data) {
-        //     var data = $.parseJSON(data);
-        //     updateIncomesCategoryList(data);
-        //     printFlashMessages(data);
-        //   });
-        // });
+          $.ajax({
+            url: '/Settings/deletePaymentMethod',
+            type: 'POST',
+            data: { id: id_to_delete,
+                    force: force
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updatePaymentMethodsList(data);
+            printFlashMessages(data);
+          });
+        });
 
         setInterval(removeDefaultLabelOnValidateError, 1);
     });
@@ -905,7 +892,7 @@
   </div>
 
   <!-- modal - remove category name expenses -->
-  <!-- <div class="modal fade" id="modalRemCatNameExpenses" tabindex="-1">
+  <div class="modal fade" id="modalRemCatNameExpenses" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header p-5 pb-4 border-bottom-0">
@@ -948,10 +935,10 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 
   <!-- modal - remove category name payment -->
-  <!-- <div class="modal fade" id="modalRemCatNamePayment" tabindex="-1">
+  <div class="modal fade" id="modalRemCatNamePayment" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header p-5 pb-4 border-bottom-0">
@@ -994,7 +981,7 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 
   <!-- modal - remove category name incomes accept -->
   <div class="modal fade" id="modalRemCatNameIncomesAccept" tabindex="-1">
@@ -1012,13 +999,11 @@
         <div class="modal-body p-5 pt-0">
           <form class="" method="post" id="formRemoveIncomeCategoryAccept" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3" id="RemoveIncomeCategoryAcceptNote">
-              <input type="hidden" name="id" id="RemoveIncomeCategoryAccepts" value=""/>
-              wybrana kategoria zawiera wpisy, usunięcie kategorii spowoduje usunięcie transakcji z tą kategorią
             </div>
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
               type="submit"
-              id="btnRemIncCatA"
+              id="buttonRemoveIncomesCategoryAccept"
               data-bs-dismiss="modal"
             >
               Usuń mimo to
@@ -1030,7 +1015,7 @@
   </div>
 
   <!-- modal - remove category name expenses accept -->
-  <!-- <div class="modal fade" id="modalRemCatNameExpensesAccept" tabindex="-1">
+  <div class="modal fade" id="modalRemCatNameExpensesAccept" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header p-5 pb-4 border-bottom-0">
@@ -1046,8 +1031,6 @@
           <form class="" method="post" id="formRemoveExpenseCategoryAccept" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
               <div class="form-floating mb-3" id="RemoveExpenseCategoryAcceptNote">
-                <input type="hidden" name="id" id="RemoveExpenseCategoryAccept"/>
-                wybrana kategoria zawiera wpisy, usunięcie kategorii spowoduje usunięcie transakcji z tą kategorią
               </div>
             </div>
             <button
@@ -1062,10 +1045,10 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 
   <!-- modal - remove category name payment accept -->
-  <!-- <div class="modal fade" id="modalRemCatNamePaymentAccept" tabindex="-1">
+  <div class="modal fade" id="modalRemCatNamePaymentAccept" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header p-5 pb-4 border-bottom-0">
@@ -1081,8 +1064,6 @@
           <form class="" method="post" id="formRemovePaymentMethodAccept" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
               <div class="form-floating mb-3" id="RemovePaymentMethodAcceptNote">
-                <input type="hidden" name="id" id="RemovePaymentMethodAccept"/>
-                wybrana kategoria zawiera wpisy, usunięcie kategorii spowoduje usunięcie transakcji z tą kategorią
               </div>
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
@@ -1096,7 +1077,7 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 
   <!-- modal - edit account -->
   <div class="modal fade" id="modalEditAccount" tabindex="-1">
