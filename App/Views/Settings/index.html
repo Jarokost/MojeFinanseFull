@@ -8,6 +8,7 @@
 <script>
 
     var flash_message_id = 0;
+    var id_to_delete = 0;
 
     setTimeout(function(){
           $('.flash_messages').remove();
@@ -109,6 +110,7 @@
     }
 
     $(document).ready(function () {
+
         $("#formUpdateAccount").validate({
         errorClass: "is-invalid",
             rules: {
@@ -182,12 +184,38 @@
 
         $("#buttonRemoveIncomesCategory").on("click", function(e) {
           
-          var id = $("#floatingSelectRemCatNameIncomes").val();
+          id_to_delete = $("#floatingSelectRemCatNameIncomes").val();
+          var force = 'n';
 
           $.ajax({
             url: '/Settings/deleteIncomeCategory',
             type: 'POST',
-            data: { id: id }
+            data: { id: id_to_delete,
+                    force: force
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateIncomesCategoryList(data);
+            printFlashMessages(data);
+            if(data.flash_message_type[0] === 'warning')
+            {
+              $("#modalRemCatNameIncomesAccept").modal('show');
+              $("#RemoveIncomeCategoryAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
+            }
+          });
+        });
+
+        $("#buttonRemoveIncomesCategoryAccept").on("click", function(e) {
+
+          var force = 'y';
+
+          $.ajax({
+            url: '/Settings/deleteIncomeCategory',
+            type: 'POST',
+            data: { id: id_to_delete,
+                    force: force
+                  }
           })
           .done(function(data) {
             var data = $.parseJSON(data);
@@ -237,12 +265,38 @@
 
         $("#buttonRemoveExpensesCategory").on("click", function(e) {
           
-          var id = $("#floatingSelectRemCatNameExpenses").val();
+          id_to_delete = $("#floatingSelectRemCatNameExpenses").val();
+          var force = 'n';
+          
+          $.ajax({
+            url: '/Settings/deleteExpenseCategory',
+            type: 'POST',
+            data: { id: id_to_delete,
+                    force: force
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updateExpensesCategoryList(data);
+            printFlashMessages(data);
+            if(data.flash_message_type[0] === 'warning')
+            {
+              $("#RemoveExpenseCategoryAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
+              $("#modalRemCatNameExpensesAccept").modal('show');
+            }
+          });
+        });
+
+        $("#buttonRemoveExpensesCategoryAccept").on("click", function(e) {
+          
+          var force = 'y';
 
           $.ajax({
             url: '/Settings/deleteExpenseCategory',
             type: 'POST',
-            data: { id: id }
+            data: { id: id_to_delete,
+                    force: force
+                  }
           })
           .done(function(data) {
             var data = $.parseJSON(data);
@@ -292,12 +346,38 @@
 
         $("#buttonRemovePaymentMethod").on("click", function(e) {
           
-          var id = $("#floatingSelectRemCatNamePayment").val();
+          id_to_delete = $("#floatingSelectRemCatNamePayment").val();
+          var force = 'n';
 
           $.ajax({
             url: '/Settings/deletePaymentMethod',
             type: 'POST',
-            data: { id: id }
+            data: { id: id_to_delete,
+                    force: force
+                  }
+          })
+          .done(function(data) {
+            var data = $.parseJSON(data);
+            updatePaymentMethodsList(data);
+            printFlashMessages(data);
+            if(data.flash_message_type[0] === 'warning')
+            {
+              $("#RemovePaymentMethodAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
+              $("#modalRemCatNamePaymentAccept").modal('show');
+            }
+          });
+        });
+
+        $("#buttonRemovePaymentMethodAccept").on("click", function(e) {
+          
+          var force = 'y';
+
+          $.ajax({
+            url: '/Settings/deletePaymentMethod',
+            type: 'POST',
+            data: { id: id_to_delete,
+                    force: force
+                  }
           })
           .done(function(data) {
             var data = $.parseJSON(data);
@@ -825,7 +905,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="">
+          <form class="" method="post" id="formRemoveExpenseCategory" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
               <select
                 class="form-select"
@@ -896,6 +976,102 @@
               data-bs-dismiss="modal"
             >
               Usuń
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal - remove category name incomes accept -->
+  <div class="modal fade" id="modalRemCatNameIncomesAccept" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="" method="post" id="formRemoveIncomeCategoryAccept" onsubmit="dontSubmit(); return false;">
+            <div class="form-floating mb-3" id="RemoveIncomeCategoryAcceptNote">
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
+              type="submit"
+              id="buttonRemoveIncomesCategoryAccept"
+              data-bs-dismiss="modal"
+            >
+              Usuń mimo to
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal - remove category name expenses accept -->
+  <div class="modal fade" id="modalRemCatNameExpensesAccept" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="" method="post" id="formRemoveExpenseCategoryAccept" onsubmit="dontSubmit(); return false;">
+            <div class="form-floating mb-3">
+              <div class="form-floating mb-3" id="RemoveExpenseCategoryAcceptNote">
+              </div>
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
+              type="submit"
+              id="buttonRemoveExpensesCategoryAccept"
+              data-bs-dismiss="modal"
+            >
+              Usuń mimo to
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal - remove category name payment accept -->
+  <div class="modal fade" id="modalRemCatNamePaymentAccept" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie kategorii</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="" method="post" id="formRemovePaymentMethodAccept" onsubmit="dontSubmit(); return false;">
+            <div class="form-floating mb-3">
+              <div class="form-floating mb-3" id="RemovePaymentMethodAcceptNote">
+              </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
+              type="submit"
+              id="buttonRemovePaymentMethodAccept"
+              data-bs-dismiss="modal"
+            >
+              Usuń mimo to
             </button>
           </form>
         </div>

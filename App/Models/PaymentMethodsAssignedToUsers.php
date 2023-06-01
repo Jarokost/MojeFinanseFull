@@ -183,4 +183,34 @@ class PaymentMethodsAssignedToUsers extends \Core\Model
 
         $stmt->execute();
     }
+
+    /**
+     * check if any transaction exists for this category
+     * 
+     * @param int user_id
+     * @param int category_id to look for
+     * 
+     * @return mixed
+     */
+    public static function transactionsSumForSelectedCategory($user_id, $category_id)
+    {
+        $sql = 'SELECT pu.name AS category_name, COUNT(e.id) AS transactions
+                FROM expenses AS e, payment_methods_assigned_to_users AS pu
+                WHERE e.user_id = :user_id
+                AND e.payment_method_assigned_to_user_id = :category_id
+                AND e.payment_method_assigned_to_user_id = pu.id
+                GROUP BY pu.name';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
 }

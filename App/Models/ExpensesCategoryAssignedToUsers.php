@@ -183,4 +183,34 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
 
         $stmt->execute();
     }
+
+    /**
+     * check if any transaction exists for this category
+     * 
+     * @param int user_id
+     * @param int category_id to look for
+     * 
+     * @return mixed
+     */
+    public static function transactionsSumForSelectedCategory($user_id, $category_id)
+    {
+        $sql = 'SELECT eu.name AS category_name, COUNT(e.id) AS transactions
+                FROM expenses AS e, expenses_category_assigned_to_users AS eu
+                WHERE e.user_id = :user_id
+                AND e.expense_category_assigned_to_user_id = :category_id
+                AND e.expense_category_assigned_to_user_id = eu.id
+                GROUP BY eu.name';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
 }

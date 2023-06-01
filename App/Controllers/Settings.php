@@ -166,11 +166,26 @@ class Settings extends Authenticated
      */
     public function deleteIncomeCategoryAction()
     {
+        $transactions = IncomesCategoryAssignedToUsers::transactionsSumForSelectedCategory($_SESSION['user_id'], $_POST['id']);
         $category_name = IncomesCategoryAssignedToUsers::getCategoryName($_POST['id']);
-        IncomesCategoryAssignedToUsers::removeCategory($_POST['id']);
+        $force = $_POST['force'];
 
-        $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
-        $data['flash_message_type'][0] = 'info';
+        if($transactions && $force === 'n') {
+
+            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istnieją (' . $transactions['transactions'] . ') transakcje, niepowodzenie';
+            $data['flash_message_type'][0] = 'warning';
+
+            $data['category_name'] = $transactions['category_name'];
+            $data['transactions'] = $transactions['transactions'];
+
+        } else {
+
+            //IncomesCategoryAssignedToUsers::removeCategory($_POST['id']);
+
+            $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
 
         $data['categories'] = IncomesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
@@ -243,11 +258,26 @@ class Settings extends Authenticated
      */
     public function deleteExpenseCategoryAction()
     {
+        $transactions = ExpensesCategoryAssignedToUsers::transactionsSumForSelectedCategory($_SESSION['user_id'], $_POST['id']);
         $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($_POST['id']);
-        ExpensesCategoryAssignedToUsers::removeCategory($_POST['id']);
+        $force = $_POST['force'];
 
-        $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
-        $data['flash_message_type'][0] = 'info';
+        if($transactions && $force === 'n') {
+
+            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istnieją (' . $transactions['transactions'] . ') transakcje, niepowodzenie';
+            $data['flash_message_type'][0] = 'warning';
+
+            $data['category_name'] = $transactions['category_name'];
+            $data['transactions'] = $transactions['transactions'];
+
+        } else {
+
+            //ExpensesCategoryAssignedToUsers::removeCategory($_POST['id']);
+
+            $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
 
         $data['categories'] = ExpensesCategoryAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
@@ -320,11 +350,26 @@ class Settings extends Authenticated
      */
     public function deletePaymentMethodAction()
     {
+        $transactions = PaymentMethodsAssignedToUsers::transactionsSumForSelectedCategory($_SESSION['user_id'], $_POST['id']);
         $category_name = PaymentMethodsAssignedToUsers::getCategoryName($_POST['id']);
-        PaymentMethodsAssignedToUsers::removeCategory($_POST['id']);
+        $force = $_POST['force'];
 
-        $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
-        $data['flash_message_type'][0] = 'info';
+        if($transactions && $force === 'n') {
+
+            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istnieją (' . $transactions['transactions'] . ') transakcje, niepowodzenie';
+            $data['flash_message_type'][0] = 'warning';
+
+            $data['category_name'] = $transactions['category_name'];
+            $data['transactions'] = $transactions['transactions'];
+
+        } else {
+
+            //PaymentMethodsAssignedToUsers::removeCategory($_POST['id']);
+
+            $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
+            $data['flash_message_type'][0] = 'info';
+
+        }
 
         $data['categories'] = PaymentMethodsAssignedToUsers::
         getCategoriesAssignedToUser($_SESSION['user_id']);
