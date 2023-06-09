@@ -1,8 +1,11 @@
 {% extends 'base.html' %} {% block title %}Home{% endblock %} {% block footer %}
 <script src="/js/app.js"></script>
 
+<script src="/js/passShowHide.js"></script>
+
 <script>
-  $(document).ready(function () {
+  $(document).ready(function () { 
+
     $("#formSignup").validate({
       errorClass: "is-invalid",
       rules: {
@@ -59,24 +62,6 @@
 
     setInterval(removeDefaultLabelOnValidateError, 1);
   });
-
-  function passShowHideReg() {
-    var pass_shreg = document.getElementById("inputPasswordReg");
-    if (pass_shreg.type == "password") pass_shreg.type = "text";
-    else pass_shreg.type = "password";
-    var btnreg = document.getElementById("inputPasswordRegBtn");
-    if (btnreg.innerHTML == "Pokaż") btnreg.innerHTML = "Ukryj";
-    else btnreg.innerHTML = "Pokaż";
-  }
-
-  function passShowHide() {
-    var pass_sh = document.getElementById("inputPassword");
-    if (pass_sh.type == "password") pass_sh.type = "text";
-    else pass_sh.type = "password";
-    var btn = document.getElementById("inputPasswordBtn");
-    if (btn.innerHTML == "Pokaż") btn.innerHTML = "Ukryj";
-    else btn.innerHTML = "Pokaż";
-  }
 
   function removeDefaultLabelOnValidateError() {
     if ($("#inputNameReg").hasClass("is-invalid")) {
@@ -324,7 +309,6 @@
               />
             </div>
             <button
-              onclick="passShowHide()"
               class="btn btn-outline-secondary"
               type="button"
               id="inputPasswordBtn"
@@ -425,7 +409,6 @@
               />
             </div>
             <button
-              onclick="passShowHideReg()"
               class="btn btn-outline-secondary"
               type="button"
               id="inputPasswordRegBtn"
