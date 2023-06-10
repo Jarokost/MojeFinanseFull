@@ -85,6 +85,34 @@
         return false;
       }
     }
+    function validatePasswordInputLogin(passwordInput) {
+      if( passwordInput.value === '' ) {
+        passwordInput.classList.add('is-invalid');
+        document.getElementById(passwordInput.id + 'Label').textContent = 'Podaj hasło!';
+        return true;
+      } else {
+        passwordInput.classList.remove('is-invalid');
+        document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło';
+        return false;
+      }
+    }
+    function validateEmailInputLogin(emailInput) {
+      const regexpEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      if( emailInput.value === '' ) {
+        emailInput.classList.add('is-invalid');
+        document.getElementById(emailInput.id + 'Label').textContent = 'Podaj adres email!';
+        return true;
+      } else if (!regexpEmail.test(emailInput.value)) {
+        emailInput.classList.add('is-invalid');
+        document.getElementById(emailInput.id + 'Label').textContent = 'Adres email jest niepoprawny!';
+        return true;
+      } else {
+        emailInput.classList.remove('is-invalid');
+        document.getElementById(emailInput.id + 'Label').textContent = 'Adres email';
+        return false;
+      }
+    }
 
     document.getElementById("inputNameReg").addEventListener('focusout', function () {
       validateNameInputRegistration(this);
@@ -101,54 +129,15 @@
             event.preventDefault();
         }
     });
-
-    $("#formLogin").validate({
-      errorClass: "is-invalid",
-      rules: {
-        email: {
-          required: true,
-          email: true,
-        },
-        password: {
-          required: true,
-        },
-      },
-      messages: {
-        email: {
-          required: "Podaj adres email",
-          email: "Podaj adres email",
-        },
-        password: {
-          required: "Podaj hasło",
-        }
-      },
+    document.getElementById("inputPassword").addEventListener('focusout', function () {
+      validatePasswordInputLogin(this);
+    });
+    document.getElementById("inputEmail").addEventListener('focusout', function () {
+      validateEmailInputLogin(this);
     });
 
-   setInterval(removeDefaultLabelOnValidateError, 1);
   });
 
-  function removeDefaultLabelOnValidateError() {
-
-    if ($("#inputEmail").hasClass("is-invalid")) {
-      $("#inputEmailLabel").remove();
-    } else {
-      if (document.getElementById("inputEmailLabel") === null) {
-        $("#inputEmail").after(
-          '<label id="inputEmailLabel" for="inputEmail">Adres email</label>'
-        );
-      }
-    }
-
-    if ($("#inputPassword").hasClass("is-invalid")) {
-      $("#inputPasswordLabel").remove();
-    } else {
-      if (document.getElementById("inputPasswordLabel") === null) {
-        $("#inputPassword").after(
-          '<label id="inputPasswordLabel" for="inputPassword">Hasło</label>'
-        );
-      }
-    }
-  }
 </script>
 
 {% endblock %}
@@ -328,6 +317,7 @@
               autocomplete="off"
               value="{{ email }}"
             />
+            <label id="inputEmailLabel" for="inputEmail">Adres email</label>
           </div>
 
           <div class="input-group mb-3">
@@ -342,6 +332,7 @@
                 aria-describedby="inputPasswordBtn"
                 autocomplete="off"
               />
+              <label id="inputPasswordLabel" for="inputPassword">Hasło</label>
             </div>
             <button
               class="btn btn-outline-secondary"
