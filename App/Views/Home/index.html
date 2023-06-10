@@ -21,10 +21,18 @@
       }
     }
 
-    function validateFormOnSubmit() {
+    function validateRegistrationFormOnSubmit() {
       if ( validateNameInputRegistration(document.getElementById("inputNameReg"))
         || validatePasswordInputRegistration(document.getElementById("inputPasswordReg"))
         || validateEmailInputRegistration(document.getElementById("inputEmailReg")) ) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    function validateLoginFormOnSubmit() {
+      if ( validatePasswordInputLogin(document.getElementById("inputPassword"))
+        || validateEmailInputLogin(document.getElementById("inputEmail")) ) {
         return false;
       } else {
         return true;
@@ -124,7 +132,7 @@
       validateEmailInputRegistration(this);
     });
     document.getElementById("formSignup").addEventListener('submit', (event) => {
-        if (validateFormOnSubmit() === true) {
+        if (validateRegistrationFormOnSubmit() === true) {
         } else {
             event.preventDefault();
         }
@@ -134,6 +142,12 @@
     });
     document.getElementById("inputEmail").addEventListener('focusout', function () {
       validateEmailInputLogin(this);
+    });
+    document.getElementById("formLogin").addEventListener('submit', (event) => {
+        if (validateLoginFormOnSubmit() === true) {
+        } else {
+            event.preventDefault();
+        }
     });
 
   });
