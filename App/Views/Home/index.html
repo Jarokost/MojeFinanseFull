@@ -6,7 +6,7 @@
 <script>
   $(document).ready(function () { 
 
-    const getEmailExists = async (email) => {
+    const getEmailIsValid = async (email) => {
       const inData = {
         email: email
       }; 
@@ -16,9 +16,18 @@
           body: JSON.stringify(inData)
         })
         const data = await res.json()
-        console.log(data);
       } catch (e) {
         console.log('ERROR: ', e);
+      }
+    }
+
+    function validateFormOnSubmit() {
+      if ( validateNameInputRegistration(document.getElementById("inputNameReg"))
+        || validatePasswordInputRegistration(document.getElementById("inputPasswordReg"))
+        || validateEmailInputRegistration(document.getElementById("inputEmailReg")) ) {
+        return false;
+      } else {
+        return true;
       }
     }
 
@@ -26,9 +35,11 @@
       if( nameInput.value === '' ) {
         nameInput.classList.add('is-invalid');
         document.getElementById(nameInput.id + 'Label').textContent = 'Podaj imię!';
+        return true;
       } else {
         nameInput.classList.remove('is-invalid');
         document.getElementById(nameInput.id + 'Label').textContent = 'Imię';
+        return false;
       }
     }
     function validatePasswordInputRegistration(passwordInput) {
@@ -38,15 +49,19 @@
       if( passwordInput.value.length < 6 ) {
         passwordInput.classList.add('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło musi zawierać min. 6 znaków!';
+        return true;
       } else if (!regexpLetter.test(passwordInput.value)) {
         passwordInput.classList.add('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło musi zawierać conajmniej jedną literę!';
+        return true;
       } else if (!regexpNumber.test(passwordInput.value)) {
         passwordInput.classList.add('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło musi zawierać conajmniej jedną cyfrę!';
+        return true;
       } else {
         passwordInput.classList.remove('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło';
+        return false;
       }
     }
     function validateEmailInputRegistration(emailInput) {
@@ -55,15 +70,19 @@
       if( emailInput.value === '' ) {
         emailInput.classList.add('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Podaj adres email!';
+        return true;
       } else if (!regexpEmail.test(emailInput.value)) {
         emailInput.classList.add('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Adres email jest niepoprawny!';
-      } else if (getEmailExists(emailInput.value)) {
+        return true;
+      } else if (!getEmailIsValid(emailInput.value)) {
         emailInput.classList.add('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Adres email jest zajęty!';
+        return true;
       } else {
         emailInput.classList.remove('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Adres email';
+        return false;
       }
     }
 
@@ -75,6 +94,12 @@
     });
     document.getElementById("inputEmailReg").addEventListener('focusout', function () {
       validateEmailInputRegistration(this);
+    });
+    document.getElementById("formSignup").addEventListener('submit', (event) => {
+        if (validateFormOnSubmit() === true) {
+        } else {
+            event.preventDefault();
+        }
     });
 
     $("#formLogin").validate({
