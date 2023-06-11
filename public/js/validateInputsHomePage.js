@@ -18,7 +18,7 @@ const getEmailIsValid = async (emailInput) => {
 
 // Registration Form
 function validateNameInputRegistration(nameInput) {
-    if( nameInput.value === '' ) {
+    if ( nameInput.value === '' ) {
         nameInput.classList.add('is-invalid');
         document.getElementById(nameInput.id + 'Label').textContent = 'Podaj imię!';
         return true;
@@ -32,7 +32,7 @@ function validatePasswordInputRegistration(passwordInput) {
     const regexpLetter = /.*[a-zA-Z]+.*/;
     const regexpNumber = /.*\d+.*/;
 
-    if( passwordInput.value.length < 6 ) {
+    if ( passwordInput.value.length < 6 ) {
         passwordInput.classList.add('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło musi zawierać min. 6 znaków!';
         return true;
@@ -53,7 +53,7 @@ function validatePasswordInputRegistration(passwordInput) {
 function validateEmailInputRegistration(emailInput, emailIsNotValid) {
     const regexpEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if( emailInput.value === '' ) {
+    if ( emailInput.value === '' ) {
         emailInput.classList.add('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Podaj adres email!';
         return true;
@@ -86,7 +86,7 @@ function validateRegistrationFormOnSubmit() {
 
 // Login Form
 function validatePasswordInputLogin(passwordInput) {
-    if( passwordInput.value === '' ) {
+    if ( passwordInput.value === '' ) {
         passwordInput.classList.add('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Podaj hasło!';
         return true;
@@ -129,13 +129,25 @@ document.onreadystatechange = () => {
     if (document.readyState === 'interactive') {
         // Registration Form
         document.getElementById("inputNameReg").addEventListener('focusout', function () {
-            validateNameInputRegistration(this);
+            if ( validateNameInputRegistration(this) ) {
+                this.addEventListener('input', function () {
+                    validateNameInputRegistration(this);
+                });
+            }
         });
         document.getElementById("inputPasswordReg").addEventListener('focusout', function () {
-            validatePasswordInputRegistration(this);
+            if ( validatePasswordInputRegistration(this) ) {
+                this.addEventListener('input', function () {
+                    validatePasswordInputRegistration(this);
+                });
+            }
         });
         document.getElementById("inputEmailReg").addEventListener('focusout', function () {
-            validateEmailInputRegistration(this);
+            if ( getEmailIsValid(this) ) {
+                this.addEventListener('input', function () {
+                    getEmailIsValid(this);
+                });
+            }
         });
         document.getElementById("formSignup").addEventListener('submit', (event) => {
             if (validateRegistrationFormOnSubmit() === true) {
@@ -146,10 +158,18 @@ document.onreadystatechange = () => {
 
         // Login form
         document.getElementById("inputPassword").addEventListener('focusout', function () {
-            validatePasswordInputLogin(this);
+            if ( validatePasswordInputLogin(this) ) {
+                this.addEventListener('input', function () {
+                    validatePasswordInputLogin(this);
+                });
+            }
         });
         document.getElementById("inputEmail").addEventListener('focusout', function () {
-            validateEmailInputLogin(this);
+            if ( validateEmailInputLogin(this) ) {
+                this.addEventListener('input', function () {
+                    validateEmailInputLogin(this);
+                });
+            }
         });
         document.getElementById("formLogin").addEventListener('submit', (event) => {
             if (validateLoginFormOnSubmit() === true) {
