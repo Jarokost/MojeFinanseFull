@@ -28,6 +28,7 @@ function validateNameInputRegistration(nameInput) {
         return false;
     }
 }
+
 function validatePasswordInputRegistration(passwordInput) {
     const regexpLetter = /.*[a-zA-Z]+.*/;
     const regexpNumber = /.*\d+.*/;
@@ -50,6 +51,7 @@ function validatePasswordInputRegistration(passwordInput) {
         return false;
     }
 }
+
 function validateEmailInputRegistration(emailInput, emailIsNotValid) {
     const regexpEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -71,6 +73,7 @@ function validateEmailInputRegistration(emailInput, emailIsNotValid) {
         return false;
     }
 }
+
 function validateRegistrationFormOnSubmit() {
 
     let nameNotValid = validateNameInputRegistration(document.getElementById("inputNameReg"));
@@ -96,6 +99,7 @@ function validatePasswordInputLogin(passwordInput) {
         return false;
     }
 }
+
 function validateEmailInputLogin(emailInput) {
     const regexpEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -113,6 +117,7 @@ function validateEmailInputLogin(emailInput) {
         return false;
     }
 }
+
 function validateLoginFormOnSubmit() {
 
     let passwordNotValid = validatePasswordInputLogin(document.getElementById("inputPassword"));
@@ -125,6 +130,7 @@ function validateLoginFormOnSubmit() {
     }
 }
 
+
 document.onreadystatechange = () => {
     if (document.readyState === 'interactive') {
         // Registration Form
@@ -135,6 +141,7 @@ document.onreadystatechange = () => {
                 });
             }
         });
+
         document.getElementById("inputPasswordReg").addEventListener('focusout', function () {
             if ( validatePasswordInputRegistration(this) ) {
                 this.addEventListener('input', function () {
@@ -142,6 +149,7 @@ document.onreadystatechange = () => {
                 });
             }
         });
+
         document.getElementById("inputEmailReg").addEventListener('focusout', function () {
             if ( getEmailIsValid(this) ) {
                 this.addEventListener('input', function () {
@@ -149,6 +157,7 @@ document.onreadystatechange = () => {
                 });
             }
         });
+
         document.getElementById("formSignup").addEventListener('submit', (event) => {
             if (validateRegistrationFormOnSubmit() === true) {
             } else {
@@ -164,6 +173,7 @@ document.onreadystatechange = () => {
                 });
             }
         });
+
         document.getElementById("inputEmail").addEventListener('focusout', function () {
             if ( validateEmailInputLogin(this) ) {
                 this.addEventListener('input', function () {
@@ -171,6 +181,7 @@ document.onreadystatechange = () => {
                 });
             }
         });
+
         document.getElementById("formLogin").addEventListener('submit', (event) => {
             if (validateLoginFormOnSubmit() === true) {
             } else {
