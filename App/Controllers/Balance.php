@@ -201,7 +201,7 @@ class Balance extends Authenticated
     /**
      * 
      */
-    public function foo()
+    public function getIncomesAndExpensesSumGroupedByCategoryAction()
     {
         $input = json_decode(file_get_contents('php://input'), true);
 
