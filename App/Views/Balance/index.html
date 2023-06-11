@@ -18,15 +18,15 @@
 
     <script>
 
-      var tr = null;
-      var expenses_categories_sum_table = [["Wydatki", "Wartość"]];
-      var incomes_categories_sum_table = [["Przychody", "Wartość"]];
-      var chart_expenses = null;
-      var chart_incomes = null;
-      var chart_data_expenses = null;
-      var chart_data_incomes = null;
-      var chart_options_expenses = null;
-      var chart_options_incomes = null;
+      let tr = null;
+      let expenses_categories_sum_table = [["Wydatki", "Wartość"]];
+      let incomes_categories_sum_table = [["Przychody", "Wartość"]];
+      let chart_expenses = null;
+      let chart_incomes = null;
+      let chart_data_expenses = null;
+      let chart_data_incomes = null;
+      let chart_options_expenses = null;
+      let chart_options_incomes = null;
 
       google.charts.load("current", { packages: ["corechart"] });
 
@@ -55,7 +55,7 @@
         chart_incomes = new google.visualization.PieChart(
           document.getElementById("incomesDonutChart")
         );
-        //chart_incomes.draw(chart_data_incomes, chart_options_incomes);
+        //chart_incomes.draw(chart_data_incomes, chart_options_incomes); //draw graphs on load
       }
 
       function drawChartExpenses() {
@@ -80,7 +80,7 @@
         chart_expenses = new google.visualization.PieChart(
           document.getElementById("expensesDonutChart")
         );
-        //chart_expenses.draw(chart_data_expenses, chart_options_expenses);
+        //chart_expenses.draw(chart_data_expenses, chart_options_expenses); //darw graph on load
       }
 
       function dontSubmit() {
@@ -88,10 +88,10 @@
       }
 
       function setSelectByText(eID,text)
-      { //Loop through sequentially//
-        var ele=document.getElementById(eID);
-        for(var ii=0; ii<ele.length; ii++)
-          if(ele.options[ii].text==text) { //Found!
+      {
+        let ele=document.getElementById(eID);
+        for(let ii=0; ii<ele.length; ii++)
+          if(ele.options[ii].text==text) {
             ele.options[ii].selected=true;
             return true;
           }
@@ -100,53 +100,75 @@
 
       function updateBalanceData(data)
       {
-        var balance = data.incomes_sum.amount_sum - data.expenses_sum.amount_sum;
-        $('#updateBalanceData').html(parseFloat(balance).toFixed(2));
+        const balance = data.incomes_sum.amount_sum - data.expenses_sum.amount_sum;
+        const balanceElement = document.getElementById("updateBalanceData");
+        balanceElement.textContent = parseFloat(balance).toFixed(2);
         if (balance > 0) {
-          $('#updateBalanceData').addClass("balance_plus");
-          $('#updateBalanceData').removeClass("balance_minus");
+          balanceElement.classList.add("balance_plus");
+          balanceElement.classList.remove("balance_minus");
         } else {
-          $('#updateBalanceData').removeClass("balance_plus");
-          $('#updateBalanceData').addClass("balance_minus");
+          balanceElement.classList.remove("balance_plus");
+          balanceElement.classList.add("balance_minus");
         }
       }
 
-      function updateGraphsData() {
-        var date_start = $("#balanceDateStart").html();
-        var date_end = $("#balanceDateEnd").html();
+      const updateGraphsData = async () => {
+        const date_start = document.getElementById("balanceDateStart").innerHTML;
+        const date_end = document.getElementById("balanceDateEnd").innerHTML;
 
-        $.ajax({
-          url: '/Balance/foo',
-          type: 'POST',
-          data: { 
-                  date_start: date_start,
-                  date_end: date_end
-                }
-        })
-        .done(function(data) {
-            var data = $.parseJSON(data);
-            console.log(data);            
-            // clean table
-            incomes_categories_sum_table = [["Przychody", "Wartość"]];
-            // fill table with AJAX requested data
-            for(var i=0; i < data.incomes_category_sum.length; i++) {
-              incomes_categories_sum_table.push([data.incomes_category_sum[i].category_name, parseFloat(data.incomes_category_sum[i].category_amount_sum)]);
-            }
-            // pass new data and redraw graph
-            chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
-            chart_incomes.draw(chart_data_incomes, chart_options_incomes);
+        const inData = {
+          date_start: date_start,
+          date_end: date_end
+        };
 
-            // clean table
-            expenses_categories_sum_table = [["Wydatki", "Wartość"]];
-            // fill table with AJAX requested data
-            for(var i=0; i < data.expenses_category_sum.length; i++) {
-              expenses_categories_sum_table.push([data.expenses_category_sum[i].category_name, parseFloat(data.expenses_category_sum[i].category_amount_sum)]);
-            }
-            // pass new data and redraw graph
-            chart_data_expenses = google.visualization.arrayToDataTable(expenses_categories_sum_table);
-            chart_expenses.draw(chart_data_expenses, chart_options_expenses);
+        try { 
+          const res = await fetch(`/Balance/foo`, {
+              method: 'post',
+              body: JSON.stringify(inData)
+          })
+          const data = await res.json();
 
-        });
+          incomes_categories_sum_table = [["Przychody", "Wartość"]];
+          for(let i=0; i < data.incomes_category_sum.length; i++) {
+            incomes_categories_sum_table.push([data.incomes_category_sum[i].category_name, parseFloat(data.incomes_category_sum[i].category_amount_sum)]);
+          }
+          chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
+          chart_incomes.draw(chart_data_incomes, chart_options_incomes);
+
+          expenses_categories_sum_table = [["Wydatki", "Wartość"]];
+          for(let i=0; i < data.expenses_category_sum.length; i++) {
+            expenses_categories_sum_table.push([data.expenses_category_sum[i].category_name, parseFloat(data.expenses_category_sum[i].category_amount_sum)]);
+          }
+          chart_data_expenses = google.visualization.arrayToDataTable(expenses_categories_sum_table);
+          chart_expenses.draw(chart_data_expenses, chart_options_expenses);
+        } catch (e) {
+            console.log('ERROR: ', e);
+        }
+
+        // .done(function(inData) {
+        //     let data = $.parseJSON(inData);
+        //     console.log(data);            
+        //     // clean table
+        //     incomes_categories_sum_table = [["Przychody", "Wartość"]];
+        //     // fill table with AJAX requested data
+        //     for(let i=0; i < data.incomes_category_sum.length; i++) {
+        //       incomes_categories_sum_table.push([data.incomes_category_sum[i].category_name, parseFloat(data.incomes_category_sum[i].category_amount_sum)]);
+        //     }
+        //     // pass new data and redraw graph
+        //     chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
+        //     chart_incomes.draw(chart_data_incomes, chart_options_incomes);
+
+        //     // clean table
+        //     expenses_categories_sum_table = [["Wydatki", "Wartość"]];
+        //     // fill table with AJAX requested data
+        //     for(let i=0; i < data.expenses_category_sum.length; i++) {
+        //       expenses_categories_sum_table.push([data.expenses_category_sum[i].category_name, parseFloat(data.expenses_category_sum[i].category_amount_sum)]);
+        //     }
+        //     // pass new data and redraw graph
+        //     chart_data_expenses = google.visualization.arrayToDataTable(expenses_categories_sum_table);
+        //     chart_expenses.draw(chart_data_expenses, chart_options_expenses);
+
+        // });
       }
 
       $(document).ready(function() {
@@ -159,12 +181,12 @@
             //table row text data
             tr = ele.target.parentNode.parentNode.parentNode;
 
-            var id = tr.cells[1].textContent;
-            var date = tr.cells[2].textContent;
-            var category = tr.cells[3].textContent;
-            var method = tr.cells[4].textContent;
-            var comment = tr.cells[5].textContent;
-            var amount = tr.cells[6].textContent;
+            let id = tr.cells[1].textContent;
+            let date = tr.cells[2].textContent;
+            let category = tr.cells[3].textContent;
+            let method = tr.cells[4].textContent;
+            let comment = tr.cells[5].textContent;
+            let amount = tr.cells[6].textContent;
 
             //Prefill the fields with the gathered information
             $('#editExpenseId').val(id);
@@ -178,14 +200,14 @@
 
         $("button.button-expense-change").on("click", function(e) {
           
-          var id = $("#editExpenseId").val();
-          var amount = $("#editExpenseAmount").val();
-          var date_of_expense = $("#editExpenseDate").val();
-          var expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
-          var payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
-          var expense_comment = $("#editExpenseComment").val();
-          var date_start = $("#balanceDateStart").html();
-          var date_end = $("#balanceDateEnd").html();
+          let id = $("#editExpenseId").val();
+          let amount = $("#editExpenseAmount").val();
+          let date_of_expense = $("#editExpenseDate").val();
+          let expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
+          let payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
+          let expense_comment = $("#editExpenseComment").val();
+          let date_start = $("#balanceDateStart").html();
+          let date_end = $("#balanceDateEnd").html();
 
           $.ajax({
             url: '/Expenses/updateTableRowAjax',
@@ -200,8 +222,8 @@
                   date_end: date_end
             }
           })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+          .done(function(inData) {
+            let data = $.parseJSON(inData);
             if (data.success == false) {
               alert(data.errors);
             } else {
@@ -224,11 +246,11 @@
             //table row text data
             tr = ele.target.parentNode.parentNode.parentNode;
 
-            var id = tr.cells[1].textContent;
-            var date = tr.cells[2].textContent;
-            var category = tr.cells[3].textContent;
-            var comment = tr.cells[4].textContent;
-            var amount = tr.cells[5].textContent;
+            let id = tr.cells[1].textContent;
+            let date = tr.cells[2].textContent;
+            let category = tr.cells[3].textContent;
+            let comment = tr.cells[4].textContent;
+            let amount = tr.cells[5].textContent;
 
             //Prefill the fields with the gathered information
             $('#editIncomeId').val(id);
@@ -241,13 +263,13 @@
 
         $("button.button-income-change").on("click", function(e) {
 
-          var id = $("#editIncomeId").val();
-          var amount = $("#editIncomeAmount").val();
-          var date_of_income = $("#editIncomeDate").val();
-          var income_category_assigned_to_user_id = $("#editIncomeCategory").val();
-          var income_comment = $("#editIncomeComment").val();
-          var date_start = $("#balanceDateStart").html();
-          var date_end = $("#balanceDateEnd").html();
+          let id = $("#editIncomeId").val();
+          let amount = $("#editIncomeAmount").val();
+          let date_of_income = $("#editIncomeDate").val();
+          let income_category_assigned_to_user_id = $("#editIncomeCategory").val();
+          let income_comment = $("#editIncomeComment").val();
+          let date_start = $("#balanceDateStart").html();
+          let date_end = $("#balanceDateEnd").html();
 
           $.ajax({
             url: '/Incomes/updateTableRowAjax',
@@ -261,8 +283,8 @@
                   date_end: date_end
           }
           })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+          .done(function(inData) {
+            let data = $.parseJSON(inData);
             if (data.success == false) {
               alert(data.errors);
             } else {
@@ -284,12 +306,12 @@
           //table row text data
           tr = ele.target.parentNode.parentNode.parentNode;
 
-          var id = tr.cells[1].textContent;
-          var date = tr.cells[2].textContent;
-          var category = tr.cells[3].textContent;
-          var method = tr.cells[4].textContent;
-          var comment = tr.cells[5].textContent;
-          var amount = tr.cells[6].textContent;
+          let id = tr.cells[1].textContent;
+          let date = tr.cells[2].textContent;
+          let category = tr.cells[3].textContent;
+          let method = tr.cells[4].textContent;
+          let comment = tr.cells[5].textContent;
+          let amount = tr.cells[6].textContent;
 
           // fill invisible input in modal
           $('#removeExpenseId').val(id);
@@ -305,9 +327,9 @@
 
         $("button.button-expense-remove").on("click", function(e) {
 
-          var id = $("#removeExpenseId").val();
-          var date_start = $("#balanceDateStart").html();
-          var date_end = $("#balanceDateEnd").html();
+          let id = $("#removeExpenseId").val();
+          let date_start = $("#balanceDateStart").html();
+          let date_end = $("#balanceDateEnd").html();
 
           $.ajax({
             url: '/Expenses/removeTableRowAjax',
@@ -317,17 +339,17 @@
                   date_end: date_end
             }
           })
-          .done(function(data) {
+          .done(function(inData) {
             // remove table row
             tr.remove();
             // renumber index
-            var index = 1;
+            let index = 1;
             $("tr.expense-item-in-expenses-table").each(function() {
               $(this)[0].cells[0].textContent = index;
               index++;
             });
             // redisplay balance value
-            var data = $.parseJSON(data);
+            let data = $.parseJSON(data);
             updateBalanceData(data);
             updateGraphsData();
           });
@@ -339,11 +361,11 @@
           //table row text data
           tr = ele.target.parentNode.parentNode.parentNode;
 
-          var id = tr.cells[1].textContent;
-          var date = tr.cells[2].textContent;
-          var category = tr.cells[3].textContent;
-          var comment = tr.cells[5].textContent;
-          var amount = tr.cells[6].textContent;
+          let id = tr.cells[1].textContent;
+          let date = tr.cells[2].textContent;
+          let category = tr.cells[3].textContent;
+          let comment = tr.cells[5].textContent;
+          let amount = tr.cells[6].textContent;
 
           // fill invisible input in modal
           $('#removeIncomeId').val(id);
@@ -358,9 +380,9 @@
 
         $("button.button-income-remove").on("click", function(e) {
 
-        var id = $("#removeIncomeId").val();
-        var date_start = $("#balanceDateStart").html();
-        var date_end = $("#balanceDateEnd").html();
+        let id = $("#removeIncomeId").val();
+        let date_start = $("#balanceDateStart").html();
+        let date_end = $("#balanceDateEnd").html();
 
         $.ajax({
           url: '/Incomes/removeTableRowAjax',
@@ -370,17 +392,17 @@
                 date_end: date_end
           }
         })
-        .done(function(data) {
+        .done(function(inData) {
           // remove table row
           tr.remove();
           // renumber index
-          var index = 1;
+          let index = 1;
           $("tr.income-item-in-incomes-table").each(function() {
             $(this)[0].cells[0].textContent = index;
             index++;
           });
           // redisplay balance value
-          var data = $.parseJSON(data);
+          let data = $.parseJSON(inData);
           updateBalanceData(data);
           updateGraphsData();
         });
