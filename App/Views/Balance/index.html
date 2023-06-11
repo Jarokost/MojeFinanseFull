@@ -86,10 +86,6 @@
     //chart_expenses.draw(chart_data_expenses, chart_options_expenses); //darw graph on load
   }
 
-  function dontSubmit() {
-    //return false;
-  }
-
   function setSelectByText(eID,text)
   {
     let ele=document.getElementById(eID);
@@ -150,6 +146,11 @@
     }
   
   }
+
+  document.getElementById("formEditExpense").addEventListener("submit", (event) => {event.preventDefault()});
+  document.getElementById("formEditIncome").addEventListener("submit", (event) => {event.preventDefault()});
+  document.getElementById("formRemoveExpense").addEventListener("submit", (event) => {event.preventDefault()});
+  document.getElementById("formRemoveIncome").addEventListener("submit", (event) => {event.preventDefault()});
 
   window.addEventListener('load', function () {
     updateGraphsData();
@@ -709,7 +710,7 @@
           ></button>
         </div>
 
-        <form method="post" id="formEditExpense" onsubmit="dontSubmit(); return false;">
+        <form method="post" id="formEditExpense">
 
           <input type="hidden" name="id" id="editExpenseId"/>
 
@@ -807,7 +808,7 @@
 
         <div class="modal-body p-5 pt-0">
 
-          <form method="post" id="formEditIncome" onsubmit="dontSubmit(); return false;">
+          <form method="post" id="formEditIncome">
 
             <input type="hidden" name="id" id="editIncomeId"/>
 
@@ -889,7 +890,7 @@
 
         <div class="modal-body p-5 pt-0">
 
-          <form method="post" id="formRemoveExpense" onsubmit="dontSubmit(); return false;">
+          <form method="post" id="formRemoveExpense">
 
             <input type="hidden" name="id" id="removeExpenseId"/>
 
@@ -922,7 +923,7 @@
 
         <div class="modal-body p-5 pt-0">
 
-          <form method="post" id="formRemoveIncome" onsubmit="dontSubmit(); return false;">
+          <form method="post" id="formRemoveIncome">
 
             <input type="hidden" name="id" id="removeIncomeId"/>
 
