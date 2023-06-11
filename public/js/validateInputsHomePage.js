@@ -130,64 +130,58 @@ function validateLoginFormOnSubmit() {
     }
 }
 
-
-document.onreadystatechange = () => {
-    if (document.readyState === 'interactive') {
-        // Registration Form
-        document.getElementById("inputNameReg").addEventListener('focusout', function () {
-            if ( validateNameInputRegistration(this) ) {
-                this.addEventListener('input', function () {
-                    validateNameInputRegistration(this);
-                });
-            }
+// Registration Form
+document.getElementById("inputNameReg").addEventListener('focusout', function () {
+    if ( validateNameInputRegistration(this) ) {
+        this.addEventListener('input', function () {
+            validateNameInputRegistration(this);
         });
-
-        document.getElementById("inputPasswordReg").addEventListener('focusout', function () {
-            if ( validatePasswordInputRegistration(this) ) {
-                this.addEventListener('input', function () {
-                    validatePasswordInputRegistration(this);
-                });
-            }
-        });
-
-        document.getElementById("inputEmailReg").addEventListener('focusout', function () {
-            if ( getEmailIsValid(this) ) {
-                this.addEventListener('input', function () {
-                    getEmailIsValid(this);
-                });
-            }
-        });
-
-        document.getElementById("formSignup").addEventListener('submit', (event) => {
-            if (validateRegistrationFormOnSubmit() === true) {
-            } else {
-                event.preventDefault();
-            }
-        });
-
-        // Login form
-        document.getElementById("inputPassword").addEventListener('focusout', function () {
-            if ( validatePasswordInputLogin(this) ) {
-                this.addEventListener('input', function () {
-                    validatePasswordInputLogin(this);
-                });
-            }
-        });
-
-        document.getElementById("inputEmail").addEventListener('focusout', function () {
-            if ( validateEmailInputLogin(this) ) {
-                this.addEventListener('input', function () {
-                    validateEmailInputLogin(this);
-                });
-            }
-        });
-
-        document.getElementById("formLogin").addEventListener('submit', (event) => {
-            if (validateLoginFormOnSubmit() === true) {
-            } else {
-                event.preventDefault();
-            }
-        });
-
     }
-};
+});
+
+document.getElementById("inputPasswordReg").addEventListener('focusout', function () {
+    if ( validatePasswordInputRegistration(this) ) {
+        this.addEventListener('input', function () {
+            validatePasswordInputRegistration(this);
+        });
+    }
+});
+
+document.getElementById("inputEmailReg").addEventListener('focusout', function () {
+    if ( getEmailIsValid(this) ) {
+        this.addEventListener('input', function () {
+            getEmailIsValid(this);
+        });
+    }
+});
+
+document.getElementById("formSignup").addEventListener('submit', (event) => {
+    if (validateRegistrationFormOnSubmit() === true) {
+    } else {
+        event.preventDefault();
+    }
+});
+
+// Login form
+document.getElementById("inputPassword").addEventListener('focusout', function () {
+    if ( validatePasswordInputLogin(this) ) {
+        this.addEventListener('input', function () {
+            validatePasswordInputLogin(this);
+        });
+    }
+});
+
+document.getElementById("inputEmail").addEventListener('focusout', function () {
+    if ( validateEmailInputLogin(this) ) {
+        this.addEventListener('input', function () {
+            validateEmailInputLogin(this);
+        });
+    }
+});
+
+document.getElementById("formLogin").addEventListener('submit', (event) => {
+    if (validateLoginFormOnSubmit() === true) {
+    } else {
+        event.preventDefault();
+    }
+});
