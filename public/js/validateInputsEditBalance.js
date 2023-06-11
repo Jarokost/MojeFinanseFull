@@ -44,11 +44,39 @@ document.getElementById("editExpenseMethod").addEventListener('focusout', functi
   }
 });
 
-// document.getElementById("formEditExpense").addEventListener('submit', (event) => {
-//   if (validateEditExpenseFormOnSubmit() === true) {
-//     console.log('submitted');
-//   } else {
-//     event.preventDefault();
-//     console.log('not submitted');
-//   }
-// });
+function validateEditIncomeFormOnSubmit() {
+
+  let amountNotValid = validateAmountInput(document.getElementById("editIncomeAmount"));
+  let dateNotValid = validateDateInput(document.getElementById("editIncomeDate"));
+  let categoryNotValid = validateCategoryInput(document.getElementById("editIncomeCategory"));
+
+  if ( amountNotValid || dateNotValid || categoryNotValid ) {
+      return false;
+  } else {
+      return true;
+  }
+}
+
+document.getElementById("editIncomeAmount").addEventListener('focusout', function () {
+  if ( validateAmountInput(this) ) {
+    this.addEventListener('input', function () {
+      validateAmountInput(this);
+    });
+  }
+});
+
+document.getElementById("editIncomeDate").addEventListener('focusout', function () {
+  if ( validateDateInput(this) ) {
+    this.addEventListener('input', function () {
+      validateDateInput(this);
+    });
+  }
+});
+
+document.getElementById("editIncomeCategory").addEventListener('focusout', function () {
+  if ( validateCategoryInput(this) ) {
+    this.addEventListener('input', function () {
+      validateCategoryInput(this);
+    });
+  }
+});
