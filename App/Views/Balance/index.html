@@ -153,10 +153,12 @@
             window.addEventListener('load', function () {
               updateGraphsData();
             })
-          // Edit Expense 
-          $("#tableExpenses").on("click", "a.editingTRbutton", function(ele) {
 
-              //table row text data
+          // Edit Expense 
+          document.getElementById("tableExpenses")
+          .querySelector("a.editingTRbutton")
+          .addEventListener('click', function(ele) {
+
               tr = ele.target.parentNode.parentNode.parentNode;
 
               let id = tr.cells[1].textContent;
@@ -166,56 +168,63 @@
               let comment = tr.cells[5].textContent;
               let amount = tr.cells[6].textContent;
 
-              //Prefill the fields with the gathered information
-              $('#editExpenseId').val(id);
-              $('#editExpenseAmount').val(amount);
-              $('#editExpenseDate').val(date);
-              $('#editExpenseComment').val(comment);
+              document.getElementById("editExpenseId").value = id;
+              document.getElementById("editExpenseAmount").value = amount;
+              document.getElementById("editExpenseDate").value = date;
+              document.getElementById("editExpenseComment").value = comment;
               setSelectByText('editExpenseCategory', category);
               setSelectByText('editExpenseMethod', method);
 
           });
 
-          $("button.button-expense-change").on("click", function(e) {
-            
-            let id = $("#editExpenseId").val();
-            let amount = $("#editExpenseAmount").val();
-            let date_of_expense = $("#editExpenseDate").val();
-            let expense_category_assigned_to_user_id = $("#editExpenseCategory").val();
-            let payment_method_assigned_to_user_id = $("#editExpenseMethod").val();
-            let expense_comment = $("#editExpenseComment").val();
-            let date_start = $("#balanceDateStart").html();
-            let date_end = $("#balanceDateEnd").html();
+          document.querySelector("button.button-expense-change")
+          .addEventListener('click', async () => {
 
-            $.ajax({
-              url: '/Expenses/updateTableRowAjax',
-              type: 'POST',
-              data: {id: id,
-                    amount: amount,
-                    date_of_expense: date_of_expense,
-                    expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
-                    payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
-                    expense_comment: expense_comment,
-                    date_start: date_start,
-                    date_end: date_end
-              }
-            })
-            .done(function(inData) {
-              let data = $.parseJSON(inData);
+            let id = document.getElementById("editExpenseId").value;
+            let amount = document.getElementById("editExpenseAmount").value;
+            let date_of_expense = document.getElementById("editExpenseDate").value;
+            let expense_category_assigned_to_user_id = document.getElementById("editExpenseCategory").value;
+            let payment_method_assigned_to_user_id = document.getElementById("editExpenseMethod").value;
+            let expense_comment = document.getElementById("editExpenseComment").value;
+            let date_start = document.getElementById("balanceDateStart").textContent;
+            let date_end = document.getElementById("balanceDateEnd").textContent;
+
+            const inData = {
+              id: id,
+              amount: amount,
+              date_of_expense: date_of_expense,
+              expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
+              payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
+              expense_comment: expense_comment,
+              date_start: date_start,
+              date_end: date_end
+            };
+
+            try { 
+              const res = await fetch(`/Expenses/updateTableRowAjax`, {
+                  method: 'post',
+                  body: JSON.stringify(inData)
+              })
+              const data = await res.json();
               if (data.success == false) {
                 alert(data.errors);
               } else {
                 tr.cells[1].textContent = id;
                 tr.cells[2].textContent = date_of_expense;
-                tr.cells[3].textContent = $("#editExpenseCategory option:selected").text();
-                tr.cells[4].textContent = $("#editExpenseMethod option:selected").text();
+                const categorySelect = document.getElementById("editExpenseCategory");
+                tr.cells[3].textContent = categorySelect.options[categorySelect.selectedIndex].text;
+                const methodSelect = document.getElementById("editExpenseMethod");
+                tr.cells[4].textContent = methodSelect.options[methodSelect.selectedIndex].text;
                 tr.cells[5].textContent = expense_comment;
                 tr.cells[6].textContent = parseFloat(amount).toFixed(2);
                 
                 updateBalanceData(data);
                 updateGraphsData();
               }
-            });
+            } catch (e) {
+              console.log('ERROR: ', e);
+            }
+
           });
 
           // Edit Income
