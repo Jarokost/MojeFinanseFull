@@ -3,7 +3,9 @@
 {% block title %}Incomes{% endblock %}
 
 {% block footer %}
-  <script src="/js/app.js"></script>
+
+  <script src="/js/validateInputsNewIncome.js"></script>
+  <!-- <script src="/js/app.js"></script>
 
   <script>
 
@@ -74,7 +76,7 @@
         }
       }
     }
-  </script>
+  </script> -->
 
 {% endblock %}
 
@@ -105,7 +107,7 @@
             placeholder="0.00"
             step="0.01"
           />
-          <!-- <label for="floatingInputKwota">Kwota [PLN]</label> -->
+          <label id="floatingInputKwotaLabel" for="floatingInputKwota">Kwota [PLN]</label>
         </div>
 
         <!-- JS use class is-invalid when input validation -->
@@ -118,7 +120,7 @@
             placeholder="Data"
             value="{{ income.date_of_income }}"
           />
-          <label for="floatingDate">Data</label>
+          <label id="floatingDateLabel" for="floatingDate">Data</label>
         </div>
 
         <!-- JS use class is-invalid when input validation -->
@@ -135,7 +137,7 @@
               </option>
             {% endfor %}
           </select>
-          <!-- <label for="floatingSelect">Kategoria</label> -->
+          <label id="floatingSelectLabel" for="floatingSelect">Wybierz kategorię</label>
         </div>
 
         <div class="form-floating mb-2 center-block">
