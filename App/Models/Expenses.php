@@ -305,14 +305,14 @@ class Expenses extends \Core\Model
      * 
      * @return void
      */
-    public static function removeTableRowAjax() {
+    public static function removeTableRowAjax($id) {
         $sql = 'DELETE FROM expenses
                 WHERE id = :id';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
 
-        $stmt->bindValue(':id', $_POST['id'], PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
         return $stmt->execute();
     }

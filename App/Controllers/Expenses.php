@@ -98,7 +98,10 @@ class Expenses extends Authenticated
 
     public function removeTableRowAjax()
     {
-        \App\Models\Expenses::removeTableRowAjax();
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+        $row_id = $post_fetch_promise['id'];
+
+        \App\Models\Expenses::removeTableRowAjax($row_id);
 
         $data = [];
         $data = $this->queries($data);
