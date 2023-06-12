@@ -1,4 +1,12 @@
 body {
+    padding-top: 90px;
+}
+
+section {
+    min-height: 90vh;
+}
+
+body {
     /* min-height: 75rem; */
     padding-top: 4.5rem;
   
@@ -114,17 +122,6 @@ body {
     animation-fill-mode: forwards;
   }
   
-  .input-width {
-    min-width: 360px;
-    max-width: 360px;
-  }
-  
-  .center-block {
-    display: table; /* Instead of display:block */
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
   .balance_plus {
     color: #93c01f;
   }
@@ -192,4 +189,24 @@ body {
   textarea {
     resize: none;
     min-height: calc(1.5em + 4.75rem + 2px) !important;
+  }
+
+  @media (max-width: 575px) {
+    .center-block {
+      display: block; /* Instead of display:block */
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media (min-width: 576px) {
+    .input-width {
+      min-width: 360px;
+      max-width: 360px;
+    }
+    .center-block {
+      display: table; /* Instead of display:block */
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
