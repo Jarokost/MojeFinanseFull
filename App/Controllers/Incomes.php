@@ -45,7 +45,7 @@ class Incomes extends Authenticated
         $income = New \App\Models\Incomes($_POST);
         if ($income->add()) {
 
-            Flash::addMessage('Dodano nowy przychód');
+            Flash::addMessage('Dodano przychód: ' . $income->date_of_income . ' ' . $income->income_comment . ' ' . number_format($income->amount, 2, '.', '') . '[PLN]' );
 
             $this->redirect('/incomes/new');
 

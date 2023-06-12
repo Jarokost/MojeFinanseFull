@@ -48,7 +48,7 @@ class Expenses extends Authenticated
         $expense = New \App\Models\Expenses($_POST);
         if ($expense->add()) {
 
-            Flash::addMessage('Dodano wydatek');
+            Flash::addMessage('Dodano wydatek: ' . $expense->date_of_expense . ' ' . $expense->expense_comment . ' ' . number_format($expense->amount, 2, '.', '') . '[PLN]' ); 
 
             $this->redirect('/expenses/new');
 
