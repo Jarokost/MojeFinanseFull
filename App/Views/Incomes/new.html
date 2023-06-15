@@ -13,76 +13,77 @@
 
 <main class="container">
     <div class="bg-light px-5 py-4 rounded">
+      <div class="center-block">
+        <form method="post" action="/Incomes/add" id="formAddIncome">
 
-      <form method="post" action="/Incomes/add" id="formAddIncome">
+          {% if income.errors is not empty %}
+            <div class="form-floating mb-2">
+              <ul>
+                  {% for error in income.errors %}
+                      <li>{{ error }}</li>
+                  {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
 
-        {% if income.errors is not empty %}
-          <div class="form-floating mb-2 center-block">
-            <ul>
-                {% for error in income.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
+          <!-- JS use class is-invalid when input validation -->
+          <div class="form-floating mb-2">
+            <input
+              type="number"
+              class="form-control input-width"
+              id="floatingInputKwota"
+              name="amount"
+              placeholder="0.00"
+              step="0.01"
+            />
+            <label id="floatingInputKwotaLabel" for="floatingInputKwota">Kwota [PLN]</label>
           </div>
-        {% endif %}
 
-        <!-- JS use class is-invalid when input validation -->
-        <div class="form-floating mb-2 center-block">
-          <input
-            type="number"
-            class="form-control input-width"
-            id="floatingInputKwota"
-            name="amount"
-            placeholder="0.00"
-            step="0.01"
-          />
-          <label id="floatingInputKwotaLabel" for="floatingInputKwota">Kwota [PLN]</label>
-        </div>
+          <!-- JS use class is-invalid when input validation -->
+          <div class="form-floating mb-2">
+            <input
+              type="date"
+              class="form-control input-width"
+              id="floatingDate"
+              name="date_of_income"
+              placeholder="Data"
+              value="{{ income.date_of_income }}"
+            />
+            <label id="floatingDateLabel" for="floatingDate">Data</label>
+          </div>
 
-        <!-- JS use class is-invalid when input validation -->
-        <div class="form-floating mb-2 center-block">
-          <input
-            type="date"
-            class="form-control input-width"
-            id="floatingDate"
-            name="date_of_income"
-            placeholder="Data"
-            value="{{ income.date_of_income }}"
-          />
-          <label id="floatingDateLabel" for="floatingDate">Data</label>
-        </div>
+          <!-- JS use class is-invalid when input validation -->
+          <div class="form-floating mb-2">
+            <select class="form-select input-width" 
+            id="floatingSelect"
+            name="income_category_assigned_to_user_id"
+            >
+              <option>wybierz</option>
+              {% for category in income_categories %}
+                <option value="{{ category.id }}"
+                {{ (category.id==income.income_category_assigned_to_user_id) ? 'selected' }}>
+                    {{ category.name }}
+                </option>
+              {% endfor %}
+            </select>
+            <label id="floatingSelectLabel" for="floatingSelect">Wybierz kategorię</label>
+          </div>
 
-        <!-- JS use class is-invalid when input validation -->
-        <div class="form-floating mb-2 center-block">
-          <select class="form-select input-width" 
-          id="floatingSelect"
-          name="income_category_assigned_to_user_id"
-          >
-            <option>wybierz</option>
-            {% for category in income_categories %}
-              <option value="{{ category.id }}"
-              {{ (category.id==income.income_category_assigned_to_user_id) ? 'selected' }}>
-                  {{ category.name }}
-              </option>
-            {% endfor %}
-          </select>
-          <label id="floatingSelectLabel" for="floatingSelect">Wybierz kategorię</label>
-        </div>
+          <div class="form-floating mb-2">
+            <textarea
+              class="form-control input-width"
+              placeholder="Komentarz"
+              id="floatingTextarea"
+              name="income_comment"
+            >{{ income.income_comment ?? '' }}</textarea>
+            <label for="floatingTextarea">Komentarz</label>
+          </div>
 
-        <div class="form-floating mb-2 center-block">
-          <textarea
-            class="form-control input-width"
-            placeholder="Komentarz"
-            id="floatingTextarea"
-            name="income_comment"
-          >{{ income.income_comment ?? '' }}</textarea>
-          <label for="floatingTextarea">Komentarz</label>
-        </div>
-
-        <button class="w-100 btn btn-lg rounded-3 btn-success input-width center-block" type="submit">
-          Dodaj
-        </button>
-      </form>
+          <button class="w-100 btn btn-lg rounded-3 btn-success input-width" type="submit">
+            Dodaj
+          </button>
+        </form>
+      </div>
     </div>
 </main>
 
