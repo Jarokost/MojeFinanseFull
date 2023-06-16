@@ -186,11 +186,6 @@ class User extends \Core\Model
      */
     public function validate()
     {
-        // Name
-        if ($this->name == '') {
-            $this->errors[] = 'Name is required';
-        }
-
         // name
         if (strlen($this->name) < 2) {
             $this->errors[] = 'Imię musi składać się przynajmniej z 2 znaków';
