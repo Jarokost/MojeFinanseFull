@@ -201,11 +201,14 @@ class Balance extends Authenticated
     /**
      * 
      */
-    public function foo()
+    public function getIncomesAndExpensesSumGroupedByCategoryAction()
     {
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+
         $user_id = $_SESSION['user_id'];
-        $date_start = $_POST['date_start'];
-        $date_end = $_POST['date_end'];
+
+        $date_start = $post_fetch_promise['date_start'];
+        $date_end = $post_fetch_promise['date_end'];
 
         $data['incomes_category_sum'] = Incomes::getIncomesSumGroupedByCategories($user_id, $date_start, $date_end);
         $data['expenses_category_sum'] = Expenses::getExpensesSumGroupedByCategories($user_id, $date_start, $date_end);

@@ -38,4 +38,6 @@ $router->add('password/reset/{token:[\da-f]+}', ['controller' => 'Password', 'ac
 $router->add('signup/activate/{token:[\da-f]+}', ['controller' => 'Signup', 'action' => 'activate']);
 $router->add('{controller}/{action}');
 
+$router->add('api/email/{email:[\wżźćńółęąśŻŹĆŃÓŁĘĄŚ]+}', ['controller' => 'Account', 'action' => 'validateEmail']);
+
 $router->dispatch($_SERVER['QUERY_STRING']);

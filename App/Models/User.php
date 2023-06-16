@@ -186,14 +186,14 @@ class User extends \Core\Model
      */
     public function validate()
     {
-        // Name
-        if ($this->name == '') {
-            $this->errors[] = 'Name is required';
+        // name
+        if (strlen($this->name) < 2) {
+            $this->errors[] = 'Imię musi składać się przynajmniej z 2 znaków';
         }
 
         // email address
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
-            $this->errors[] = 'Imię jest wymagane';
+            $this->errors[] = 'Podaj adres email';
         }
         if (static::emailExists($this->email, $this->id ?? null)) {
             $this->errors[] = 'Podany email jest już zajęty';

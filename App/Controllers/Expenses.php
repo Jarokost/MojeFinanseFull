@@ -48,7 +48,7 @@ class Expenses extends Authenticated
         $expense = New \App\Models\Expenses($_POST);
         if ($expense->add()) {
 
-            Flash::addMessage('Dodano wydatek');
+            Flash::addMessage('Dodano wydatek: ' . $expense->date_of_expense . ' ' . $expense->expense_comment . ' ' . number_format($expense->amount, 2, '.', '') . '[PLN]' ); 
 
             $this->redirect('/expenses/new');
 
@@ -68,9 +68,13 @@ class Expenses extends Authenticated
     }
 
     private function queries($data) {
+
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+
         $user_id = $_SESSION['user_id'];
-        $date_start = $_POST['date_start'];
-        $date_end = $_POST['date_end'];
+
+        $date_start = $post_fetch_promise['date_start'];
+        $date_end = $post_fetch_promise['date_end'];
 
         $data['incomes_sum'] = \App\Models\Incomes::getIncomesSum($user_id, $date_start, $date_end);
         $data['expenses_sum'] = \App\Models\Expenses::getExpensesSum($user_id, $date_start, $date_end);
@@ -81,7 +85,8 @@ class Expenses extends Authenticated
     public function updateTableRowAjax()
     {
         $data = [];
-        $expenses = new \App\Models\Expenses($_POST);
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+        $expenses = new \App\Models\Expenses($post_fetch_promise);
         $data['success'] = $expenses->updateTableRowAjax();;
         $data['errors'] = $expenses->errors;
 
@@ -93,7 +98,10 @@ class Expenses extends Authenticated
 
     public function removeTableRowAjax()
     {
-        \App\Models\Expenses::removeTableRowAjax();
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+        $row_id = $post_fetch_promise['id'];
+
+        \App\Models\Expenses::removeTableRowAjax($row_id);
 
         $data = [];
         $data = $this->queries($data);
