@@ -436,6 +436,108 @@
 <main class="container">
     <div class="bg-light px-5 py-4 mb-5 rounded">
       <div class="row">
+
+        <div class="accordion mb-5" id="accordionAccount">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingAccordionAccount">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAccordionAccount" aria-expanded="false" aria-controls="collapseAccordionAccount">
+                KONTO
+              </button>
+            </h2>
+            <div id="collapseAccordionAccount" class="accordion-collapse collapse" aria-labelledby="headingAccordionAccount" data-bs-parent="#accordionAccount">
+              <div class="accordion-body">
+                <div class="table-item first-item px-auto py-2 text-center" href="#modalEditAccount"
+                data-bs-toggle="modal">Zmień imię</div>
+                <div class="table-item mid-item px-auto py-2 text-center" href="#modalEditAccount"
+                data-bs-toggle="modal">Zmień adres email</div>
+                <div class="table-item mid-item px-auto py-2 text-center" href="#modalEditAccount"
+                data-bs-toggle="modal">Zmień hasło </div>
+                <div class="table-item last-item px-auto py-2 text-center" href="#modalRemAccount"
+                data-bs-toggle="modal">Usuń konto</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3 row-edit">
+          <div
+            class="col-12 col-md-4 py-2 fw-bold"
+          >
+            <div class="accordion mb-5" id="accordionIncomes">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingAccordionIncomes">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAccordionIncomes" aria-expanded="false" aria-controls="collapseAccordionIncomes">
+                    KATEGORIE PRZYCHODÓW
+                  </button>
+                </h2>
+                <div id="collapseAccordionIncomes" class="accordion-collapse collapse" aria-labelledby="headingAccordionIncomes" data-bs-parent="#accordionIncomes">
+                  <div class="accordion-body">
+                    <div class="table-item first-item px-auto py-2 text-center" href="#modalEditAccount"
+                    data-bs-toggle="modal">Zmień imię</div>
+                    <div class="table-item mid-item px-auto py-2 text-center" href="#modalEditAccount"
+                    data-bs-toggle="modal">Zmień adres email</div>
+                    <div class="table-item mid-item px-auto py-2 text-center" href="#modalEditAccount"
+                    data-bs-toggle="modal">Zmień hasło </div>
+                    <div class="table-item last-item px-auto py-2 text-center" href="#modalRemAccount"
+                    data-bs-toggle="modal">Usuń konto</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-12 col-md-4 py-2 fw-bold"
+          >
+            <div class="accordion mb-5" id="accordionExpenses">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingAccordionExpeneses">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAccordionExpenses" aria-expanded="false" aria-controls="collapseAccordionExpenses">
+                    KATEGORIE WYDATKÓW
+                  </button>
+                </h2>
+                <div id="collapseAccordionExpenses" class="accordion-collapse collapse" aria-labelledby="headingAccordionExpeneses" data-bs-parent="#accordionExpenses">
+                  <div class="accordion-body">
+                    <div class="table-item first-item px-auto py-2 text-center" href="#modalEditAccount"
+                    data-bs-toggle="modal">Zmień imię</div>
+                    <div class="table-item mid-item px-auto py-2 text-center" href="#modalEditAccount"
+                    data-bs-toggle="modal">Zmień adres email</div>
+                    <div class="table-item mid-item px-auto py-2 text-center" href="#modalEditAccount"
+                    data-bs-toggle="modal">Zmień hasło </div>
+                    <div class="table-item last-item px-auto py-2 text-center" href="#modalRemAccount"
+                    data-bs-toggle="modal">Usuń konto</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-12 col-md-4 py-2 fw-bold"
+          >
+            <div class="accordion mb-5" id="accordionPaymentMethods">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingAccordionPaymentMethods">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAccordionPaymentMethods" aria-expanded="false" aria-controls="collapseAccordionPaymentMethods">
+                    METODY PŁATNOŚCI
+                  </button>
+                </h2>
+                <div id="collapseAccordionPaymentMethods" class="accordion-collapse collapse" aria-labelledby="headingAccordionPaymentMethods" data-bs-parent="#accordionPaymentMethods">
+                  <div class="accordion-body">
+                    <div class="table-item first-item px-auto py-2 text-center" href="#modalEditAccount"
+                    data-bs-toggle="modal">Zmień imię</div>
+                    <div class="table-item mid-item px-auto py-2 text-center" href="#modalEditAccount"
+                    data-bs-toggle="modal">Zmień adres email</div>
+                    <div class="table-item mid-item px-auto py-2 text-center" href="#modalEditAccount"
+                    data-bs-toggle="modal">Zmień hasło </div>
+                    <div class="table-item last-item px-auto py-2 text-center" href="#modalRemAccount"
+                    data-bs-toggle="modal">Usuń konto</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
         <div
           class="w-100 h2 mb-3 text-center bg-dark rounded text-secondary py-2 mt-3"
         >
@@ -518,6 +620,7 @@
         </div>
         <hr class="hr-edit" />
         <div class="w-100 h5 mb-2 text-center">edycja konta</div>
+
         {% if user.errors is not empty %}
         <div class="w-100 h6 mb-2 text-center">
             <p>Errors:</p>
@@ -528,6 +631,7 @@
             </ul>
         </div>
         {% endif %}
+
         <div class="row mb-3 row-edit">
           <div
             class="col-12 btn btn-warning text-white py-2 mb-2 fw-bold"
@@ -544,6 +648,7 @@
             <i class="icon-cancel-squared"></i>usuń konto
           </div>
         </div>
+
       </div>
     </div>
   </main>
