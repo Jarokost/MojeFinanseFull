@@ -225,8 +225,8 @@ textarea {
 }
 
 .table-item:hover {
-  background-color: #0b5c52;
-  color: white;
+  background-color: #061c2d; /* #0b5c52; */
+  color: #fff;
 }
 
 .accordion-button:focus {
@@ -291,4 +291,99 @@ textarea {
     background-image 0.15s ease-in-out;
   --bs-accordion-btn-icon-transform:  
     rotate(-180deg);  
+}
+
+table.rounded-corners {
+  background-color: #7acb7e;
+  color: #000;
+  text-align: center;
+  width: 100%;
+}
+
+table.rounded-corners tr:hover td {
+  background-color: #061c2d;
+  color: #fff;
+}
+
+table.rounded-corners {
+  --border: 1px solid #dee2e6;
+  border-radius: 10px;
+  border-spacing: 0;
+  border-collapse: separate;
+  border: var(--border);
+  overflow: hidden;
+}
+
+table.rounded-corners > thead > tr:not(:last-child) > th,
+table.rounded-corners > thead > tr:not(:last-child) > td,
+table.rounded-corners > tbody > tr:not(:last-child) > th,
+table.rounded-corners > tbody > tr:not(:last-child) > td,
+table.rounded-corners > tfoot > tr:not(:last-child) > th,
+table.rounded-corners > tfoot > tr:not(:last-child) > td,
+table.rounded-corners > tr:not(:last-child) > td,
+table.rounded-corners > tr:not(:last-child) > th,
+table.rounded-corners > thead:not(:last-child),
+table.rounded-corners > tbody:not(:last-child),
+table.rounded-corners > tfoot:not(:last-child) {
+  border-bottom: var(--border);
+}
+
+table.rounded-corners tr td:not(:first-child):hover {
+  color: #71a00d !important;
+  cursor: pointer;
+}
+
+table.rounded-corners tr td:first-child {
+  width: 90%;
+  text-align: left;
+  padding: 10px;
+}
+
+table.rounded-corners tr td:nth-child(n+3) {
+  width: 5%;
+  text-align: center;
+  padding: 10px 5px;
+}
+
+table.rounded-corners tr td:last-child {
+  width: 5%;
+  text-align: center;
+  padding: 10px 10px 10px 5px;
+}
+
+table.rounded-corners.expenses-categories tr td:not(:first-child):hover {
+  color: #71a00d !important;
+  cursor: pointer;
+}
+
+table.rounded-corners.expenses-categories tr td:first-child {
+  width: 70%;
+  text-align: left;
+  padding: 10px 5px 10px 10px;
+}
+/* 
+table.rounded-corners.expenses-categories tr td:nth-child(3) {
+  width: 20%;
+  text-align: center;
+  padding: 10px 5px;
+} */
+
+table.rounded-corners.expenses-categories tr td:nth-child(n+3) {
+  width: 5%;
+  text-align: center;
+  padding: 10px 5px;
+}
+
+table.rounded-corners.expenses-categories tr td:last-child {
+  width: 5%;
+  text-align: center;
+  padding: 10px 10px 10px 5px;
+}
+
+.expenses-limit {
+  line-height: 100%;
+}
+
+table.rounded-corners tr td small.text-muted {
+  color: #3c5569 !important;
 }
