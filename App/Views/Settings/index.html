@@ -598,7 +598,7 @@
         </div>
 
 
-        <div
+        <!-- <div
           class="w-100 h2 mb-3 text-center bg-dark rounded text-secondary py-2 mt-3"
         >
           Opcje edycji
@@ -707,7 +707,7 @@
           >
             <i class="icon-cancel-squared"></i>usuń konto
           </div>
-        </div>
+        </div> -->
 
       </div>
     </div>
@@ -716,12 +716,12 @@
   <!-- modal - change category name incomes -->
   <div class="modal fade" id="modalChgCatNameIncomes" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Edycja nazwy kategorii</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Edycja nazwy kategorii</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -729,7 +729,7 @@
         <div class="modal-body p-5 pt-0">
           <form class="" method="post" id="formUpdateIncomeCategory" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
-              <select
+              <!-- <select
                 class="form-select"
                 id="floatingSelectChgCatNameIncomes"
                 name="id"
@@ -743,22 +743,28 @@
               </select>
               <label for="floatingSelectChgCatNameIncomes"
                 >Kategoria przychodów</label
-              >
+              > -->
+              <input 
+                type="text"
+                class="form-control rounded-3 fw-bold"
+                id="floatingChgCatNameIncomesCurrent"
+                placeholder="Salary"
+                value="Salary"
+                disabled/>
+              <label for="floatingChgCatNameIncomesCurrent">Obecna nazwa kategorii</label>
             </div>
             <div class="form-floating mb-3">
               <input
                 type="text"
-                class="form-control rounded-3"
+                class="form-control rounded-3 fw-bold"
                 id="floatingChgCatNameIncomes"
                 placeholder="Nowa nazwa kategorii"
                 name="name"
               />
-              <label for="floatingChgCatNameIncomes"
-                >Nowa nazwa kategorii przychodów</label
-              >
+              <label for="floatingChgCatNameIncomes">Nowa nazwa kategorii</label>
             </div>
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
               id="buttonUpdateIncomesCategory"
               type="submit"
               data-bs-dismiss="modal"

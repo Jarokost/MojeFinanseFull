@@ -59,19 +59,27 @@ body {
 
 .btn.btn-success {
   color: white;
-  background-color: #93c01f;
-  border-color: #93c01f;
+  font-weight: bold !important;
+  /* background-color: #93c01f;
+  border-color: #93c01f; */
+  background-color: #98d600;
+  border-color: #98d600;
 }
 .btn.btn-success:hover {
   color: white;
-  border-color: #82b00e;
-  background-color: #82b00e;
+  /* border-color: #82b00e;
+  background-color: #82b00e; */
+  border-color: #8ec900;
+  background-color: #8ec900;
+
 }
 .btn.btn-success.active,
 .btn.btn-success:active {
   color: white;
-  border-color: #71a00d;
-  background-color: #71a00d;
+  /* border-color: #71a00d;
+  background-color: #71a00d; */
+  border-color: #699500;
+  background-color: #699500;
 }
 
 ol > li {
@@ -396,4 +404,18 @@ table.rounded-corners.expenses-categories tr td:last-child {
 
 table.rounded-corners tr td small.text-muted {
   color: #3c5569 !important;
+}
+
+.settings-modal-bg {
+  background-color: #061c2d;
+}
+
+.settings-modal-header-color {
+  color: #fff;
+}
+
+.btn-close {
+  width: 2em !important;
+  height: 2em !important;
+  color: white !important;
 }
