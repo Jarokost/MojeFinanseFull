@@ -868,15 +868,15 @@
     </div>
   </div>
 
-  <!-- modal - change category name payment -->
+  <!-- modal - change category payment -->
   <div class="modal fade" id="modalChgCatNamePayment" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Edycja nazwy kategorii</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Edycja nazwy kategorii</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -884,7 +884,7 @@
         <div class="modal-body p-5 pt-0">
           <form class="" method="post" id="formUpdatePaymentMethod" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
-              <select
+              <!-- <select
                 class="form-select"
                 id="floatingSelectChgCatNamePayment"
                 name="id"
@@ -898,22 +898,30 @@
               </select>
               <label for="floatingSelectChgCatNamePayment"
                 >Kategoria sposobów płatności</label
-              >
+              > -->
+              <input 
+                type="text"
+                class="form-control rounded-3 fw-bold"
+                id="floatingChgCatNamePaymentCurrent"
+                placeholder="Cash"
+                value="Cash"
+                disabled/>
+              <label for="floatingChgCatNamePaymentCurrent">Obecna nazwa kategorii</label>
             </div>
             <div class="form-floating mb-3">
               <input
                 type="text"
-                class="form-control rounded-3"
+                class="form-control rounded-3 fw-bold"
                 id="floatingChgCatNamePayment"
                 placeholder="Nowa nazwa kategorii"
                 name="name"
               />
               <label for="floatingChgCatNamePayment"
-                >Nowa nazwa kategorii płatności</label
+                >Nowa nazwa kategorii</label
               >
             </div>
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success fw-bold"
               type="submit"
               id="buttonUpdatePaymentMethod"
               data-bs-dismiss="modal"
