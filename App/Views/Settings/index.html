@@ -1049,7 +1049,7 @@
     </div>
   </div>
 
-  <!-- modal - remove category name incomes -->
+  <!-- modal - remove category incomes -->
   <div class="modal fade" id="modalRemCatNameIncomes" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content settings-modal-bg">
@@ -1103,15 +1103,15 @@
     </div>
   </div>
 
-  <!-- modal - remove category name expenses -->
+  <!-- modal - remove category expenses -->
   <div class="modal fade" id="modalRemCatNameExpenses" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie kategorii</h1>
+          <h1 class="fw-bold mb-0 fs-2 w-100 text-white">Usuwanie kategorii</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -1119,7 +1119,7 @@
         <div class="modal-body p-5 pt-0">
           <form class="" method="post" id="formRemoveExpenseCategory" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
-              <select
+              <!-- <select
                 class="form-select"
                 id="floatingSelectRemCatNameExpenses"
                 name="id"
@@ -1133,10 +1133,18 @@
               </select>
               <label for="floatingSelectRemCatNameExpenses"
                 >Kategoria wydatków</label
-              >
+              > -->
+              <input 
+                type="text"
+                class="form-control rounded-3 fw-bold"
+                id="floatingRemCatNameExpenses"
+                placeholder="Salary"
+                value="Salary"
+                disabled/>
+              <label for="floatingRemCatNameExpenses">Wybrana kategoria</label>
             </div>
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-danger"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-danger fw-bold"
               type="submit"
               id="buttonRemoveExpensesCategory"
               data-bs-dismiss="modal"
