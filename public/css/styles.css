@@ -409,13 +409,3 @@ table.rounded-corners tr td small.text-muted {
 .settings-modal-bg {
   background-color: #061c2d;
 }
-
-.settings-modal-header-color {
-  color: #fff;
-}
-
-.btn-close {
-  width: 2em !important;
-  height: 2em !important;
-  color: white !important;
-}
