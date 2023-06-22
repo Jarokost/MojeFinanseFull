@@ -218,10 +218,15 @@ textarea {
 }
 
 .table-item {
+  border: 1px solid #dee2e6;
+  border-radius: 8px 8px 8px 8px;
   cursor: pointer;
   background-color: #7acb7e;
   color: black;
   font-weight: bold;
+  text-align: center;
+  transition: background-color 0.15s ease-in-out,
+  color 0.15s ease-in-out;
 }
 
 .table-item:hover {
@@ -298,6 +303,11 @@ table.rounded-corners {
   color: #000;
   text-align: center;
   width: 100%;
+}
+
+table.rounded-corners tr td {
+  transition: background-color 0.15s ease-in-out,
+  color 0.15s ease-in-out;
 }
 
 table.rounded-corners tr:hover td {
