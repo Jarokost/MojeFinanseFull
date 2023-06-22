@@ -409,3 +409,8 @@ table.rounded-corners tr td small.text-muted {
 .settings-modal-bg {
   background-color: #061c2d;
 }
+
+.form-check input:hover,
+.form-check label:hover {
+  cursor: pointer;
+}

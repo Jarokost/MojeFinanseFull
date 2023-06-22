@@ -777,15 +777,15 @@
     </div>
   </div>
 
-  <!-- modal - change category name expenses -->
+  <!-- modal - change category expenses -->
   <div class="modal fade" id="modalChgCatNameExpenses" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Edycja kategorii</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Edycja kategorii</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -793,7 +793,7 @@
         <div class="modal-body p-5 pt-0">
           <form class="" method="post" id="formUpdateExpenseCategory" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
-              <select
+              <!-- <select
                 class="form-select"
                 id="floatingSelectChgCatNameExpenses"
                 name="id"
@@ -807,22 +807,55 @@
               </select>
               <label for="floatingSelectChgCatNameExpenses"
                 >Kategoria wydatków</label
-              >
+              > -->
+              <input 
+                type="text"
+                class="form-control rounded-3 fw-bold"
+                id="floatingChgCatNameExpenseCurrent"
+                placeholder="Salary"
+                value="Salary"
+                disabled/>
+              <label for="floatingChgCatNameExpenseCurrent">Obecna nazwa kategorii</label>
             </div>
+
             <div class="form-floating mb-3">
               <input
                 type="text"
-                class="form-control rounded-3"
+                class="form-control rounded-3 fw-bold"
                 id="floatingChgCatNameExpenses"
                 placeholder="Nowa nazwa kategorii"
                 name="name"
               />
-              <label for="floatingChgCatNameOutcomes"
-                >Nowa nazwa kategorii wydatków</label
-              >
+              <label for="floatingChgCatNameOutcomes">Nowa nazwa kategorii wydatków</label>
             </div>
+
+            <div class="form-check mb-3">
+                <input
+                  type="checkbox"
+                  name="limitCheckbox"
+                  class="form-check-input"
+                  id="limitCheckbox"
+                  checked
+                />
+                <label class="form-check-label text-white" for="limitCheckbox">Limit</label>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input
+                type="number"
+                class="form-control rounded-3 fw-bold"
+                id="floatingChgCatNameExpenses"
+                placeholder="Wartość limitu"
+                name="name"
+                value="9999.99"
+                step="0.01"
+                disabled
+              />
+              <label for="floatingChgCatNameOutcomes">Wartość limitu</label>
+            </div>
+
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success fw-bold"
               type="submit"
               id="buttonUpdateExpensesCategory"
               data-bs-dismiss="modal"
