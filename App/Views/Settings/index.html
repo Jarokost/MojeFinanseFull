@@ -470,7 +470,7 @@
 
                 <div
                   class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
-                  href="#modalEditAccount"
+                  href="#modalEditAccountPassword"
                   data-bs-toggle="modal"
                 >
                   Zmień hasło
@@ -1372,7 +1372,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2 text-white">Edycja adresu email</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Zmiana adresu email</h1>
           <button
             type="button"
             class="btn-close btn-close-white"
@@ -1430,58 +1430,30 @@
       </div>
     </div>
   </div>
-
-  <div class="modal fade" id="modalEditAccount" tabindex="-1">
+  
+  <!-- modal - edit account password -->
+  <div class="modal fade" id="modalEditAccountPassword" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Edycja konta</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Zmiana hasła</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
 
         <div class="modal-body p-5 pt-0">
           <form class="" method="post" action="/settings/updateAccount" id="formUpdateAccount">
-            <!-- <small class="text-muted"
-              >Podaj nowe dane, tylko te, które chcesz zmienić. <br />
-              Pozostałe pozostaw puste</small
-            >
-            <hr /> -->
-
-            <div class="form-floating mb-3">
-                <input
-                    type="text"
-                    class="form-control"
-                    id="inputName"
-                    name="name"
-                    placeholder="Imię"
-                    autocomplete="off"
-                    value="{{ user.name }}"
-                />
-            </div>
-
-            <div class="form-floating mb-3">
-                <input
-                  type="email"
-                  class="form-control"
-                  id="inputEmail"
-                  name="email"
-                  placeholder="Adres email"
-                  autocomplete="off"
-                  value="{{ user.email }}"
-                />
-            </div>
     
             <div class="input-group mb-3">
                 <div class="form-floating">
                     <input
                     type="password"
-                    class="form-control"
-                    id="inputPassword"
-                    name="password"
+                    class="form-control fw-bold"
+                    id="inputPasswordCurrent"
+                    name="passwordCurrent"
                     placeholder="Hasło"
                     aria-label="Hasło"
                     aria-describedby="inputPasswordBtn"
@@ -1492,15 +1464,36 @@
                   onclick="passShowHideReg()"
                   class="btn btn-outline-secondary"
                   type="button"
-                  id="inputPasswordBtn"
+                  id="inputPasswordBtnCurrent"
                 >Pokaż</button>
             </div>
 
+            <div class="input-group mb-3">
+              <div class="form-floating">
+                  <input
+                  type="password"
+                  class="form-control fw-bold"
+                  id="inputPasswordNew"
+                  name="passwordNew"
+                  placeholder="Hasło"
+                  aria-label="Hasło"
+                  aria-describedby="inputPasswordBtnNew"
+                  autocomplete="off"
+                  />
+              </div>
+              <button
+                onclick="passShowHideReg()"
+                class="btn btn-outline-secondary"
+                type="button"
+                id="inputPasswordBtnNew"
+              >Pokaż</button>
+            </div>
+
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success text-white fw-bold"
               type="submit"
             >
-              Dokonaj zmian
+              Zmień hasło
             </button>
           </form>
         </div>
