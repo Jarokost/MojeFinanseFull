@@ -541,6 +541,13 @@
                 </h2>
                 <div id="collapseAccordionExpenses" class="accordion-collapse collapse" aria-labelledby="headingAccordionExpeneses" data-bs-parent="#accordionExpenses">
                   <div class="accordion-body">
+                    <div
+                      class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
+                      href="#modalAddCatNameExpenses"
+                      data-bs-toggle="modal"
+                    >
+                    Dodaj nową <i class="icon-plus"></i>
+                    </div>
                     <table class="rounded-corners">
                       {% for category in expenses_categories %}
                       <tr>
@@ -841,24 +848,24 @@
                   type="checkbox"
                   name="limitCheckbox"
                   class="form-check-input"
-                  id="limitCheckbox"
+                  id="limitCheckboxChangeExpenseCategory"
                   checked
                 />
-                <label class="form-check-label text-white" for="limitCheckbox">Limit</label>
+                <label class="form-check-label text-white" for="limitCheckboxChangeExpenseCategory">Limit</label>
             </div>
 
             <div class="form-floating mb-3">
               <input
                 type="number"
                 class="form-control rounded-3 fw-bold"
-                id="floatingChgCatNameExpenses"
+                id="floatingChgCatLimitExpenses"
                 placeholder="Wartość limitu"
                 name="name"
                 value="9999.99"
                 step="0.01"
                 disabled
               />
-              <label for="floatingChgCatNameOutcomes">Wartość limitu</label>
+              <label for="floatingChgCatLimitExpenses">Wartość limitu</label>
             </div>
 
             <button
@@ -969,7 +976,7 @@
               >
             </div>
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-success fw-bold"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success fw-bold text-white"
               type="submit"
               id="buttonAddIncomesCategory"
               data-bs-dismiss="modal"
@@ -985,12 +992,12 @@
   <!-- modal - add category name expenses -->
   <div class="modal fade" id="modalAddCatNameExpenses" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Dodawanie kategorii</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Dodawanie kategorii</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -998,19 +1005,46 @@
         <div class="modal-body p-5 pt-0">
           <form class="" method="post" id="formAddExpenseCategory" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
+
               <input
                 type="text"
                 class="form-control rounded-3"
                 id="floatingAddCatNameExpenses"
-                placeholder="Nazwa kategorii"
+                placeholder="np. wakacje"
                 name="name"
               />
               <label for="floatingAddCatNameExpenses"
                 >Nazwa kategorii wydatków</label
               >
             </div>
+
+            <div class="form-check mb-3">
+              <input
+                type="checkbox"
+                name="limitCheckbox"
+                class="form-check-input"
+                id="limitCheckboxAddNewExpenseCategory"
+                checked
+              />
+              <label class="form-check-label text-white" for="limitCheckboxAddNewExpenseCategory">Limit</label>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input
+                type="number"
+                class="form-control rounded-3 fw-bold"
+                id="floatingAddCatLimitExpenses"
+                placeholder="Wartość limitu"
+                name="name"
+                value="9999.99"
+                step="0.01"
+                disabled
+              />
+              <label for="floatingAddCatLimitExpenses">Wartość limitu</label>
+            </div>
+
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success fw-bold text-white"
               type="submit"
               id="buttonAddExpensesCategory"
               data-bs-dismiss="modal"
