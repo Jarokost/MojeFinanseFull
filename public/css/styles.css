@@ -414,3 +414,11 @@ table.rounded-corners tr td small.text-muted {
 .form-check label:hover {
   cursor: pointer;
 }
+
+.form-floating > .form-control::placeholder {
+  color: revert;
+}
+
+.form-floating > .form-control:not(:focus)::placeholder {
+  color: transparent;
+}

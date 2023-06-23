@@ -454,7 +454,7 @@
 
                 <div
                   class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
-                  href="#modalEditAccount"
+                  href="#modalEditAccountName"
                   data-bs-toggle="modal"
                 >
                 Zmień imię
@@ -478,7 +478,7 @@
 
                 <div
                   class="col-12 col-md-4 table-item py-2 fw-bold w-100"
-                  href="#modalEditAccount"
+                  href="#modalRemAccount"
                   data-bs-toggle="modal"
                 >
                   Usuń konto
@@ -1316,7 +1316,57 @@
     </div>
   </div>
 
-  <!-- modal - edit account -->
+  <!-- modal - edit account name -->
+  <div class="modal fade" id="modalEditAccountName" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content settings-modal-bg">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 text-white">Zmiania imienia</h1>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="" method="post" action="/settings/updateAccount" id="formUpdateAccount">
+
+            <div class="form-floating mb-3">
+              <input 
+                type="text"
+                class="form-control rounded-3 fw-bold"
+                id="inputNameCurrent"
+                placeholder="Jarek"
+                value="{{ user.name }}"
+                disabled/>
+              <label for="inputNameCurrent">Aktualne imię</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input
+                    type="text"
+                    class="form-control fw-bold"
+                    id="inputName"
+                    name="name"
+                    placeholder="{{ user.name }}"
+                    autocomplete="off"
+                />
+                <label for="inputName">Nowe imię</label>
+            </div>
+
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white fw-bold"
+              type="submit"
+            >
+              Zmień imię
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal fade" id="modalEditAccount" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -1397,12 +1447,12 @@
   <!-- modal - remove account -->
   <div class="modal fade" id="modalRemAccount" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie Konta</h1>
+          <h1 class="fw-bold mb-0 fs-2 w-100 text-white">Usuwanie Konta</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -1411,7 +1461,7 @@
           <form class="" method="post" action="/settings/removeAccount" id="formRemoveAccount">
             <div class="w-100 my-5"></div>
             <button
-              class="w-100 mb-2 mt-5 btn btn-lg rounded-3 btn-danger"
+              class="w-100 mb-2 mt-5 btn btn-lg rounded-3 btn-danger fw-bold"
               type="submit"
             >
               Usuń Konto
