@@ -501,6 +501,13 @@
                 </h2>
                 <div id="collapseAccordionIncomes" class="accordion-collapse collapse" aria-labelledby="headingAccordionIncomes" data-bs-parent="#accordionIncomes">
                   <div class="accordion-body">
+                    <div
+                      class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
+                      href="#modalAddCatNameIncomes"
+                      data-bs-toggle="modal"
+                    >
+                    Dodaj nową <i class="icon-plus"></i>
+                    </div>
                     <table class="rounded-corners">
                       {% for category in incomes_categories %}
                       <tr>
@@ -937,12 +944,12 @@
   <!-- modal - add category name incomes -->
   <div class="modal fade" id="modalAddCatNameIncomes" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Dodawanie kategorii</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Dodawanie kategorii</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -954,7 +961,7 @@
                 type="text"
                 class="form-control rounded-3"
                 id="floatingAddCatNameIncomes"
-                placeholder="Nazwa kategorii"
+                placeholder="np. loteria"
                 name="name"
               />
               <label for="floatingAddCatNameIncomes"
@@ -962,7 +969,7 @@
               >
             </div>
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success fw-bold"
               type="submit"
               id="buttonAddIncomesCategory"
               data-bs-dismiss="modal"
