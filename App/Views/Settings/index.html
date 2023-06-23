@@ -462,7 +462,7 @@
 
                 <div
                   class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
-                  href="#modalEditAccount"
+                  href="#modalEditAccountEmail"
                   data-bs-toggle="modal"
                 >
                   Zmień adres email
@@ -1356,10 +1356,74 @@
             </div>
 
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white fw-bold"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success text-white fw-bold"
               type="submit"
             >
               Zmień imię
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal - edit account email -->
+  <div class="modal fade" id="modalEditAccountEmail" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content settings-modal-bg">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 text-white">Edycja adresu email</h1>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+          <form class="" method="post" action="/settings/updateAccount" id="formUpdateAccount">
+
+            <div class="form-floating mb-3">
+              <input 
+                type="text"
+                class="form-control rounded-3 fw-bold"
+                id="inputEmailCurrent"
+                placeholder="{{ user.email }}"
+                value="{{ user.email }}"
+                disabled
+              />
+              <label for="inputEmailCurrent">Aktualny adres email</label>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input
+                type="email"
+                class="form-control fw-bold"
+                id="inputEmail"
+                name="email"
+                placeholder="{{ user.email }}"
+                autocomplete="off"
+              />
+              <label for="inputEmail">Nowy adres email</label>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input
+                type="email"
+                class="form-control fw-bold"
+                id="inputEmail2"
+                name="email"
+                placeholder="{{ user.email }}"
+                autocomplete="off"
+              />
+              <label for="inputEmail2">Powtórz nowy adres email</label>
+            </div>
+
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success text-white fw-bold"
+              type="submit"
+            >
+              Zmień adres email
             </button>
           </form>
         </div>
