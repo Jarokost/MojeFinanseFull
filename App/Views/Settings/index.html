@@ -586,6 +586,13 @@
                 </h2>
                 <div id="collapseAccordionPaymentMethods" class="accordion-collapse collapse" aria-labelledby="headingAccordionPaymentMethods" data-bs-parent="#accordionPaymentMethods">
                   <div class="accordion-body">
+                    <div
+                      class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
+                      href="#modalAddCatNamePayment"
+                      data-bs-toggle="modal"
+                    >
+                    Dodaj nową <i class="icon-plus"></i>
+                    </div>
                     <table class="rounded-corners">
                       {% for method in payment_methods %}
                       <tr>
@@ -948,7 +955,7 @@
     </div>
   </div>
 
-  <!-- modal - add category name incomes -->
+  <!-- modal - add category incomes -->
   <div class="modal fade" id="modalAddCatNameIncomes" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content settings-modal-bg">
@@ -966,7 +973,7 @@
             <div class="form-floating mb-3">
               <input
                 type="text"
-                class="form-control rounded-3"
+                class="form-control rounded-3 fw-bold"
                 id="floatingAddCatNameIncomes"
                 placeholder="np. loteria"
                 name="name"
@@ -989,7 +996,7 @@
     </div>
   </div>
 
-  <!-- modal - add category name expenses -->
+  <!-- modal - add category expenses -->
   <div class="modal fade" id="modalAddCatNameExpenses" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content settings-modal-bg">
@@ -1008,7 +1015,7 @@
 
               <input
                 type="text"
-                class="form-control rounded-3"
+                class="form-control rounded-3 fw-bold"
                 id="floatingAddCatNameExpenses"
                 placeholder="np. wakacje"
                 name="name"
@@ -1057,15 +1064,15 @@
     </div>
   </div>
 
-  <!-- modal - add category name payment -->
+  <!-- modal - add category payment -->
   <div class="modal fade" id="modalAddCatNamePayment" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Dodawanie kategorii</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Dodawanie kategorii</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -1075,17 +1082,17 @@
             <div class="form-floating mb-3">
               <input
                 type="text"
-                class="form-control rounded-3"
+                class="form-control rounded-3 fw-bold"
                 id="floatingAddCatNamePayment"
-                placeholder="Nazwa kategorii"
+                placeholder="np. karta służbowa"
                 name="name"
               />
               <label for="floatingAddCatNamePayment"
-                >Nazwa kategorii sposobów płatności</label
+                >Nazwa metody płatności</label
               >
             </div>
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-success"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-success fw-bold text-white"
               type="submit"
               id="buttonAddPaymentMethod"
               data-bs-dismiss="modal"
