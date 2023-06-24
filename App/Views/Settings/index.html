@@ -381,7 +381,7 @@
         });
 
         // Remove Expenses Category
-        // check if removal category has transaction assigned, if not remove, if yes display confirmation
+        // Check if removal category has transaction assigned, if not remove, if yes display confirmation
         document.getElementById("buttonRemoveExpensesCategory")
         .addEventListener("click", async () => {
 
@@ -412,7 +412,7 @@
           }
         });
 
-        // if removal category has transaction assigned, confirm removal
+        // If removal category has transaction assigned, confirm removal
         document.getElementById("buttonRemoveExpensesCategoryAccept")
         .addEventListener("click", async () => {
 
@@ -460,47 +460,56 @@
           }
         });
 
-        $("#buttonUpdatePaymentMethod").on("click", function(e) {
-          
-          var id = $("#floatingSelectChgCatNamePayment").val();
-          var name = $("#floatingChgCatNamePayment").val();
-
-          $.ajax({
-            url: '/Settings/updatePaymentMethod',
-            type: 'POST',
-            data: { id: id,
-                    name: name
-                  }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
-            updatePaymentMethodsList(data);
-            // clear text input
-            $("#floatingChgCatNamePayment").val('');
-            printFlashMessages(data);
-          });
-        });
-
-        // Remove Payment Method
-        // select row from table
+        // Select row from table
         document.getElementById("tablePaymentMethods")
         .addEventListener("click", function(ele) {
 
           if( ele.srcElement.cellIndex < 2 ) {
             return;
-          }
-          else if (ele.target.className === "icon-trash") {
+          } else if (ele.target.className === "icon-trash") {
             table_row = ele.target.parentNode.parentNode.parentNode;
-          }
-          else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
+            document.getElementById("floatingRemCatNamePayment").value = table_row.cells[0].textContent;
+          } else if (ele.target.className === "icon-pencil") {
+            table_row = ele.target.parentNode.parentNode.parentNode;
+            document.getElementById("floatingChgCatNamePaymentCurrent").value = table_row.cells[0].textContent;
+          } else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
             table_row = ele.target.parentNode;
+            document.getElementById("floatingRemCatNamePayment").value = table_row.cells[0].textContent;
+          } else if (ele.target.childNodes[1].childNodes[1].className === "icon-pencil") {
+            table_row = ele.target.parentNode;
+            document.getElementById("floatingChgCatNamePaymentCurrent").value = table_row.cells[0].textContent;
           }
-
-          document.getElementById("floatingRemCatNamePayment").value = table_row.cells[0].textContent;
 
         });
 
-        // check if removal category has transaction assigned, if not remove, if yes display confirmation
+        // Edit Payment Method
+        document.getElementById("buttonUpdatePaymentMethod")
+        .addEventListener("click", async () => {
+          
+          let id = table_row.cells[1].textContent;
+          let name = document.getElementById("floatingChgCatNamePayment").value;
+
+          let inData = {
+            id: id,
+            name: name
+          };
+
+          try { 
+            const res = await fetch(`/Settings/updatePaymentMethod`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
+            updatePaymentMethodsList(data);
+            document.getElementById("floatingChgCatNamePayment").value = '';
+            printFlashMessages(data);
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
+        });
+
+        // Remove Payment Method
+        // Check if removal category has transaction assigned, if not remove, if yes display confirmation
         document.getElementById("buttonRemovePaymentMethod")
         .addEventListener("click", async () => {
 
@@ -530,7 +539,7 @@
           }
         });
 
-        // if removal category has transaction assigned, confirm removal
+        // If removal category has transaction assigned, confirm removal
         document.getElementById("buttonRemovePaymentMethodAccept")
         .addEventListener("click", async () => {
 

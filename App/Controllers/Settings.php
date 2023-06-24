@@ -339,17 +339,19 @@ class Settings extends Authenticated
      */
     public function updatePaymentMethodAction()
     {
-        if( PaymentMethodsAssignedToUsers::categoryExists($_POST['name']) ) {
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
 
-            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+        if( PaymentMethodsAssignedToUsers::categoryExists($post_fetch_promise['name'], $_SESSION['user_id']) ) {
+
+            $data['flash_message_body'][0] = 'kategoria "' . $post_fetch_promise['name'] .  '" już istnieje';
             $data['flash_message_type'][0] = 'warning';
 
         } else {
 
-            $category_name = PaymentMethodsAssignedToUsers::getCategoryName($_POST['id']);
-            PaymentMethodsAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+            $category_name = PaymentMethodsAssignedToUsers::getCategoryName($post_fetch_promise['id']);
+            PaymentMethodsAssignedToUsers::updateCategory($post_fetch_promise['id'], $post_fetch_promise['name']);
 
-            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
             $data['flash_message_type'][0] = 'info';
             
         }
