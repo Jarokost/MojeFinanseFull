@@ -53,24 +53,33 @@
     function updateExpensesCategoryList(data)
     {
       console.log(data);
-      // Update List
-      // remove select options
-      $("#floatingSelectChgCatNameExpenses")
-        .find('option').remove().end()
-        .append('<option value="">wybierz</option>').val('');  
-      // fill with updated category options
-      for (var i = 0; i < data.categories.length; i++) {
-        $('#floatingSelectChgCatNameExpenses').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
+      let table_rows = document.querySelectorAll("#tableExpensesCategories tr");
+      for(let i = 0; i<table_rows.length; i++) {
+        table_rows[i].remove();
       }
 
-      // Remove List
-      // remove select options
-      $("#floatingSelectRemCatNameExpenses")
-        .find('option').remove().end()
-        .append('<option value="">wybierz</option>').val(''); 
-      // fill with updated category options
-      for (var i = 0; i < data.categories.length; i++) {
-        $('#floatingSelectRemCatNameExpenses').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
+      let table_body = document.querySelector("#tableExpensesCategories tbody");
+      for (let i = 0; i < data.categories.length; i++) {
+        table_body.insertAdjacentHTML( "beforeend", `
+          <tr>
+            <td class="expenses-limit">
+              ${data.categories[i].name}
+              </br>
+              <small class="text-muted">limit: 9999.99</small>
+            </td>
+            <td hidden>${data.categories[i].id}</td>
+            <td href="#modalChgCatNameExpenses" data-bs-toggle="modal">
+              <a class="dropdown-item editingTRbutton">
+                <i class="icon-pencil"></i>
+              </a>
+            </td>
+            <td href="#modalRemCatNameExpenses" data-bs-toggle="modal">
+              <a class="dropdown-item removingTRbutton">
+                <i class="icon-trash"></i>
+              </a></a>
+            </td>
+          </tr>
+        `);
       }
     }
 
@@ -167,6 +176,7 @@
             }
         });
 
+        // Add Incomes Category
         document.getElementById("buttonAddIncomesCategory").
         addEventListener("click", async () => {
 
@@ -253,22 +263,28 @@
           });
         });
 
-        $("#buttonAddExpensesCategory").on("click", function(e) {
-          
-          var name = $("#floatingAddCatNameExpenses").val();
+        // Add Expenses Category
+        document.getElementById("buttonAddExpensesCategory")
+        .addEventListener("click", async () => {
 
-          $.ajax({
-            url: '/Settings/addExpenseCategory',
-            type: 'POST',
-            data: { name: name }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+          $("#modalAddCatNameExpenses").modal("hide");
+
+          let name = document.getElementById("floatingAddCatNameExpenses").value;
+
+          const inData = { name: name };
+
+          try { 
+            const res = await fetch(`/Settings/addExpenseCategory`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
             updateExpensesCategoryList(data);
-            // clear text input
-            $("#floatingAddCatNameExpenses").val('');
+            document.getElementById("floatingAddCatNameExpenses").value = '';
             printFlashMessages(data);
-          });
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
         });
 
         $("#buttonUpdateExpensesCategory").on("click", function(e) {
@@ -573,7 +589,7 @@
                     >
                     Dodaj nową <i class="icon-plus"></i>
                     </div>
-                    <table class="rounded-corners">
+                    <table id="tableExpensesCategories" class="rounded-corners">
                       {% for category in expenses_categories %}
                       <tr>
                           <td class="expenses-limit">
@@ -582,7 +598,6 @@
                             <small class="text-muted">limit: 9999.99</small>
                           </td>
                           <td hidden>{{ category.id }}</td>
-                          <!-- <td>limit: XXXX</td> -->
                           <td href="#modalChgCatNameExpenses" data-bs-toggle="modal">
                             <a class="dropdown-item editingTRbutton">
                               <i class="icon-pencil"></i>
