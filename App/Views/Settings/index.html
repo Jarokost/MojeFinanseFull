@@ -25,24 +25,28 @@
     function updateIncomesCategoryList(data)
     {
       console.log(data);
-      // Update List
-      // remove select options
-      $("#floatingSelectChgCatNameIncomes")
-        .find('option').remove().end()
-        .append('<option value="">wybierz</option>').val('');  
-      // fill with updated category options
-      for (var i = 0; i < data.categories.length; i++) {
-        $('#floatingSelectChgCatNameIncomes').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
+      let table_rows = document.querySelectorAll("#tableIncomesCategories tr");
+      for(let i = 0; i<table_rows.length; i++) {
+        table_rows[i].remove();
       }
-
-      // Remove List
-      // remove select options
-      $("#floatingSelectRemCatNameIncomes")
-        .find('option').remove().end()
-        .append('<option value="">wybierz</option>').val(''); 
-      // fill with updated category options
-      for (var i = 0; i < data.categories.length; i++) {
-        $('#floatingSelectRemCatNameIncomes').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
+     
+      let table_body = document.querySelector("#tableIncomesCategories tbody");
+      for (let i = 0; i < data.categories.length; i++) {
+        table_body.insertAdjacentHTML( "beforeend", `
+          <tr>
+            <td>${data.categories[i].name}</td>
+            <td hidden>${data.categories[i].id}</td>
+            <td href="#modalChgCatNameIncomes" data-bs-toggle="modal">
+              <a class="dropdown-item editingTRbutton">
+                <i class="icon-pencil"></i>
+              </a>
+            </td>
+            <td href="#modalRemCatNameIncomes" data-bs-toggle="modal">
+              <a class="dropdown-item removingTRbutton">
+                <i class="icon-trash"></i>
+              </a></a>
+            </td>
+          </tr>`);
       }
     }
 
@@ -147,22 +151,43 @@
             },
         });
 
-        $("#buttonAddIncomesCategory").on("click", function(e) {
-          
-          var name = $("#floatingAddCatNameIncomes").val();
+        document.getElementById("tableIncomesCategories").
+        addEventListener("click", function(ele) {
 
-          $.ajax({
-            url: '/Settings/addIncomeCategory',
-            type: 'POST',
-            data: { name: name }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+          if (ele.target.className === "icon-pencil") {
+
+            tr = ele.target.parentNode.parentNode.parentNode;
+            console.log(name);
+
+            let id = tr.cells[2].textContent;
+            let name = tr.cells[1].textContent;
+
+            document.getElementById("floatingAddCatNameIncomes").value = name;
+
+            }
+        });
+
+        document.getElementById("buttonAddIncomesCategory").
+        addEventListener("click", async () => {
+
+          $("#modalAddCatNameIncomes").modal("hide");
+
+          let name = document.getElementById("floatingAddCatNameIncomes").value;
+
+          const inData = { name: name };
+
+          try { 
+            const res = await fetch(`/Settings/addIncomeCategory`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
             updateIncomesCategoryList(data);
-            // clear text input
-            $("#floatingAddCatNameIncomes").val('');
+            document.getElementById("floatingAddCatNameIncomes").value = '';
             printFlashMessages(data);
-          });
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
         });
 
         $("#buttonUpdateIncomesCategory").on("click", function(e) {
@@ -508,7 +533,7 @@
                     >
                     Dodaj nową <i class="icon-plus"></i>
                     </div>
-                    <table class="rounded-corners">
+                    <table id="tableIncomesCategories" class="rounded-corners">
                       {% for category in incomes_categories %}
                       <tr>
                           <td>{{ category.name }}</td>

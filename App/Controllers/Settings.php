@@ -111,16 +111,18 @@ class Settings extends Authenticated
      */
     public function addIncomeCategoryAction()
     {
-        if( IncomesCategoryAssignedToUsers::categoryExists($_POST['name']) ) {
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
 
-            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+        if( IncomesCategoryAssignedToUsers::categoryExists($post_fetch_promise['name'], $_SESSION['user_id']) ) {
+
+            $data['flash_message_body'][0] = 'kategoria "' . $post_fetch_promise['name'] .  '" już istnieje';
             $data['flash_message_type'][0] = 'warning';
 
         } else {
         
-            IncomesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $_POST['name']);
+            IncomesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $post_fetch_promise['name']);
 
-            $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $_POST['name'];
+            $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $post_fetch_promise['name'];
             $data['flash_message_type'][0] = 'info';
 
         }
