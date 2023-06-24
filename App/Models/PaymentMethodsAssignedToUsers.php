@@ -78,9 +78,9 @@ class PaymentMethodsAssignedToUsers extends \Core\Model
      *
      * @return boolean  True if a record already exists with the specified name, false otherwise
      */
-    public static function categoryExists($name, $ignore_id = null)
+    public static function categoryExists($name, $user_id, $ignore_id = null)
     {
-        $category = static::findCategoryByName($name);
+        $category = static::findCategoryByName($name, $user_id);
 
         if ($category) {
             if ($category->id != $ignore_id) {
@@ -98,13 +98,16 @@ class PaymentMethodsAssignedToUsers extends \Core\Model
      *
      * @return mixed PaymentMethodsAssignedToUsers object if found, false otherwise
      */
-    public static function findCategoryByName($name)
+    public static function findCategoryByName($name, $user_id)
     {
-        $sql = 'SELECT * FROM payment_methods_assigned_to_users WHERE name = :name';
+        $sql = 'SELECT *
+                FROM payment_methods_assigned_to_users
+                WHERE name = :name AND user_id = :user_id';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 
         $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 

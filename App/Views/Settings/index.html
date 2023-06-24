@@ -86,24 +86,29 @@
     function updatePaymentMethodsList(data)
     {
       console.log(data);
-      // Update List
-      // remove select options
-      $("#floatingSelectChgCatNamePayment")
-        .find('option').remove().end()
-        .append('<option value="">wybierz</option>').val('');  
-      // fill with updated category options
-      for (var i = 0; i < data.categories.length; i++) {
-        $('#floatingSelectChgCatNamePayment').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
+      let table_rows = document.querySelectorAll("#tablePaymentMethods tr");
+      for(let i = 0; i<table_rows.length; i++) {
+        table_rows[i].remove();
       }
 
-      // Remove List
-      // remove select options
-      $("#floatingSelectRemCatNamePayment")
-        .find('option').remove().end()
-        .append('<option value="">wybierz</option>').val(''); 
-      // fill with updated category options
-      for (var i = 0; i < data.categories.length; i++) {
-        $('#floatingSelectRemCatNamePayment').append('<option value="' + data.categories[i].id + '">' + data.categories[i].name + '</option>');
+      let table_body = document.querySelector("#tablePaymentMethods tbody");
+      for (let i = 0; i < data.categories.length; i++) {
+        table_body.insertAdjacentHTML( "beforeend", `
+          <tr>
+            <td>${data.categories[i].name}</td>
+            <td hidden>${data.categories[i].id}</td>
+            <td href="#modalChgCatNamePayment" data-bs-toggle="modal">
+              <a class="dropdown-item editingTRbutton">
+                <i class="icon-pencil"></i>
+              </a>
+            </td>
+            <td href="#modalRemCatNamePayment" data-bs-toggle="modal">
+              <a class="dropdown-item removingTRbutton">
+                <i class="icon-trash"></i>
+              </a></a>
+            </td>
+          </tr>
+        `);
       }
     }
 
@@ -350,22 +355,28 @@
           });
         });
 
-        $("#buttonAddPaymentMethod").on("click", function(e) {
-          
-          var name = $("#floatingAddCatNamePayment").val();
+        // Add Payment Method
+        document.getElementById("buttonAddPaymentMethod")
+        .addEventListener("click", async () => {
 
-          $.ajax({
-            url: '/Settings/addPaymentMethod',
-            type: 'POST',
-            data: { name: name }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+          $("#modalAddCatNamePayment").modal("hide");
+
+          let name = document.getElementById("floatingAddCatNamePayment").value;
+
+          const inData = { name: name };
+
+          try { 
+            const res = await fetch(`/Settings/addPaymentMethod`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
             updatePaymentMethodsList(data);
-            // clear text input
-            $("#floatingAddCatNamePayment").val('');
+            document.getElementById("floatingAddCatNamePayment").value = '';
             printFlashMessages(data);
-          });
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
         });
 
         $("#buttonUpdatePaymentMethod").on("click", function(e) {
@@ -633,7 +644,7 @@
                     >
                     Dodaj nową <i class="icon-plus"></i>
                     </div>
-                    <table class="rounded-corners">
+                    <table id="tablePaymentMethods" class="rounded-corners">
                       {% for method in payment_methods %}
                       <tr>
                           <td>{{ method.name }}</td>
