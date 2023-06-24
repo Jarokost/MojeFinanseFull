@@ -12,7 +12,8 @@
 <script>
 
     var flash_message_id = 0;
-    var id_to_delete = 0;
+    let id_to_delete = 0;
+    let table_row = null;
 
     setTimeout(function(){
           $('.flash_messages').remove();
@@ -226,46 +227,74 @@
           });
         });
 
-        $("#buttonRemoveIncomesCategory").on("click", function(e) {
-          
-          id_to_delete = $("#floatingSelectRemCatNameIncomes").val();
-          var force = 'n';
+        // Remove Incomes Category
+        // select row from table
+        document.getElementById("tableIncomesCategories")
+        .addEventListener("click", function(ele) {
 
-          $.ajax({
-            url: '/Settings/deleteIncomeCategory',
-            type: 'POST',
-            data: { id: id_to_delete,
-                    force: force
-                  }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+          if (ele.target.className === "icon-trash") {
+            table_row = ele.target.parentNode.parentNode.parentNode;
+          }
+          else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
+            table_row = ele.target.parentNode;
+          }
+
+          document.getElementById("floatingRemCatNameIncomes").value = table_row.cells[0].textContent;
+
+        });
+
+        // check if removal category has transaction assigned, if not remove, if yes display confirmation
+        document.getElementById("buttonRemoveIncomesCategory")
+        .addEventListener("click", async () => {
+
+          id_to_delete = table_row.cells[1].textContent;
+          let force = 'n';
+
+          const inData = {
+            id: id_to_delete,
+            force: force
+          }
+
+          try { 
+            const res = await fetch(`/Settings/deleteIncomeCategory`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
             updateIncomesCategoryList(data);
             printFlashMessages(data);
             if(data.flash_message_type[0] === 'warning')
             {
               $("#modalRemCatNameIncomesAccept").modal('show');
-              $("#RemoveIncomeCategoryAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
+              document.getElementById("RemoveIncomeCategoryAcceptNote").innerHTML('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
             }
-          });
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
         });
 
-        $("#buttonRemoveIncomesCategoryAccept").on("click", function(e) {
+        // if removal category has transaction assigned, confirm removal
+        document.getElementById("buttonRemoveIncomesCategoryAccept")
+        .addEventListener("click", async () => {
 
-          var force = 'y';
+          let force = 'y';
 
-          $.ajax({
-            url: '/Settings/deleteIncomeCategory',
-            type: 'POST',
-            data: { id: id_to_delete,
-                    force: force
-                  }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+          const inData = {
+            id: id_to_delete,
+            force: force
+          }
+
+          try { 
+            const res = await fetch(`/Settings/deleteIncomeCategory`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
             updateIncomesCategoryList(data);
             printFlashMessages(data);
-          });
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
         });
 
         // Add Expenses Category
@@ -1186,13 +1215,13 @@
               </select>
               <label for="floatingSelectRemCatNameIncomes"
                 >Kategoria przychodów</label
-              > -->
+              >                 placeholder="Salary"
+                value="Salary"-->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
                 id="floatingRemCatNameIncomes"
-                placeholder="Salary"
-                value="Salary"
+
                 disabled/>
               <label for="floatingRemCatNameIncomes">Wybrana kategoria</label>
             </div>
