@@ -181,22 +181,6 @@
             },
         });
 
-        document.getElementById("tableIncomesCategories").
-        addEventListener("click", function(ele) {
-
-          if (ele.target.className === "icon-pencil") {
-
-            tr = ele.target.parentNode.parentNode.parentNode;
-            console.log(name);
-
-            let id = tr.cells[2].textContent;
-            let name = tr.cells[1].textContent;
-
-            document.getElementById("floatingAddCatNameIncomes").value = name;
-
-            }
-        });
-
         // Add Incomes Category
         document.getElementById("buttonAddIncomesCategory").
         addEventListener("click", async () => {
@@ -221,46 +205,53 @@
           }
         });
 
-        $("#buttonUpdateIncomesCategory").on("click", function(e) {
-          
-          var id = $("#floatingSelectChgCatNameIncomes").val();
-          var name = $("#floatingChgCatNameIncomes").val();
-
-          $.ajax({
-            url: '/Settings/updateIncomeCategory',
-            type: 'POST',
-            data: { id: id,
-                    name: name
-                  }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
-            updateIncomesCategoryList(data);
-            // clear text input
-            $("#floatingChgCatNameIncomes").val('');
-            printFlashMessages(data);
-          });
-        });
-
-        // Remove Incomes Category
         // select row from table
         document.getElementById("tableIncomesCategories")
         .addEventListener("click", function(ele) {
 
           if( ele.srcElement.cellIndex < 2 ) {
             return;
-          }
-          else if (ele.target.className === "icon-trash") {
+          } else if (ele.target.className === "icon-trash") {
             table_row = ele.target.parentNode.parentNode.parentNode;
-          }
-          else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
+            document.getElementById("floatingRemCatNameIncomes").value = table_row.cells[0].textContent;
+          } else if (ele.target.className === "icon-pencil") {
+            table_row = ele.target.parentNode.parentNode.parentNode;
+            document.getElementById("floatingChgCatNameIncomesCurrent").value = table_row.cells[0].textContent;
+          } else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
             table_row = ele.target.parentNode;
+            document.getElementById("floatingRemCatNameIncomes").value = table_row.cells[0].textContent;
+          } else if (ele.target.childNodes[1].childNodes[1].className === "icon-pencil") {
+            table_row = ele.target.parentNode;
+            document.getElementById("floatingChgCatNameIncomesCurrent").value = table_row.cells[0].textContent;
           }
-
-          document.getElementById("floatingRemCatNameIncomes").value = table_row.cells[0].textContent;
-
         });
 
+        document.getElementById("buttonUpdateIncomesCategory")
+        .addEventListener("click", async () => {
+          
+          let id = table_row.cells[1].textContent;
+          let name = document.getElementById("floatingChgCatNameIncomes").value;
+
+          let inData = {
+            id: id,
+            name: name
+          };
+
+          try { 
+            const res = await fetch(`/Settings/updateIncomeCategory`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
+            updateIncomesCategoryList(data);
+            document.getElementById("floatingChgCatNameIncomes").value = '';
+            printFlashMessages(data);
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
+        });
+
+        // Remove Incomes Category
         // check if removal category has transaction assigned, if not remove, if yes display confirmation
         document.getElementById("buttonRemoveIncomesCategory")
         .addEventListener("click", async () => {
