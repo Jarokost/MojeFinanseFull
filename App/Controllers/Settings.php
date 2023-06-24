@@ -264,9 +264,11 @@ class Settings extends Authenticated
      */
     public function deleteExpenseCategoryAction()
     {
-        $transactions = ExpensesCategoryAssignedToUsers::transactionsSumForSelectedCategory($_SESSION['user_id'], $_POST['id']);
-        $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($_POST['id']);
-        $force = $_POST['force'];
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+
+        $transactions = ExpensesCategoryAssignedToUsers::transactionsSumForSelectedCategory($_SESSION['user_id'], $post_fetch_promise['id']);
+        $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($post_fetch_promise['id']);
+        $force = $post_fetch_promise['force'];
 
         if($transactions && $force === 'n') {
 
@@ -278,7 +280,7 @@ class Settings extends Authenticated
 
         } else {
 
-            ExpensesCategoryAssignedToUsers::removeCategory($_POST['id']);
+            ExpensesCategoryAssignedToUsers::removeCategory($post_fetch_promise['id']);
 
             $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
             $data['flash_message_type'][0] = 'info';

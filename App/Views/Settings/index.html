@@ -132,6 +132,21 @@
       }
     }
 
+    function polishEnding(number) {
+      if ( number < 5 ) {
+        return 'e';
+      } else if ( number >= 5 && number < 20 ) {
+        return 'i';
+      } else {
+        let mod = number % 10;
+        if ( (mod >= 0 && mod <= 1) || (mod >= 5 && mod <= 9) ) {
+          return 'i';
+        } else {
+          return 'e';
+        }
+      }
+    }
+
     $(document).ready(function () {
 
         $("#formUpdateAccount").validate({
@@ -232,7 +247,10 @@
         document.getElementById("tableIncomesCategories")
         .addEventListener("click", function(ele) {
 
-          if (ele.target.className === "icon-trash") {
+          if( ele.srcElement.cellIndex < 2 ) {
+            return;
+          }
+          else if (ele.target.className === "icon-trash") {
             table_row = ele.target.parentNode.parentNode.parentNode;
           }
           else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
@@ -266,7 +284,7 @@
             if(data.flash_message_type[0] === 'warning')
             {
               $("#modalRemCatNameIncomesAccept").modal('show');
-              document.getElementById("RemoveIncomeCategoryAcceptNote").innerHTML('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
+              document.getElementById("RemoveIncomeCategoryAcceptNote").innerHTML = `kategoria: "${data.category_name}" zawiera: (${data.transactions}) transakcj${polishEnding(data.transactions)}, usunięcie kategorii spowoduje również usunięcie tych tansakcji!`;
             }
           } catch (e) {
             console.log('ERROR: ', e);
@@ -342,46 +360,78 @@
           });
         });
 
-        $("#buttonRemoveExpensesCategory").on("click", function(e) {
-          
-          id_to_delete = $("#floatingSelectRemCatNameExpenses").val();
-          var force = 'n';
-          
-          $.ajax({
-            url: '/Settings/deleteExpenseCategory',
-            type: 'POST',
-            data: { id: id_to_delete,
-                    force: force
-                  }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+        // Remove Expenses Category
+        // select row from table
+        document.getElementById("tableExpensesCategories")
+        .addEventListener("click", function(ele) {
+
+          if( ele.srcElement.cellIndex < 2 ) {
+            return;
+          }
+          else if (ele.target.className === "icon-trash") {
+            table_row = ele.target.parentNode.parentNode.parentNode;
+          }
+          else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
+            table_row = ele.target.parentNode;
+          }
+
+          document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();
+
+        });
+
+        // check if removal category has transaction assigned, if not remove, if yes display confirmation
+        document.getElementById("buttonRemoveExpensesCategory")
+        .addEventListener("click", async () => {
+
+          id_to_delete = table_row.cells[1].textContent;
+          let force = 'n';
+
+          const inData = {
+            id: id_to_delete,
+            force: force
+          }
+
+          try { 
+            const res = await fetch(`/Settings/deleteExpenseCategory`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
             updateExpensesCategoryList(data);
             printFlashMessages(data);
             if(data.flash_message_type[0] === 'warning')
             {
-              $("#RemoveExpenseCategoryAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
               $("#modalRemCatNameExpensesAccept").modal('show');
+              document.getElementById("RemoveExpenseCategoryAcceptNote").innerHTML = `kategoria: "${data.category_name}" zawiera: (${data.transactions}) transakcj${polishEnding(data.transactions)}, usunięcie kategorii spowoduje również usunięcie ${data.transactions <= 1 ? "tej tansakcji!" : "tych tansakcji!"}`;
+              console.log(document.getElementById("RemoveExpenseCategoryAcceptNote").innerHTML);
             }
-          });
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
         });
 
-        $("#buttonRemoveExpensesCategoryAccept").on("click", function(e) {
-          
-          var force = 'y';
+        // if removal category has transaction assigned, confirm removal
+        document.getElementById("buttonRemoveExpensesCategoryAccept")
+        .addEventListener("click", async () => {
 
-          $.ajax({
-            url: '/Settings/deleteExpenseCategory',
-            type: 'POST',
-            data: { id: id_to_delete,
-                    force: force
-                  }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+          let force = 'y';
+
+          const inData = {
+            id: id_to_delete,
+            force: force
+          }
+
+          try { 
+            const res = await fetch(`/Settings/deleteExpenseCategory`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
             updateExpensesCategoryList(data);
             printFlashMessages(data);
-          });
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
         });
 
         // Add Payment Method
@@ -1362,7 +1412,7 @@
 
         <div class="modal-body p-5 pt-0">
           <form class="" method="post" id="formRemoveIncomeCategoryAccept" onsubmit="dontSubmit(); return false;">
-            <div class="form-floating mb-3" id="RemoveIncomeCategoryAcceptNote">
+            <div class="form-floating mb-3 text-white fw-bold" id="RemoveIncomeCategoryAcceptNote">
             </div>
             <button
               class="w-100 mb-2 btn btn-lg rounded-3 btn-danger fw-bold"
@@ -1394,7 +1444,7 @@
         <div class="modal-body p-5 pt-0">
           <form class="" method="post" id="formRemoveExpenseCategoryAccept" onsubmit="dontSubmit(); return false;">
             <div class="form-floating mb-3">
-              <div class="form-floating mb-3" id="RemoveExpenseCategoryAcceptNote">
+              <div class="form-floating mb-3 text-white fw-bold" id="RemoveExpenseCategoryAcceptNote">
               </div>
             </div>
             <button
