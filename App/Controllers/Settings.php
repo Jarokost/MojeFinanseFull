@@ -239,17 +239,19 @@ class Settings extends Authenticated
      */
     public function updateExpenseCategoryAction()
     {
-        if( ExpensesCategoryAssignedToUsers::categoryExists($_POST['name']) ) {
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
 
-            $data['flash_message_body'][0] = 'kategoria "' . $_POST['name'] .  '" już istnieje';
+        if( ExpensesCategoryAssignedToUsers::categoryExists($post_fetch_promise['name'], $_SESSION['user_id']) ) {
+
+            $data['flash_message_body'][0] = 'kategoria "' . $post_fetch_promise['name'] .  '" już istnieje';
             $data['flash_message_type'][0] = 'warning';
 
         } else {
 
-            $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($_POST['id']);
-            ExpensesCategoryAssignedToUsers::updateCategory($_POST['id'], $_POST['name']);
+            $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($post_fetch_promise['id']);
+            ExpensesCategoryAssignedToUsers::updateCategory($post_fetch_promise['id'], $post_fetch_promise['name']);
 
-            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $_POST['name'];
+            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
             $data['flash_message_type'][0] = 'info';
 
         }

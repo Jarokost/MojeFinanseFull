@@ -205,7 +205,7 @@
           }
         });
 
-        // select row from table
+        // Select row from table
         document.getElementById("tableIncomesCategories")
         .addEventListener("click", function(ele) {
 
@@ -226,6 +226,7 @@
           }
         });
 
+        // Edit Incomes Category
         document.getElementById("buttonUpdateIncomesCategory")
         .addEventListener("click", async () => {
           
@@ -252,7 +253,7 @@
         });
 
         // Remove Incomes Category
-        // check if removal category has transaction assigned, if not remove, if yes display confirmation
+        // Check if removal category has transaction assigned, if not remove, if yes display confirmation
         document.getElementById("buttonRemoveIncomesCategory")
         .addEventListener("click", async () => {
 
@@ -282,7 +283,7 @@
           }
         });
 
-        // if removal category has transaction assigned, confirm removal
+        // If removal category has transaction assigned, confirm removal
         document.getElementById("buttonRemoveIncomesCategoryAccept")
         .addEventListener("click", async () => {
 
@@ -330,46 +331,56 @@
           }
         });
 
-        $("#buttonUpdateExpensesCategory").on("click", function(e) {
-          
-          var id = $("#floatingSelectChgCatNameExpenses").val();
-          var name = $("#floatingChgCatNameExpenses").val();
-
-          $.ajax({
-            url: '/Settings/updateExpenseCategory',
-            type: 'POST',
-            data: { id: id,
-                    name: name
-                  }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
-            updateExpensesCategoryList(data);
-            // clear text input
-            $("#floatingChgCatNameExpenses").val('');
-            printFlashMessages(data);
-          });
-        });
-
-        // Remove Expenses Category
-        // select row from table
+        // Select row from table
         document.getElementById("tableExpensesCategories")
         .addEventListener("click", function(ele) {
 
           if( ele.srcElement.cellIndex < 2 ) {
             return;
-          }
-          else if (ele.target.className === "icon-trash") {
+          } else if (ele.target.className === "icon-trash") {
             table_row = ele.target.parentNode.parentNode.parentNode;
-          }
-          else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
+            document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();
+          } else if (ele.target.className === "icon-pencil") {
+            table_row = ele.target.parentNode.parentNode.parentNode;
+            document.getElementById("floatingChgCatNameExpenseCurrent").value = table_row.cells[0].childNodes[0].textContent.trim();
+          } else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
             table_row = ele.target.parentNode;
+            document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();
+          } else if (ele.target.childNodes[1].childNodes[1].className === "icon-pencil") {
+            table_row = ele.target.parentNode;
+            document.getElementById("floatingChgCatNameExpenseCurrent").value = table_row.cells[0].childNodes[0].textContent.trim();
           }
-
-          document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();
 
         });
 
+        // Edit Expenses Category
+        document.getElementById("buttonUpdateExpensesCategory")
+        .addEventListener("click", async () => {
+
+          let id = table_row.cells[1].textContent;
+          let name = document.getElementById("floatingChgCatNameExpenses").value;
+
+          let inData = {
+            id: id,
+            name: name
+          };
+
+          try { 
+            const res = await fetch(`/Settings/updateExpenseCategory`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
+            updateExpensesCategoryList(data);
+            document.getElementById("floatingChgCatNameExpenses").value = '';
+            printFlashMessages(data);
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
+          
+        });
+
+        // Remove Expenses Category
         // check if removal category has transaction assigned, if not remove, if yes display confirmation
         document.getElementById("buttonRemoveExpensesCategory")
         .addEventListener("click", async () => {
