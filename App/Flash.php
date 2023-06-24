@@ -66,4 +66,52 @@ class Flash
             return $messages;
         }
     }
+
+    /**
+     * Change polish endings numerals
+     * 
+     * @return string
+     */
+    public static function polishEnding1($number) 
+    {
+        if ( $number < 2 ) {
+            return 'a';
+        }
+        else if ( $number < 5 ) {
+            return 'e';
+        } else if ( $number >= 5 && $number < 20 ) {
+            return 'i';
+        } else {
+            $mod = $number % 10;
+            if ( ($mod >= 0 && $mod <= 1) || ($mod >= 5 && $mod <= 9) ) {
+                return 'i';
+            } else {
+                return 'e';
+            }
+        }
+    }
+
+    /**
+     * Change polish endings numerals
+     * 
+     * @return string
+     */
+    public static function polishEnding2($number) 
+    {
+        if ( $number < 2 ) {
+            return 'e';
+        }
+        else if ( $number < 5 ) {
+            return 'ą';
+        } else if ( $number >= 5 && $number < 20 ) {
+            return 'e';
+        } else {
+            $mod = $number % 10;
+            if ( ($mod >= 0 && $mod <= 1) || ($mod >= 5 && $mod <= 9) ) {
+                return 'e';
+            } else {
+                return 'ą';
+            }
+        }
+    }
 }

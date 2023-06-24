@@ -176,7 +176,9 @@ class Settings extends Authenticated
 
         if($transactions && $force === 'n') {
 
-            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istnieją (' . $transactions['transactions'] . ') transakcje, niepowodzenie';
+            $ending1 = Flash::polishEnding1($transactions['transactions']);
+            $ending2 = Flash::polishEnding2($transactions['transactions']);
+            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istniej' . $ending2 . ' (' . $transactions['transactions'] . ') transakcj' . $ending1 . ', niepowodzenie';
             $data['flash_message_type'][0] = 'warning';
 
             $data['category_name'] = $transactions['category_name'];
@@ -272,7 +274,9 @@ class Settings extends Authenticated
 
         if($transactions && $force === 'n') {
 
-            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istnieją (' . $transactions['transactions'] . ') transakcje, niepowodzenie';
+            $ending1 = Flash::polishEnding1($transactions['transactions']);
+            $ending2 = Flash::polishEnding2($transactions['transactions']);
+            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istniej' . $ending2 . ' (' . $transactions['transactions'] . ') transakcj' . $ending1 . ', niepowodzenie';
             $data['flash_message_type'][0] = 'warning';
 
             $data['category_name'] = $transactions['category_name'];
@@ -360,13 +364,17 @@ class Settings extends Authenticated
      */
     public function deletePaymentMethodAction()
     {
-        $transactions = PaymentMethodsAssignedToUsers::transactionsSumForSelectedCategory($_SESSION['user_id'], $_POST['id']);
-        $category_name = PaymentMethodsAssignedToUsers::getCategoryName($_POST['id']);
-        $force = $_POST['force'];
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+
+        $transactions = PaymentMethodsAssignedToUsers::transactionsSumForSelectedCategory($_SESSION['user_id'], $post_fetch_promise['id']);
+        $category_name = PaymentMethodsAssignedToUsers::getCategoryName($post_fetch_promise['id']);
+        $force = $post_fetch_promise['force'];
 
         if($transactions && $force === 'n') {
 
-            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istnieją (' . $transactions['transactions'] . ') transakcje, niepowodzenie';
+            $ending1 = Flash::polishEnding1($transactions['transactions']);
+            $ending2 = Flash::polishEnding2($transactions['transactions']);
+            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istniej' . $ending2 . ' (' . $transactions['transactions'] . ') transakcj' . $ending1 . ', niepowodzenie';
             $data['flash_message_type'][0] = 'warning';
 
             $data['category_name'] = $transactions['category_name'];
@@ -374,7 +382,7 @@ class Settings extends Authenticated
 
         } else {
 
-            PaymentMethodsAssignedToUsers::removeCategory($_POST['id']);
+            PaymentMethodsAssignedToUsers::removeCategory($post_fetch_promise['id']);
 
             $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
             $data['flash_message_type'][0] = 'info';

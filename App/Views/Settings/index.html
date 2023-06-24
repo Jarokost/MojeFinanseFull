@@ -479,46 +479,77 @@
           });
         });
 
-        $("#buttonRemovePaymentMethod").on("click", function(e) {
-          
-          id_to_delete = $("#floatingSelectRemCatNamePayment").val();
-          var force = 'n';
+        // Remove Payment Method
+        // select row from table
+        document.getElementById("tablePaymentMethods")
+        .addEventListener("click", function(ele) {
 
-          $.ajax({
-            url: '/Settings/deletePaymentMethod',
-            type: 'POST',
-            data: { id: id_to_delete,
-                    force: force
-                  }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+          if( ele.srcElement.cellIndex < 2 ) {
+            return;
+          }
+          else if (ele.target.className === "icon-trash") {
+            table_row = ele.target.parentNode.parentNode.parentNode;
+          }
+          else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
+            table_row = ele.target.parentNode;
+          }
+
+          document.getElementById("floatingRemCatNamePayment").value = table_row.cells[0].textContent;
+
+        });
+
+        // check if removal category has transaction assigned, if not remove, if yes display confirmation
+        document.getElementById("buttonRemovePaymentMethod")
+        .addEventListener("click", async () => {
+
+          id_to_delete = table_row.cells[1].textContent;
+          let force = 'n';
+
+          const inData = {
+            id: id_to_delete,
+            force: force
+          }
+
+          try { 
+            const res = await fetch(`/Settings/deletePaymentMethod`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
             updatePaymentMethodsList(data);
             printFlashMessages(data);
             if(data.flash_message_type[0] === 'warning')
             {
-              $("#RemovePaymentMethodAcceptNote").html('kategoria: "' + data.category_name + '" zawiera: ' + data.transactions + ' transakcji, usunięcie kategorii spowoduje również usunięcie tych tansakcji!');
               $("#modalRemCatNamePaymentAccept").modal('show');
+              document.getElementById("modalRemCatNamePaymentAcceptNote").innerHTML = `kategoria: "${data.category_name}" zawiera: (${data.transactions}) transakcj${polishEnding(data.transactions)}, usunięcie kategorii spowoduje również usunięcie tych tansakcji!`;
             }
-          });
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
         });
 
-        $("#buttonRemovePaymentMethodAccept").on("click", function(e) {
-          
-          var force = 'y';
+        // if removal category has transaction assigned, confirm removal
+        document.getElementById("buttonRemovePaymentMethodAccept")
+        .addEventListener("click", async () => {
 
-          $.ajax({
-            url: '/Settings/deletePaymentMethod',
-            type: 'POST',
-            data: { id: id_to_delete,
-                    force: force
-                  }
-          })
-          .done(function(data) {
-            var data = $.parseJSON(data);
+          let force = 'y';
+
+          const inData = {
+            id: id_to_delete,
+            force: force
+          }
+
+          try { 
+            const res = await fetch(`/Settings/deletePaymentMethod`, {
+                method: 'post',
+                body: JSON.stringify(inData)
+            })
+            const data = await res.json();
             updatePaymentMethodsList(data);
             printFlashMessages(data);
-          });
+          } catch (e) {
+            console.log('ERROR: ', e);
+          }
         });
 
         setInterval(removeDefaultLabelOnValidateError, 1);
