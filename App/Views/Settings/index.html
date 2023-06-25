@@ -1685,7 +1685,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" action="/settings/updateAccount" id="formUpdateAccount">
+          <form class="" method="post" action="/settings/updateAccountPassword" id="formUpdateAccountPassword">
     
             <div class="input-group mb-3">
                 <div class="form-floating">
@@ -1699,6 +1699,7 @@
                     aria-describedby="inputPasswordBtn"
                     autocomplete="off"
                     />
+                    <label for="inputPasswordCurrent">Podaj aktualne hasło</label>
                 </div>
                 <button
                   onclick="passShowHideReg()"
@@ -1720,6 +1721,7 @@
                   aria-describedby="inputPasswordBtnNew"
                   autocomplete="off"
                   />
+                  <label for="inputPasswordNew">Podaj nowe hasło</label>
               </div>
               <button
                 onclick="passShowHideReg()"

@@ -115,6 +115,13 @@ class User extends \Core\Model
     private $activation_token;
 
     /**
+     * user password_new
+     * 
+     * @var string
+     */
+    private $password_new;
+
+    /**
      * Class constructor
      *
      * @param array $data  Initial property values (optional)
@@ -187,10 +194,48 @@ class User extends \Core\Model
     public function validate()
     {
         // name
+        $this->validateName();
+
+        // email address
+        $this->validateEmail();
+
+        // Password
+        if (isset($this->password)) {
+
+            if (strlen($this->password) < 6) {
+                $this->errors[] = 'Hasło musi zawierać 6 znaków';
+            }
+    
+            if (preg_match('/.*[a-z]+.*/i', $this->password) == 0) {
+                $this->errors[] = 'Hasło musi zawierać jedną literę';
+            }
+    
+            if (preg_match('/.*\d+.*/i', $this->password) == 0) {
+                $this->errors[] = 'Hasło musi zawierać jedną cyfrę';
+            }
+        }
+    }
+
+    /**
+     * Validate current property values, adding valiation error messages to the errors array property
+     *
+     * @return void
+     */
+    public function validateName()
+    {
+        // name
         if (strlen($this->name) < 2) {
             $this->errors[] = 'Imię musi składać się przynajmniej z 2 znaków';
         }
+    }
 
+    /**
+     * Validate current property values, adding valiation error messages to the errors array property
+     *
+     * @return void
+     */
+    public function validateEmail()
+    {
         // email address
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
             $this->errors[] = 'Podaj adres email';
@@ -198,21 +243,31 @@ class User extends \Core\Model
         if (static::emailExists($this->email, $this->id ?? null)) {
             $this->errors[] = 'Podany email jest już zajęty';
         }
+    }
 
-        // Password
-        if (isset($this->password)) {
+    /**
+     * Validate current property values, adding valiation error messages to the errors array property
+     *
+     * @return void
+     */
+    public function validatePasswordChange()
+    {
+        $user = static::findByID($this->id);
 
-            if (strlen($this->password) < 6) {
-                $this->errors[] = 'Hasło musi składać się przynajmniej z 6 znaków';
-            }
+        if (!password_verify($this->password, $user->password_hash)) {
+            $this->errors[] = 'Aktualne hasło niepoprawne';
+        }
 
-            if (preg_match('/.*[a-z]+.*/i', $this->password) == 0) {
-                $this->errors[] = 'Hasło musi zawierać przynajmniej jedną literę';
-            }
+        if (strlen($this->password_new) < 6) {
+            $this->errors[] = 'Hasło musi zawierać 6 znaków';
+        }
 
-            if (preg_match('/.*\d+.*/i', $this->password) == 0) {
-                $this->errors[] = 'Hasło musi zawierać przynajmniej jedną cyfrę';
-            }
+        if (preg_match('/.*[a-z]+.*/i', $this->password_new) == 0) {
+            $this->errors[] = 'Hasło musi zawierać jedną literę';
+        }
+
+        if (preg_match('/.*\d+.*/i', $this->password_new) == 0) {
+            $this->errors[] = 'Hasło musi zawierać jedną cyfrę';
         }
     }
 
@@ -586,6 +641,39 @@ class User extends \Core\Model
 
             $stmt->bindValue(':name', $this->name, PDO::PARAM_STR);
             $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            return $stmt->execute();
+        }
+
+        return false;
+    }
+
+     /**
+     * Update the user's profile
+     *
+     * @param array $data Data from the edit profile form
+     *
+     * @return boolean  True if the data was updated, false otherwise
+     */
+    public function updateProfilePassword($data)
+    {
+        $this->password = $data['passwordCurrent'];
+        $this->password_new = $data['passwordNew'];
+
+        $this->validatePasswordChange();
+
+        if (empty($this->errors)) {
+
+            $sql = 'UPDATE users
+                    SET password_hash = :password_hash
+                    WHERE id = :id';
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+            $password_hash = password_hash($this->password_new, PASSWORD_DEFAULT);
+            $stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
 
             return $stmt->execute();
         }

@@ -128,6 +128,43 @@ class Settings extends Authenticated
     }
 
     /**
+     * Settings update account informations
+     * 
+     * @return void
+     */
+    public function updateAccountPasswordAction()
+    {
+
+        if ($this->user->updateProfilePassword($_POST)) {
+
+            Flash::addMessage('Hasło zostało zmienione');
+
+            $this->redirect('/settings/index');
+
+        } else {
+
+            foreach ($this->user->errors as  $error) {
+                Flash::addMessage($error, 'warning');
+            }
+            
+            $incomes_categories = IncomesCategoryAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+            $expenses_categories = ExpensesCategoryAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+            $payment_methods = PaymentMethodsAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+
+            View::renderTemplate('Settings/index.html', [
+                'user' => $this->user,
+                'incomes_categories' => $incomes_categories,
+                'expenses_categories' => $expenses_categories,
+                'payment_methods' => $payment_methods
+            ]);
+
+        }
+    }
+
+    /**
      * Settings remove account
      * 
      * @return void
