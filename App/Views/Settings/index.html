@@ -181,6 +181,23 @@
             },
         });
 
+      // modal actions - account edit
+      {
+        // document.getElementById("changeAccountNameBtn")
+        // .addEventListener("click", async () => {
+        //   try {
+        //     const res = await fetch(``, {
+
+        //     })
+        //     const data = await res.json();
+        //   } catch (e) {
+        //     console.log("ERROR: ", e);
+        //   }
+        // });
+      }
+
+      // modal actions - Add, Change, Remove Categories
+      {
         // Add Incomes Category
         document.getElementById("buttonAddIncomesCategory").
         addEventListener("click", async () => {
@@ -562,6 +579,8 @@
             console.log('ERROR: ', e);
           }
         });
+      }
+
 
         setInterval(removeDefaultLabelOnValidateError, 1);
     });
@@ -576,15 +595,15 @@
     }
 
     function removeDefaultLabelOnValidateError() {
-        if ($("#inputName").hasClass("is-invalid")) {
-            $("#inputNameLabel").remove();
-        } else {
-            if (document.getElementById("inputNameLabel") === null) {
-                $("#inputName").after(
-                '<label id="inputNameLabel" for="inputName">Imię</label>'
-                );
-            }
-        }
+        // if ($("#inputName").hasClass("is-invalid")) {
+        //     $("#inputNameLabel").remove();
+        // } else {
+        //     if (document.getElementById("inputNameLabel") === null) {
+        //         $("#inputName").after(
+        //         '<label id="inputNameLabel" for="inputName">Imię</label>'
+        //         );
+        //     }
+        // }
 
         if ($("#inputEmail").hasClass("is-invalid")) {
             $("#inputEmailLabel").remove();
@@ -1550,7 +1569,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" action="/settings/updateAccount" id="formUpdateAccount">
+          <form class="" method="post" action="/settings/updateAccountName" id="formUpdateAccountName">
 
             <div class="form-floating mb-3">
               <input 
@@ -1576,6 +1595,7 @@
             </div>
 
             <button
+              
               class="w-100 mb-2 btn btn-lg rounded-3 btn-success text-white fw-bold"
               type="submit"
             >

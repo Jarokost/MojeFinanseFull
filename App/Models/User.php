@@ -564,6 +564,35 @@ class User extends \Core\Model
         return false;
     }
 
+    /**
+     * Update the user's profile
+     *
+     * @param array $data Data from the edit profile form
+     *
+     * @return boolean  True if the data was updated, false otherwise
+     */
+    public function updateProfileName($data)
+    {
+        $this->name = $data['name'];
+
+        if (empty($this->errors)) {
+
+            $sql = 'UPDATE users
+                    SET name = :name
+                    WHERE id = :id';
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':name', $this->name, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            return $stmt->execute();
+        }
+
+        return false;
+    }
+
     public function removeProfile()
     {
         $sql = 'DELETE FROM users

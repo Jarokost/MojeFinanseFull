@@ -93,6 +93,41 @@ class Settings extends Authenticated
     }
 
     /**
+     * Settings update account informations
+     * 
+     * @return void
+     */
+    public function updateAccountNameAction()
+    {
+
+        if ($this->user->updateProfileName($_POST)) {
+
+            Flash::addMessage('Imię zostało zmienione');
+
+            $this->redirect('/settings/index');
+
+        } else {
+
+            Flash::addMessage('Formularz zawiera błędy', 'warning');
+
+            $incomes_categories = IncomesCategoryAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+            $expenses_categories = ExpensesCategoryAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+            $payment_methods = PaymentMethodsAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+
+            View::renderTemplate('Settings/index.html', [
+                'user' => $this->user,
+                'incomes_categories' => $incomes_categories,
+                'expenses_categories' => $expenses_categories,
+                'payment_methods' => $payment_methods
+            ]);
+
+        }
+    }
+
+    /**
      * Settings remove account
      * 
      * @return void
