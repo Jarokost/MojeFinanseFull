@@ -9,6 +9,8 @@
 {% block footer %}
 <script src="/js/app.js"></script>
 
+<script src="/js/passShowHide.js"></script>
+
 <script>
 
     var flash_message_id = 0;
@@ -148,6 +150,13 @@
     }
 
     $(document).ready(function () {
+
+      document.getElementById("inputPasswordNewBtn").addEventListener('click', function () {
+        passShowHide(this.id);
+      });
+      document.getElementById("inputPasswordCurrentBtn").addEventListener('click', function () {
+        passShowHide(this.id);
+      });
 
         $("#formUpdateAccount").validate({
         errorClass: "is-invalid",
@@ -582,7 +591,7 @@
       }
 
 
-        setInterval(removeDefaultLabelOnValidateError, 1);
+        //setInterval(removeDefaultLabelOnValidateError, 1);
     });
 
     function passShowHideReg() {
@@ -1696,16 +1705,15 @@
                     name="passwordCurrent"
                     placeholder="Hasło"
                     aria-label="Hasło"
-                    aria-describedby="inputPasswordBtn"
+                    aria-describedby="inputPasswordCurrent"
                     autocomplete="off"
                     />
                     <label for="inputPasswordCurrent">Podaj aktualne hasło</label>
                 </div>
                 <button
-                  onclick="passShowHideReg()"
                   class="btn btn-outline-secondary"
                   type="button"
-                  id="inputPasswordBtnCurrent"
+                  id="inputPasswordCurrentBtn"
                 >Pokaż</button>
             </div>
 
@@ -1718,16 +1726,15 @@
                   name="passwordNew"
                   placeholder="Hasło"
                   aria-label="Hasło"
-                  aria-describedby="inputPasswordBtnNew"
+                  aria-describedby="inputPasswordNew"
                   autocomplete="off"
                   />
                   <label for="inputPasswordNew">Podaj nowe hasło</label>
               </div>
               <button
-                onclick="passShowHideReg()"
                 class="btn btn-outline-secondary"
                 type="button"
-                id="inputPasswordBtnNew"
+                id="inputPasswordNewBtn"
               >Pokaż</button>
             </div>
 

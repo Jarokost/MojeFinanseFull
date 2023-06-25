@@ -14,10 +14,3 @@ function passShowHide(buttonId) {
     if (button.innerHTML == "Pokaż") button.innerHTML = "Ukryj";
     else button.innerHTML = "Pokaż";
 }
-
-document.getElementById("inputPasswordBtn").addEventListener('click', function () {
-    passShowHide(this.id);
-});
-document.getElementById("inputPasswordRegBtn").addEventListener('click', function () {
-    passShowHide(this.id);
-});
