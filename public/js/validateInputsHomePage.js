@@ -1,4 +1,5 @@
 // Async function to check if email is already taken
+let emailValidReg;
 const getEmailIsValid = async (emailInput) => {
     const inData = {
         email: emailInput.value
@@ -10,7 +11,7 @@ const getEmailIsValid = async (emailInput) => {
             body: JSON.stringify(inData)
         })
         const data = await res.json();
-        validateEmailInputRegistration(emailInput, data);
+        emailValidReg = validateEmailInputRegistration(emailInput, data);
     } catch (e) {
         console.log('ERROR: ', e);
     }
@@ -21,11 +22,11 @@ function validateNameInputRegistration(nameInput) {
     if ( nameInput.value === '' ) {
         nameInput.classList.add('is-invalid');
         document.getElementById(nameInput.id + 'Label').textContent = 'Podaj imię!';
-        return true;
+        return false;
     } else {
         nameInput.classList.remove('is-invalid');
         document.getElementById(nameInput.id + 'Label').textContent = 'Imię';
-        return false;
+        return true;
     }
 }
 
@@ -36,19 +37,19 @@ function validatePasswordInputRegistration(passwordInput) {
     if ( passwordInput.value.length < 6 ) {
         passwordInput.classList.add('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło musi zawierać min. 6 znaków!';
-        return true;
+        return false;
     } else if (!regexpLetter.test(passwordInput.value)) {
         passwordInput.classList.add('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło musi zawierać conajmniej jedną literę!';
-        return true;
+        return false;
     } else if (!regexpNumber.test(passwordInput.value)) {
         passwordInput.classList.add('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło musi zawierać conajmniej jedną cyfrę!';
-        return true;
+        return false;
     } else {
         passwordInput.classList.remove('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło';
-        return false;
+        return true;
     }
 }
 
@@ -58,32 +59,32 @@ function validateEmailInputRegistration(emailInput, emailIsNotValid) {
     if ( emailInput.value === '' ) {
         emailInput.classList.add('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Podaj adres email!';
-        return true;
+        return false;
     } else if (!regexpEmail.test(emailInput.value)) {
         emailInput.classList.add('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Adres email jest niepoprawny!';
-        return true;
+        return false;
     } else if (!emailIsNotValid) {
         emailInput.classList.add('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Adres email jest zajęty!';
-        return true;
+        return false;
     } else {
         emailInput.classList.remove('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Adres email';
-        return false;
+        return true;
     }
 }
 
 function validateRegistrationFormOnSubmit() {
 
-    let nameNotValid = validateNameInputRegistration(document.getElementById("inputNameReg"));
-    let passwordNotValid = validatePasswordInputRegistration(document.getElementById("inputPasswordReg"));
-    let emailNotValid = getEmailIsValid(document.getElementById("inputEmailReg"));
+    let nameValid = validateNameInputRegistration(document.getElementById("inputNameReg"));
+    let passwordValid = validatePasswordInputRegistration(document.getElementById("inputPasswordReg"));
+    getEmailIsValid(document.getElementById("inputEmailReg"));
 
-    if ( nameNotValid || passwordNotValid || emailNotValid ) {
-        return false;
-    } else {
+    if ( nameValid && passwordValid && emailValidReg ) {
         return true;
+    } else {
+        return false;
     }
 }
 
@@ -92,11 +93,11 @@ function validatePasswordInputLogin(passwordInput) {
     if ( passwordInput.value === '' ) {
         passwordInput.classList.add('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Podaj hasło!';
-        return true;
+        return false;
     } else {
         passwordInput.classList.remove('is-invalid');
         document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło';
-        return false;
+        return true;
     }
 }
 
@@ -106,27 +107,27 @@ function validateEmailInputLogin(emailInput) {
     if( emailInput.value === '' ) {
         emailInput.classList.add('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Podaj adres email!';
-        return true;
+        return false;
     } else if (!regexpEmail.test(emailInput.value)) {
         emailInput.classList.add('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Adres email jest niepoprawny!';
-        return true;
+        return false;
     } else {
         emailInput.classList.remove('is-invalid');
         document.getElementById(emailInput.id + 'Label').textContent = 'Adres email';
-        return false;
+        return true;
     }
 }
 
 function validateLoginFormOnSubmit() {
 
     let passwordNotValid = validatePasswordInputLogin(document.getElementById("inputPassword"));
-    let emailNotValid = validateEmailInputLogin(document.getElementById("inputEmail"));
+    let emailValid = validateEmailInputLogin(document.getElementById("inputEmail"));
 
-    if ( passwordNotValid || emailNotValid ) {
-        return false;
-    } else {
+    if ( passwordNotValid && emailValid ) {
         return true;
+    } else {
+        return false;
     }
 }
 
@@ -156,8 +157,7 @@ document.getElementById("inputEmailReg").addEventListener('focusout', function (
 });
 
 document.getElementById("formSignup").addEventListener('submit', (event) => {
-    if (validateRegistrationFormOnSubmit() === true) {
-    } else {
+    if (!validateRegistrationFormOnSubmit()) {
         event.preventDefault();
     }
 });
@@ -180,8 +180,7 @@ document.getElementById("inputEmail").addEventListener('focusout', function () {
 });
 
 document.getElementById("formLogin").addEventListener('submit', (event) => {
-    if (validateLoginFormOnSubmit() === true) {
-    } else {
+    if (!validateLoginFormOnSubmit()) {
         event.preventDefault();
     }
 });
