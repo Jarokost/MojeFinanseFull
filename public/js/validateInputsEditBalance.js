@@ -13,7 +13,7 @@ function validateEditExpenseFormOnSubmit() {
 }
 
 document.getElementById("editExpenseAmount").addEventListener('focusout', function () {
-  if ( validateAmountInput(this) ) {
+  if ( !validateAmountInput(this) ) {
     this.addEventListener('input', function () {
       validateAmountInput(this);
     });
@@ -21,7 +21,7 @@ document.getElementById("editExpenseAmount").addEventListener('focusout', functi
 });
 
 document.getElementById("editExpenseDate").addEventListener('focusout', function () {
-  if ( validateDateInput(this) ) {
+  if ( !validateDateInput(this) ) {
     this.addEventListener('input', function () {
       validateDateInput(this);
     });
@@ -29,7 +29,7 @@ document.getElementById("editExpenseDate").addEventListener('focusout', function
 });
 
 document.getElementById("editExpenseCategory").addEventListener('focusout', function () {
-  if ( validateCategoryInput(this) ) {
+  if ( !validateCategoryInput(this) ) {
     this.addEventListener('input', function () {
       validateCategoryInput(this);
     });
@@ -37,7 +37,7 @@ document.getElementById("editExpenseCategory").addEventListener('focusout', func
 });
 
 document.getElementById("editExpenseMethod").addEventListener('focusout', function () {
-  if ( validateMethodInput(this) ) {
+  if ( !validateMethodInput(this) ) {
     this.addEventListener('input', function () {
       validateMethodInput(this);
     });
@@ -58,7 +58,7 @@ function validateEditIncomeFormOnSubmit() {
 }
 
 document.getElementById("editIncomeAmount").addEventListener('focusout', function () {
-  if ( validateAmountInput(this) ) {
+  if ( !validateAmountInput(this) ) {
     this.addEventListener('input', function () {
       validateAmountInput(this);
     });
@@ -66,7 +66,7 @@ document.getElementById("editIncomeAmount").addEventListener('focusout', functio
 });
 
 document.getElementById("editIncomeDate").addEventListener('focusout', function () {
-  if ( validateDateInput(this) ) {
+  if ( !validateDateInput(this) ) {
     this.addEventListener('input', function () {
       validateDateInput(this);
     });
@@ -74,7 +74,7 @@ document.getElementById("editIncomeDate").addEventListener('focusout', function 
 });
 
 document.getElementById("editIncomeCategory").addEventListener('focusout', function () {
-  if ( validateCategoryInput(this) ) {
+  if ( !validateCategoryInput(this) ) {
     this.addEventListener('input', function () {
       validateCategoryInput(this);
     });

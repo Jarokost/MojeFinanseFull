@@ -13,7 +13,7 @@ function validateNewExpenseFormOnSubmit() {
 }
 
 document.getElementById("floatingInputKwota").addEventListener('focusout', function () {
-    if ( validateAmountInput(this) ) {
+    if ( !validateAmountInput(this) ) {
         this.addEventListener('input', function () {
             validateAmountInput(this);
         });
@@ -21,7 +21,7 @@ document.getElementById("floatingInputKwota").addEventListener('focusout', funct
 });
 
 document.getElementById("floatingDate").addEventListener('focusout', function () {
-    if ( validateDateInput(this) ) {
+    if ( !validateDateInput(this) ) {
         this.addEventListener('input', function () {
             validateDateInput(this);
         });
@@ -29,7 +29,7 @@ document.getElementById("floatingDate").addEventListener('focusout', function ()
 });
 
 document.getElementById("floatingSelect").addEventListener('focusout', function () {
-    if ( validateCategoryInput(this) ) {
+    if ( !validateCategoryInput(this) ) {
         this.addEventListener('input', function () {
             validateCategoryInput(this);
         });
@@ -37,7 +37,7 @@ document.getElementById("floatingSelect").addEventListener('focusout', function 
 });
 
 document.getElementById("floatingSelectMethod").addEventListener('focusout', function () {
-    if ( validateMethodInput(this) ) {
+    if ( !validateMethodInput(this) ) {
         this.addEventListener('input', function () {
             validateMethodInput(this);
         });
