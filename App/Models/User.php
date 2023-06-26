@@ -73,6 +73,27 @@ class User extends \Core\Model
     public $is_active;
 
     /**
+     * user table email_change
+     * 
+     * @var string
+     */
+    public $email_change;
+
+    /**
+     * user table email_change_expires_at
+     * 
+     * @var string
+     */
+    public $email_change_expires_at;
+
+    /**
+     * user table
+     * 
+     * @var string
+     */
+    public $email_change_hash;
+
+    /**
      * user remember token
      * 
      * @var string
@@ -115,11 +136,25 @@ class User extends \Core\Model
     private $activation_token;
 
     /**
+     * user email_change_token
+     * 
+     * @var string
+     */
+    private $email_change_token;
+
+    /**
      * user password_new
      * 
      * @var string
      */
     private $password_new;
+
+    /**
+     * user email_new
+     * 
+     * @var string
+     */
+    private $email_new;
 
     /**
      * Class constructor
@@ -179,6 +214,42 @@ class User extends \Core\Model
             $stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
             $stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
             $stmt->bindValue(':activation_hash', $hashed_token, PDO::PARAM_STR);            
+
+            return $stmt->execute();
+        }
+
+        return false;
+    }
+
+    /**
+     * Save the user model with the current property values
+     *
+     * @return boolean  True if the user was saved, false otherwise
+     */
+    public function saveEmailChange($data)
+    {
+        $this->validateEmailChange($data);
+
+        if (empty($this->errors)) {
+
+            $token = new Token();
+            $hashed_token = $token->getHash();
+			$this->email_change_token = $token->getValue();
+            $expiry_timestamp = time() + 60 * 15;  // 15 minutes from now
+            $sql = 'UPDATE users
+                    SET
+                    email_change = :email_change,
+                    email_change_expires_at = :email_change_expires_at, 
+                    email_change_hash = :email_change_hash
+                    WHERE id = :id';
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':email_change', $data['email'], PDO::PARAM_STR);
+            $stmt->bindValue(':email_change_expires_at', date('Y-m-d H:i:s', $expiry_timestamp), PDO::PARAM_STR);
+            $stmt->bindValue(':email_change_hash', $hashed_token, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
 
             return $stmt->execute();
         }
@@ -268,6 +339,25 @@ class User extends \Core\Model
 
         if (preg_match('/.*\d+.*/i', $this->password_new) == 0) {
             $this->errors[] = 'Hasło musi zawierać jedną cyfrę';
+        }
+    }
+
+    /**
+     * Validate current property values, adding valiation error messages to the errors array property
+     *
+     * @return void
+     */
+    public function validateEmailChange($data)
+    {
+        // email address
+        if (filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false) {
+            $this->errors[] = 'Podaj adres email';
+        }
+        if (static::emailExists($data['email'], $this->id ?? null)) {
+            $this->errors[] = 'Podany email jest już zajęty';
+        }
+        if ($data['email'] != $data['email2']) {
+            $this->errors[] = 'Emaile różnią się';
         }
     }
 
@@ -457,6 +547,21 @@ class User extends \Core\Model
     }
 
     /**
+     * Send password reset instructions in an email to the user
+     *
+     * @return void
+     */
+    protected function sendEmailChangeEmail($data)
+    {
+        $url = 'http://' . $_SERVER['HTTP_HOST'] . '/settings/emailChange/' . $this->email_change_token;
+
+        $text = View::getTemplate('Settings/change_email.txt', ['url' => $url]);
+        $html = View::getTemplate('Settings/change_email.html', ['url' => $url]);
+
+        return Mail::send(Config::SMTP_FROM, $data['email'], 'Moje Finanse - Zmiana adresu email', $text, $html);
+    }
+
+    /**
      * Find a user model by password reset token and expiry
      *
      * @param string $token Password reset token sent to user
@@ -486,6 +591,43 @@ class User extends \Core\Model
 
             // Check password reset token hasn't expired
             if (strtotime($user->password_reset_expires_at) > time()) {
+
+                return $user;
+
+            }
+        }
+    }
+
+    /**
+     * Find a user model by password reset token and expiry
+     *
+     * @param string $token Password reset token sent to user
+     *
+     * @return mixed User object if found and the token hasn't expired, null otherwise
+     */
+    public static function findByEmailChange($token)
+    {
+        $token = new Token($token);
+        $hashed_token = $token->getHash();
+
+        $sql = 'SELECT * FROM users
+                WHERE email_change_hash = :token_hash';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':token_hash', $hashed_token, PDO::PARAM_STR);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt->execute();
+
+        $user = $stmt->fetch();
+
+        if ($user) {
+
+            // Check password reset token hasn't expired
+            if (strtotime($user->email_change_expires_at) > time()) {
 
                 return $user;
 
@@ -526,6 +668,23 @@ class User extends \Core\Model
         }
 
         return false;
+    }
+
+    public function changeEmail()
+    {
+        $sql = 'UPDATE users
+                SET email = email_change,
+                    email_change  = NULL,
+                    email_change_expires_at = NULL,
+                    email_change_hash = NULL
+                WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $stmt->execute();
     }
 
     /**
@@ -678,6 +837,15 @@ class User extends \Core\Model
             return $stmt->execute();
         }
 
+        return false;
+    }
+
+    public function updateProfileEmail($data) {
+        if ( $this->saveEmailChange($data) ) {
+            if ( $this->sendEmailChangeEmail($data) ) {
+                return true;
+            }
+        }
         return false;
     }
 

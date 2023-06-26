@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use \Core\View;
+use \App\Models\User;
 use \App\Flash;
 use \App\Auth;
 use \App\Models\IncomesCategoryAssignedToUsers;
@@ -57,6 +58,16 @@ class Settings extends Authenticated
         ]);
     }
 
+    /**
+     * Settings success page email change
+     *
+     * @return void
+     */
+    public function successEmailChangeAction()
+    {
+        View::renderTemplate('Settings/change_email_success.html');
+    }
+    
     /**
      * Settings update account informations
      * 
@@ -182,6 +193,97 @@ class Settings extends Authenticated
 
         echo json_encode($data);
         exit;
+    }
+
+    /**
+     * Settings update account informations
+     * 
+     * @return void
+     */
+    public function updateAccountEmailAction()
+    {
+
+        if ($this->user->updateProfileEmail($_POST)) {
+
+            Flash::addMessage("Sprawdź swoją skrzynkę pocztową na nowym adresie email");
+
+            $this->redirect('/settings/successEmailChange');
+
+        } else {
+
+            Flash::addMessage('Nie udało się zmienić adresu email i wysłać wiadomości', 'warning');
+
+            foreach ($this->user->errors as  $error) {
+                Flash::addMessage($error, 'warning');
+            }
+
+            $incomes_categories = IncomesCategoryAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+            $expenses_categories = ExpensesCategoryAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+            $payment_methods = PaymentMethodsAssignedToUsers::
+            getCategoriesAssignedToUser($_SESSION['user_id']);
+
+            View::renderTemplate('Settings/index.html', [
+                'user' => $this->user,
+                'incomes_categories' => $incomes_categories,
+                'expenses_categories' => $expenses_categories,
+                'payment_methods' => $payment_methods
+            ]);
+
+        }
+    }
+
+    /**
+     * Reset the user's password
+     *
+     * @return void
+     */
+    public function emailChangeAction()
+    {
+        $token = $this->route_params['token'];
+
+        $user = $this->getUserOrExit($token);
+
+        if ($user->changeEmail()) {
+
+            Flash::addMessage('Zmiana adresu email pomyślna');
+
+            Auth::logout();
+
+            View::renderTemplate('Settings/change_email_activation_success.html');
+
+        } else {
+
+            Flash::addMessage('Niepowodzenie, spróbuj zmienić adres email ponownie', 'warning');
+
+            View::renderTemplate('Settings/index.html');
+
+        }
+
+    }
+
+    /**
+     * Find the user model associated with the password reset token, or end the request with a message
+     *
+     * @param string $token Password reset token sent to user
+     *
+     * @return mixed User object if found and the token hasn't expired, null otherwise
+     */
+    protected function getUserOrExit($token)
+    {
+        $user = User::findByEmailChange($token);
+
+        if ($user) {
+
+            return $user;
+
+        } else {
+
+            View::renderTemplate('Settings/token_expired.html');
+            exit;
+
+        }
     }
 
     /**
