@@ -328,7 +328,8 @@
   {
     // Add Incomes Category
     document.getElementById("buttonAddIncomesCategory").
-    addEventListener("click", async () => {
+    addEventListener("click", async (event) => {
+      event.preventDefault();
 
       $("#modalAddCatNameIncomes").modal("hide");
 
@@ -373,7 +374,8 @@
 
     // Edit Incomes Category
     document.getElementById("buttonUpdateIncomesCategory")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
       
       let id = table_row.cells[1].textContent;
       let name = document.getElementById("floatingChgCatNameIncomes").value;
@@ -400,7 +402,8 @@
     // Remove Incomes Category
     // Check if removal category has transaction assigned, if not remove, if yes display confirmation
     document.getElementById("buttonRemoveIncomesCategory")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
 
       id_to_delete = table_row.cells[1].textContent;
       let force = 'n';
@@ -430,7 +433,8 @@
 
     // If removal category has transaction assigned, confirm removal
     document.getElementById("buttonRemoveIncomesCategoryAccept")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
 
       let force = 'y';
 
@@ -454,7 +458,8 @@
 
     // Add Expenses Category
     document.getElementById("buttonAddExpensesCategory")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
 
       $("#modalAddCatNameExpenses").modal("hide");
 
@@ -500,7 +505,8 @@
 
     // Edit Expenses Category
     document.getElementById("buttonUpdateExpensesCategory")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
 
       let id = table_row.cells[1].textContent;
       let name = document.getElementById("floatingChgCatNameExpenses").value;
@@ -528,7 +534,8 @@
     // Remove Expenses Category
     // Check if removal category has transaction assigned, if not remove, if yes display confirmation
     document.getElementById("buttonRemoveExpensesCategory")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
 
       id_to_delete = table_row.cells[1].textContent;
       let force = 'n';
@@ -559,7 +566,8 @@
 
     // If removal category has transaction assigned, confirm removal
     document.getElementById("buttonRemoveExpensesCategoryAccept")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
 
       let force = 'y';
 
@@ -583,7 +591,8 @@
 
     // Add Payment Method
     document.getElementById("buttonAddPaymentMethod")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
 
       $("#modalAddCatNamePayment").modal("hide");
 
@@ -629,7 +638,8 @@
 
     // Edit Payment Method
     document.getElementById("buttonUpdatePaymentMethod")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
       
       let id = table_row.cells[1].textContent;
       let name = document.getElementById("floatingChgCatNamePayment").value;
@@ -656,7 +666,8 @@
     // Remove Payment Method
     // Check if removal category has transaction assigned, if not remove, if yes display confirmation
     document.getElementById("buttonRemovePaymentMethod")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
 
       id_to_delete = table_row.cells[1].textContent;
       let force = 'n';
@@ -686,7 +697,8 @@
 
     // If removal category has transaction assigned, confirm removal
     document.getElementById("buttonRemovePaymentMethodAccept")
-    .addEventListener("click", async () => {
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
 
       let force = 'y';
 
@@ -893,118 +905,6 @@
           </div>
         </div>
 
-
-        <!-- <div
-          class="w-100 h2 mb-3 text-center bg-dark rounded text-secondary py-2 mt-3"
-        >
-          Opcje edycji
-        </div>
-        <hr class="hr-edit" />
-        <div class="w-100 h5 mb-2 text-center">zmiana nazwy kategorii</div>
-        <div class="row mb-3 row-edit">
-          <div
-            class="col-12 col-md-4 btn btn-primary py-2 btn-edit-first fw-bold"
-            href="#modalChgCatNameIncomes"
-            data-bs-toggle="modal"
-          >
-            Przychody
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-primary py-2 btn-edit-mid fw-bold"
-            href="#modalChgCatNameExpenses"
-            data-bs-toggle="modal"
-          >
-            Wydatki
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-primary py-2 btn-edit-last fw-bold"
-            href="#modalChgCatNamePayment"
-            data-bs-toggle="modal"
-          >
-            Sposoby płatności
-          </div>
-        </div>
-        <hr class="hr-edit" />
-        <div class="w-100 h5 mb-2 text-center">dodanie kategorii</div>
-        <div class="row mb-3 row-edit">
-          <div
-            class="col-12 col-md-4 btn btn-success py-2 btn-edit-first fw-bold"
-            href="#modalAddCatNameIncomes"
-            data-bs-toggle="modal"
-          >
-            Przychody
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-success py-2 btn-edit-mid fw-bold"
-            href="#modalAddCatNameExpenses"
-            data-bs-toggle="modal"
-          >
-            Wydatki
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-success py-2 btn-edit-last fw-bold"
-            href="#modalAddCatNamePayment"
-            data-bs-toggle="modal"
-          >
-            Sposoby płatności
-          </div>
-        </div>
-        <hr class="hr-edit" />
-        <div class="w-100 h5 mb-2 text-center">usuwanie kategorii</div>
-        <div class="row mb-3 row-edit">
-          <div
-            class="col-12 col-md-4 btn btn-danger py-2 btn-edit-first fw-bold"
-            href="#modalRemCatNameIncomes"
-            data-bs-toggle="modal"
-          >
-            Przychody
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-danger py-2 btn-edit-mid fw-bold"
-            href="#modalRemCatNameExpenses"
-            data-bs-toggle="modal"
-          >
-            Wydatki
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-danger py-2 btn-edit-last fw-bold"
-            href="#modalRemCatNamePayment"
-            data-bs-toggle="modal"
-          >
-            Sposoby płatności
-          </div>
-        </div>
-        <hr class="hr-edit" />
-        <div class="w-100 h5 mb-2 text-center">edycja konta</div>
-
-        {% if user.errors is not empty %}
-        <div class="w-100 h6 mb-2 text-center">
-            <p>Errors:</p>
-            <ul>
-                {% for error in user.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
-        <div class="row mb-3 row-edit">
-          <div
-            class="col-12 btn btn-warning text-white py-2 mb-2 fw-bold"
-            href="#modalEditAccount"
-            data-bs-toggle="modal"
-          >
-            <i class="icon-tools"></i>dane użytkownika
-          </div>
-          <div
-            class="col-12 btn btn-danger py-2 fw-bold"
-            href="#modalRemAccount"
-            data-bs-toggle="modal"
-          >
-            <i class="icon-cancel-squared"></i>usuń konto
-          </div>
-        </div> -->
-
       </div>
     </div>
   </main>
@@ -1023,23 +923,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formUpdateIncomeCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formUpdateIncomeCategory">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectChgCatNameIncomes"
-                name="id"
-              >
-                <option>wybierz</option>
-                {% for category in incomes_categories %}
-                  <option value="{{ category.id }}">
-                    {{ category.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectChgCatNameIncomes"
-                >Kategoria przychodów</label
-              > -->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1087,23 +972,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formUpdateExpenseCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formUpdateExpenseCategory">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectChgCatNameExpenses"
-                name="id"
-              >
-                <option selected>Wybierz kategorię</option>
-                {% for category in expenses_categories %}
-                  <option value="{{ category.id }}">
-                    {{ category.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectChgCatNameExpenses"
-                >Kategoria wydatków</label
-              > -->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1178,23 +1048,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formUpdatePaymentMethod" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formUpdatePaymentMethod">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectChgCatNamePayment"
-                name="id"
-              >
-                <option selected>Wybierz kategorię</option>
-                {% for methods in payment_methods %}
-                  <option value="{{ methods.id }}">
-                    {{ methods.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectChgCatNamePayment"
-                >Kategoria sposobów płatności</label
-              > -->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1244,7 +1099,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formAddIncomeCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formAddIncomeCategory">
             <div class="form-floating mb-3">
               <input
                 type="text"
@@ -1285,7 +1140,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formAddExpenseCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formAddExpenseCategory">
             <div class="form-floating mb-3">
 
               <input
@@ -1353,7 +1208,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formAddPaymentMethod" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formAddPaymentMethod">
             <div class="form-floating mb-3">
               <input
                 type="text"
@@ -1394,24 +1249,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemoveIncomeCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemoveIncomeCategory">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectRemCatNameIncomes"
-                name="id"
-              >
-                <option selected>Wybierz kategorię</option>
-                {% for category in incomes_categories %}
-                  <option value="{{ category.id }}">
-                    {{ category.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectRemCatNameIncomes"
-                >Kategoria przychodów</label
-              >                 placeholder="Salary"
-                value="Salary"-->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1448,23 +1287,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemoveExpenseCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemoveExpenseCategory">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectRemCatNameExpenses"
-                name="id"
-              >
-                <option selected>Wybierz kategorię</option>
-                {% for category in expenses_categories %}
-                  <option value="{{ category.id }}">
-                    {{ category.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectRemCatNameExpenses"
-                >Kategoria wydatków</label
-              > -->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1502,23 +1326,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemovePaymentMethod" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemovePaymentMethod">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectRemCatNamePayment"
-                name="id"
-              >
-                <option selected>Wybierz kategorię</option>
-                {% for methods in payment_methods %}
-                  <option value="{{ methods.id }}">
-                    {{ methods.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectRemCatNamePayment"
-                >Kategoria sposobów płatności</label
-              > -->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1556,7 +1365,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemoveIncomeCategoryAccept" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemoveIncomeCategoryAccept">
             <div class="form-floating mb-3 text-white fw-bold" id="RemoveIncomeCategoryAcceptNote">
             </div>
             <button
@@ -1587,7 +1396,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemoveExpenseCategoryAccept" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemoveExpenseCategoryAccept">
             <div class="form-floating mb-3">
               <div class="form-floating mb-3 text-white fw-bold" id="RemoveExpenseCategoryAcceptNote">
               </div>
@@ -1620,7 +1429,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemovePaymentMethodAccept" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemovePaymentMethodAccept">
             <div class="form-floating mb-3">
               <div class="form-floating mb-3" id="RemovePaymentMethodAcceptNote">
               </div>
