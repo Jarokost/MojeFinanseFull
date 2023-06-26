@@ -306,6 +306,7 @@
               id="editExpenseMethod"
               name="payment_method_assigned_to_user_id"
               >
+                <option>wybierz</option>
                 {% for methods in balance.expenses_payment_methods %}
                   <option value="{{ methods.id }}">
                       {{ methods.name }}
