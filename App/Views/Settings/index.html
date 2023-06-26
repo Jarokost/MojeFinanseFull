@@ -331,8 +331,6 @@
     addEventListener("click", async (event) => {
       event.preventDefault();
 
-      $("#modalAddCatNameIncomes").modal("hide");
-
       let name = document.getElementById("floatingAddCatNameIncomes").value;
 
       const inData = { name: name };
@@ -460,8 +458,6 @@
     document.getElementById("buttonAddExpensesCategory")
     .addEventListener("click", async (event) => {
       event.preventDefault();
-
-      $("#modalAddCatNameExpenses").modal("hide");
 
       let name = document.getElementById("floatingAddCatNameExpenses").value;
 
@@ -593,8 +589,6 @@
     document.getElementById("buttonAddPaymentMethod")
     .addEventListener("click", async (event) => {
       event.preventDefault();
-
-      $("#modalAddCatNamePayment").modal("hide");
 
       let name = document.getElementById("floatingAddCatNamePayment").value;
 
