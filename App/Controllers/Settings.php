@@ -164,6 +164,26 @@ class Settings extends Authenticated
         }
     }
 
+    public function checkIfOldPasswordCorrectAction()
+    {
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+
+        $user = $this->user->findByID($this->user->id);
+
+        if ($user) {
+            if (password_verify($post_fetch_promise['password'], $user->password_hash)) {
+                $data = true;
+            } else {
+                $data = false;
+            }
+        } else {
+            $data = false;
+        }
+
+        echo json_encode($data);
+        exit;
+    }
+
     /**
      * Settings remove account
      * 
