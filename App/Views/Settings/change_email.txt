@@ -1,0 +1,7 @@
+Zmiana adresu email do konta w serwisie Moje Finanse
+
+Proszę kliknij w poniższy link, aby aktywować nowy adres email.
+
+{{ url }}
+
+Jeżeli to nie Ty, proszę zignoruj i usuń tą wiadomość email

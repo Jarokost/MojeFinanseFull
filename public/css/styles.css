@@ -192,6 +192,7 @@ p {
 
 .signup-success {
   color: #93c01f;
+  background-color: #061c2d !important;
 }
 
 textarea {

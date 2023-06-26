@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Forgot password{% endblock %}
+
+{% block footer %}
+<script>
+    setTimeout(function(){
+        window.location = '/';
+      }, 5000);
+</script>
+{% endblock %}
+
+{% block body %}
+
+    <main class="container">
+        <div class="signup-success bg-light px-5 py-4 rounded">
+
+            <h1>Zmiana adresu email przebiegła pomyślenie</h1>
+
+            <p>Zostaniesz wylogowany i przeniesiony na stronę główną</a>.</p>
+
+        </div>
+    </main>
+
+{% endblock %}

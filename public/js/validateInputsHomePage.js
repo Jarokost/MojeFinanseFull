@@ -191,3 +191,10 @@ if( !document.querySelector(".logged-in-as") ) {
         $("#exampleModalToggle").modal("show");
     }, 15000);
 }
+
+document.getElementById("inputPasswordBtn").addEventListener('click', function () {
+    passShowHide(this.id);
+});
+document.getElementById("inputPasswordRegBtn").addEventListener('click', function () {
+    passShowHide(this.id);
+});

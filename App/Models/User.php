@@ -73,6 +73,27 @@ class User extends \Core\Model
     public $is_active;
 
     /**
+     * user table email_change
+     * 
+     * @var string
+     */
+    public $email_change;
+
+    /**
+     * user table email_change_expires_at
+     * 
+     * @var string
+     */
+    public $email_change_expires_at;
+
+    /**
+     * user table
+     * 
+     * @var string
+     */
+    public $email_change_hash;
+
+    /**
      * user remember token
      * 
      * @var string
@@ -113,6 +134,27 @@ class User extends \Core\Model
      * @var string
      */
     private $activation_token;
+
+    /**
+     * user email_change_token
+     * 
+     * @var string
+     */
+    private $email_change_token;
+
+    /**
+     * user password_new
+     * 
+     * @var string
+     */
+    private $password_new;
+
+    /**
+     * user email_new
+     * 
+     * @var string
+     */
+    private $email_new;
 
     /**
      * Class constructor
@@ -180,6 +222,42 @@ class User extends \Core\Model
     }
 
     /**
+     * Save the user model with the current property values
+     *
+     * @return boolean  True if the user was saved, false otherwise
+     */
+    public function saveEmailChange($data)
+    {
+        $this->validateEmailChange($data);
+
+        if (empty($this->errors)) {
+
+            $token = new Token();
+            $hashed_token = $token->getHash();
+			$this->email_change_token = $token->getValue();
+            $expiry_timestamp = time() + 60 * 15;  // 15 minutes from now
+            $sql = 'UPDATE users
+                    SET
+                    email_change = :email_change,
+                    email_change_expires_at = :email_change_expires_at, 
+                    email_change_hash = :email_change_hash
+                    WHERE id = :id';
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':email_change', $data['email'], PDO::PARAM_STR);
+            $stmt->bindValue(':email_change_expires_at', date('Y-m-d H:i:s', $expiry_timestamp), PDO::PARAM_STR);
+            $stmt->bindValue(':email_change_hash', $hashed_token, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            return $stmt->execute();
+        }
+
+        return false;
+    }
+
+    /**
      * Validate current property values, adding valiation error messages to the errors array property
      *
      * @return void
@@ -187,10 +265,48 @@ class User extends \Core\Model
     public function validate()
     {
         // name
+        $this->validateName();
+
+        // email address
+        $this->validateEmail();
+
+        // Password
+        if (isset($this->password)) {
+
+            if (strlen($this->password) < 6) {
+                $this->errors[] = 'Hasło musi zawierać 6 znaków';
+            }
+    
+            if (preg_match('/.*[a-z]+.*/i', $this->password) == 0) {
+                $this->errors[] = 'Hasło musi zawierać jedną literę';
+            }
+    
+            if (preg_match('/.*\d+.*/i', $this->password) == 0) {
+                $this->errors[] = 'Hasło musi zawierać jedną cyfrę';
+            }
+        }
+    }
+
+    /**
+     * Validate current property values, adding valiation error messages to the errors array property
+     *
+     * @return void
+     */
+    public function validateName()
+    {
+        // name
         if (strlen($this->name) < 2) {
             $this->errors[] = 'Imię musi składać się przynajmniej z 2 znaków';
         }
+    }
 
+    /**
+     * Validate current property values, adding valiation error messages to the errors array property
+     *
+     * @return void
+     */
+    public function validateEmail()
+    {
         // email address
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
             $this->errors[] = 'Podaj adres email';
@@ -198,21 +314,50 @@ class User extends \Core\Model
         if (static::emailExists($this->email, $this->id ?? null)) {
             $this->errors[] = 'Podany email jest już zajęty';
         }
+    }
 
-        // Password
-        if (isset($this->password)) {
+    /**
+     * Validate current property values, adding valiation error messages to the errors array property
+     *
+     * @return void
+     */
+    public function validatePasswordChange()
+    {
+        $user = static::findByID($this->id);
 
-            if (strlen($this->password) < 6) {
-                $this->errors[] = 'Hasło musi składać się przynajmniej z 6 znaków';
-            }
+        if (!password_verify($this->password, $user->password_hash)) {
+            $this->errors[] = 'Aktualne hasło niepoprawne';
+        }
 
-            if (preg_match('/.*[a-z]+.*/i', $this->password) == 0) {
-                $this->errors[] = 'Hasło musi zawierać przynajmniej jedną literę';
-            }
+        if (strlen($this->password_new) < 6) {
+            $this->errors[] = 'Hasło musi zawierać 6 znaków';
+        }
 
-            if (preg_match('/.*\d+.*/i', $this->password) == 0) {
-                $this->errors[] = 'Hasło musi zawierać przynajmniej jedną cyfrę';
-            }
+        if (preg_match('/.*[a-z]+.*/i', $this->password_new) == 0) {
+            $this->errors[] = 'Hasło musi zawierać jedną literę';
+        }
+
+        if (preg_match('/.*\d+.*/i', $this->password_new) == 0) {
+            $this->errors[] = 'Hasło musi zawierać jedną cyfrę';
+        }
+    }
+
+    /**
+     * Validate current property values, adding valiation error messages to the errors array property
+     *
+     * @return void
+     */
+    public function validateEmailChange($data)
+    {
+        // email address
+        if (filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false) {
+            $this->errors[] = 'Podaj adres email';
+        }
+        if (static::emailExists($data['email'], $this->id ?? null)) {
+            $this->errors[] = 'Podany email jest już zajęty';
+        }
+        if ($data['email'] != $data['email2']) {
+            $this->errors[] = 'Emaile różnią się';
         }
     }
 
@@ -402,6 +547,21 @@ class User extends \Core\Model
     }
 
     /**
+     * Send password reset instructions in an email to the user
+     *
+     * @return void
+     */
+    protected function sendEmailChangeEmail($data)
+    {
+        $url = 'http://' . $_SERVER['HTTP_HOST'] . '/settings/emailChange/' . $this->email_change_token;
+
+        $text = View::getTemplate('Settings/change_email.txt', ['url' => $url]);
+        $html = View::getTemplate('Settings/change_email.html', ['url' => $url]);
+
+        return Mail::send(Config::SMTP_FROM, $data['email'], 'Moje Finanse - Zmiana adresu email', $text, $html);
+    }
+
+    /**
      * Find a user model by password reset token and expiry
      *
      * @param string $token Password reset token sent to user
@@ -431,6 +591,43 @@ class User extends \Core\Model
 
             // Check password reset token hasn't expired
             if (strtotime($user->password_reset_expires_at) > time()) {
+
+                return $user;
+
+            }
+        }
+    }
+
+    /**
+     * Find a user model by password reset token and expiry
+     *
+     * @param string $token Password reset token sent to user
+     *
+     * @return mixed User object if found and the token hasn't expired, null otherwise
+     */
+    public static function findByEmailChange($token)
+    {
+        $token = new Token($token);
+        $hashed_token = $token->getHash();
+
+        $sql = 'SELECT * FROM users
+                WHERE email_change_hash = :token_hash';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':token_hash', $hashed_token, PDO::PARAM_STR);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt->execute();
+
+        $user = $stmt->fetch();
+
+        if ($user) {
+
+            // Check password reset token hasn't expired
+            if (strtotime($user->email_change_expires_at) > time()) {
 
                 return $user;
 
@@ -471,6 +668,23 @@ class User extends \Core\Model
         }
 
         return false;
+    }
+
+    public function changeEmail()
+    {
+        $sql = 'UPDATE users
+                SET email = email_change,
+                    email_change  = NULL,
+                    email_change_expires_at = NULL,
+                    email_change_hash = NULL
+                WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $stmt->execute();
     }
 
     /**
@@ -561,6 +775,77 @@ class User extends \Core\Model
             return $stmt->execute();
         }
 
+        return false;
+    }
+
+    /**
+     * Update the user's profile
+     *
+     * @param array $data Data from the edit profile form
+     *
+     * @return boolean  True if the data was updated, false otherwise
+     */
+    public function updateProfileName($data)
+    {
+        $this->name = $data['name'];
+
+        if (empty($this->errors)) {
+
+            $sql = 'UPDATE users
+                    SET name = :name
+                    WHERE id = :id';
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':name', $this->name, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            return $stmt->execute();
+        }
+
+        return false;
+    }
+
+     /**
+     * Update the user's profile
+     *
+     * @param array $data Data from the edit profile form
+     *
+     * @return boolean  True if the data was updated, false otherwise
+     */
+    public function updateProfilePassword($data)
+    {
+        $this->password = $data['passwordCurrent'];
+        $this->password_new = $data['passwordNew'];
+
+        $this->validatePasswordChange();
+
+        if (empty($this->errors)) {
+
+            $sql = 'UPDATE users
+                    SET password_hash = :password_hash
+                    WHERE id = :id';
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+            $password_hash = password_hash($this->password_new, PASSWORD_DEFAULT);
+            $stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
+
+            return $stmt->execute();
+        }
+
+        return false;
+    }
+
+    public function updateProfileEmail($data) {
+        if ( $this->saveEmailChange($data) ) {
+            if ( $this->sendEmailChangeEmail($data) ) {
+                return true;
+            }
+        }
         return false;
     }
 
