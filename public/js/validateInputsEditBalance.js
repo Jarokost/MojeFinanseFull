@@ -1,14 +1,14 @@
 function validateEditExpenseFormOnSubmit() {
 
-    let amountNotValid = validateAmountInput(document.getElementById("editExpenseAmount"));
-    let dateNotValid = validateDateInput(document.getElementById("editExpenseDate"));
-    let categoryNotValid = validateCategoryInput(document.getElementById("editExpenseCategory"));
-    let methodNotValid = validateMethodInput(document.getElementById("editExpenseMethod"));
+    let amountValid = validateAmountInput(document.getElementById("editExpenseAmount"));
+    let dateValid = validateDateInput(document.getElementById("editExpenseDate"));
+    let categoryValid = validateCategoryInput(document.getElementById("editExpenseCategory"));
+    let methodValid = validateMethodInput(document.getElementById("editExpenseMethod"));
 
-    if ( amountNotValid || dateNotValid || categoryNotValid || methodNotValid ) {
-        return false;
-    } else {
+    if ( amountValid && dateValid && categoryValid && methodValid ) {
         return true;
+    } else {
+        return false;
     }
 }
 
@@ -46,14 +46,14 @@ document.getElementById("editExpenseMethod").addEventListener('focusout', functi
 
 function validateEditIncomeFormOnSubmit() {
 
-  let amountNotValid = validateAmountInput(document.getElementById("editIncomeAmount"));
-  let dateNotValid = validateDateInput(document.getElementById("editIncomeDate"));
-  let categoryNotValid = validateCategoryInput(document.getElementById("editIncomeCategory"));
+  let amountValid = validateAmountInput(document.getElementById("editIncomeAmount"));
+  let dateValid = validateDateInput(document.getElementById("editIncomeDate"));
+  let categoryValid = validateCategoryInput(document.getElementById("editIncomeCategory"));
 
-  if ( amountNotValid || dateNotValid || categoryNotValid ) {
-      return false;
-  } else {
+  if ( amountValid && dateValid && categoryValid ) {
       return true;
+  } else {
+      return false;
   }
 }
 

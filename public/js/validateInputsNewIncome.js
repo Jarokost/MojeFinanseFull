@@ -1,13 +1,13 @@
 function validateNewIncomeFormOnSubmit() {
 
-    let amountNotValid = validateAmountInput(document.getElementById("floatingInputKwota"));
-    let dateNotValid = validateDateInput(document.getElementById("floatingDate"));
-    let categoryNotValid = validateCategoryInput(document.getElementById("floatingSelect"));
+    let amountValid = validateAmountInput(document.getElementById("floatingInputKwota"));
+    let dateValid = validateDateInput(document.getElementById("floatingDate"));
+    let categoryValid = validateCategoryInput(document.getElementById("floatingSelect"));
 
-    if ( amountNotValid || dateNotValid || categoryNotValid ) {
-        return false;
-    } else {
+    if ( amountValid && dateValid && categoryValid ) {
         return true;
+    } else {
+        return false;
     }
 }
 
@@ -36,8 +36,7 @@ document.getElementById("floatingSelect").addEventListener('focusout', function 
 });
 
 document.getElementById("formAddIncome").addEventListener('submit', (event) => {
-    if (validateNewIncomeFormOnSubmit() === true) {
-    } else {
+    if (!validateNewIncomeFormOnSubmit()) {
         event.preventDefault();
     }
 });

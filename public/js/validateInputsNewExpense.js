@@ -1,14 +1,14 @@
 function validateNewExpenseFormOnSubmit() {
 
-    let amountNotValid = validateAmountInput(document.getElementById("floatingInputKwota"));
-    let dateNotValid = validateDateInput(document.getElementById("floatingDate"));
-    let categoryNotValid = validateCategoryInput(document.getElementById("floatingSelect"));
-    let methodNotValid = validateMethodInput(document.getElementById("floatingSelectMethod"));
+    let amountValid = validateAmountInput(document.getElementById("floatingInputKwota"));
+    let dateValid = validateDateInput(document.getElementById("floatingDate"));
+    let categoryValid = validateCategoryInput(document.getElementById("floatingSelect"));
+    let methodValid = validateMethodInput(document.getElementById("floatingSelectMethod"));
 
-    if ( amountNotValid || dateNotValid || categoryNotValid || methodNotValid ) {
-        return false;
-    } else {
+    if ( amountValid && dateValid && categoryValid && methodValid ) {
         return true;
+    } else {
+        return false;
     }
 }
 
@@ -45,8 +45,7 @@ document.getElementById("floatingSelectMethod").addEventListener('focusout', fun
 });
 
 document.getElementById("formAddExpense").addEventListener('submit', (event) => {
-    if (validateNewExpenseFormOnSubmit() === true) {
-    } else {
+    if (!validateNewExpenseFormOnSubmit()) {
         event.preventDefault();
     }
 });
