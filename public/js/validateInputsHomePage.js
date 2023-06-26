@@ -133,7 +133,7 @@ function validateLoginFormOnSubmit() {
 
 // Registration Form
 document.getElementById("inputNameReg").addEventListener('focusout', function () {
-    if ( validateNameInputRegistration(this) ) {
+    if ( !validateNameInputRegistration(this) ) {
         this.addEventListener('input', function () {
             validateNameInputRegistration(this);
         });
@@ -141,7 +141,7 @@ document.getElementById("inputNameReg").addEventListener('focusout', function ()
 });
 
 document.getElementById("inputPasswordReg").addEventListener('focusout', function () {
-    if ( validatePasswordInputRegistration(this) ) {
+    if ( !validatePasswordInputRegistration(this) ) {
         this.addEventListener('input', function () {
             validatePasswordInputRegistration(this);
         });
@@ -164,7 +164,7 @@ document.getElementById("formSignup").addEventListener('submit', (event) => {
 
 // Login form
 document.getElementById("inputPassword").addEventListener('focusout', function () {
-    if ( validatePasswordInputLogin(this) ) {
+    if ( !validatePasswordInputLogin(this) ) {
         this.addEventListener('input', function () {
             validatePasswordInputLogin(this);
         });
@@ -172,7 +172,7 @@ document.getElementById("inputPassword").addEventListener('focusout', function (
 });
 
 document.getElementById("inputEmail").addEventListener('focusout', function () {
-    if ( validateEmailInputLogin(this) ) {
+    if ( !validateEmailInputLogin(this) ) {
         this.addEventListener('input', function () {
             validateEmailInputLogin(this);
         });

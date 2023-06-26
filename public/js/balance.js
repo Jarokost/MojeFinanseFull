@@ -124,10 +124,26 @@ const updateGraphsData = async () => {
 
 }
 
+// never submit modal form
 document.getElementById("formEditExpense").addEventListener("submit", (event) => {event.preventDefault()});
 document.getElementById("formEditIncome").addEventListener("submit", (event) => {event.preventDefault()});
 document.getElementById("formRemoveExpense").addEventListener("submit", (event) => {event.preventDefault()});
 document.getElementById("formRemoveIncome").addEventListener("submit", (event) => {event.preventDefault()});
+
+// make modal inputs validation when displayed, to clear validation errors, remove event listener on input change
+document.getElementById("modalEditExpense").addEventListener("shown.bs.modal", function() {
+  document.getElementById("editExpenseAmount").removeEventListener('input', function() {});
+  document.getElementById("editExpenseDate").removeEventListener('input', function() {});
+  document.getElementById("editExpenseCategory").removeEventListener('input', function() {});
+  document.getElementById("editExpenseMethod").removeEventListener('input', function() {});
+  validateEditExpenseFormOnSubmit();
+});
+document.getElementById("modalEditIncome").addEventListener("shown.bs.modal", function() {
+  document.getElementById("editIncomeAmount").removeEventListener('input', function() {});
+  document.getElementById("editIncomeDate").removeEventListener('input', function() {});
+  document.getElementById("editIncomeCategory").removeEventListener('input', function() {});
+  validateEditIncomeFormOnSubmit();
+});
 
 window.addEventListener('load', function () {
   updateGraphsData();
@@ -164,6 +180,9 @@ document.querySelector("button.button-expense-change")
 
   if ( validateEditExpenseFormOnSubmit() ) {
 
+    // const myModal = document.querySelector('#modalEditExpense');
+    // const modal = new bootstrap.Modal(myModal);
+    // modal.hide();// it is asynchronous
     $("#modalEditExpense").modal("hide");
     
     let id = document.getElementById("editExpenseId").value;

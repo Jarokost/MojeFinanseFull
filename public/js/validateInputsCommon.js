@@ -2,15 +2,15 @@ function validateAmountInput(amountInput) {
     if ( amountInput.value === '' ) {
         amountInput.classList.add('is-invalid');
         document.getElementById(amountInput.id + 'Label').textContent = 'Podaj kwotę!';
-        return true;
+        return false;
     } else if ( amountInput.value <= 0.00 || amountInput.value > 999999.99 ) {
         amountInput.classList.add('is-invalid');
         document.getElementById(amountInput.id + 'Label').textContent = 'kwota poza zakresem 0.01-999999.99!';
-        return true;
+        return false;
     } else {
         amountInput.classList.remove('is-invalid');
         document.getElementById(amountInput.id + 'Label').textContent = 'Kwota [PLN]';
-        return false;
+        return true;
     }
 }
 
@@ -20,15 +20,15 @@ function validateDateInput(dateInput) {
     if ( dateInput.value === '' ) {
         dateInput.classList.add('is-invalid');
         document.getElementById(dateInput.id + 'Label').textContent = 'Podaj datę!';
-        return true;
+        return false;
     } else if ( !regexpDate.test(dateInput.value) ) {
         dateInput.classList.add('is-invalid');
         document.getElementById(dateInput.id + 'Label').textContent = 'Nieporawny format daty rrrr-mm-dd!';
-        return true;
+        return false;
     } else {
         dateInput.classList.remove('is-invalid');
         document.getElementById(dateInput.id + 'Label').textContent = 'Data';
-        return false;
+        return true;
     }
 }
 
@@ -36,15 +36,15 @@ function validateCategoryInput(categoryInput) {
     if ( categoryInput.value === '' ) {
         categoryInput.classList.add('is-invalid');
         document.getElementById(categoryInput.id + 'Label').textContent = 'Wybierz kategorię!';
-        return true;
+        return false;
     } else if ( categoryInput.value === 'wybierz' ) {
         categoryInput.classList.add('is-invalid');
         document.getElementById(categoryInput.id + 'Label').textContent = 'Wybierz kategorię!';
-        return true;
+        return false;
     } else {
         categoryInput.classList.remove('is-invalid');
         document.getElementById(categoryInput.id + 'Label').textContent = 'Kategoria';
-        return false;
+        return true;
     }
 }
 
@@ -52,14 +52,14 @@ function validateMethodInput(methodInput) {
     if ( methodInput.value === '' ) {
         methodInput.classList.add('is-invalid');
         document.getElementById(methodInput.id + 'Label').textContent = 'Wybierz metodę płatności!';
-        return true;
+        return false;
     } else if ( methodInput.value === 'wybierz' ) {
         methodInput.classList.add('is-invalid');
         document.getElementById(methodInput.id + 'Label').textContent = 'Wybierz metodę płatności!';
-        return true;
+        return false;
     } else {
         methodInput.classList.remove('is-invalid');
         document.getElementById(methodInput.id + 'Label').textContent = 'Metoda płatności';
-        return false;
+        return true;
     }
 }
