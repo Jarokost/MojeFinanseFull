@@ -161,17 +161,26 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
      * 
      * @return void
      */
-    public static function updateCategory($id, $name)
+    public static function updateCategory($id, $name, $limit_value)
     {
         $sql = 'UPDATE expenses_category_assigned_to_users
-                SET name = :name
-                WHERE id = :id'; 
+                SET name = :name';
+
+        if (isset($limit_value)) {
+            $sql .= ',
+            limit_value = :limit_value';
+        }
+
+        $sql .= "\nWHERE id = :id";
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
 
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+        if (isset($limit_value)) {
+            $stmt->bindValue(':limit_value', $limit_value, PDO::PARAM_STR);
+        }
 
         $stmt->execute();
     }
