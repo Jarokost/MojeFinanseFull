@@ -33,7 +33,14 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
      * @var string
      */
     public $name;
-    
+
+    /**
+     * expenses_category_assigned_to_users table limit_value
+     * 
+     * @var float
+     */
+    public $limit_value;
+
     public static function getCategoriesAssignedToUser($user_id)
     {
         $sql = 'SELECT * FROM expenses_category_assigned_to_users
