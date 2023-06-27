@@ -184,16 +184,3 @@ document.getElementById("formLogin").addEventListener('submit', (event) => {
         event.preventDefault();
     }
 });
-
-if( !document.querySelector(".logged-in-as") ) {
-    setTimeout(function(){
-        $("#exampleModalToggle").modal("show");
-    }, 15000);
-}
-
-document.getElementById("inputPasswordBtn").addEventListener('click', function () {
-    passShowHide(this.id);
-});
-document.getElementById("inputPasswordRegBtn").addEventListener('click', function () {
-    passShowHide(this.id);
-});

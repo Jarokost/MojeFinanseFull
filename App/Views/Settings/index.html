@@ -7,706 +7,10 @@
 {% endblock %}
 
 {% block footer %}
-<script src="/js/app.js"></script>
-
 <script src="/js/passShowHide.js"></script>
-
-<script>
-
-  var flash_message_id = 0;
-  let id_to_delete = 0;
-  let table_row = null;
-
-  setTimeout(function(){
-        $('.flash_messages').remove();
-      }, 5000);
-
-  function updateIncomesCategoryList(data)
-  {
-    let table_rows = document.querySelectorAll("#tableIncomesCategories tr");
-    for(let i = 0; i<table_rows.length; i++) {
-      table_rows[i].remove();
-    }
-    
-    let table_body = document.querySelector("#tableIncomesCategories tbody");
-    for (let i = 0; i < data.categories.length; i++) {
-      table_body.insertAdjacentHTML( "beforeend", `
-        <tr>
-          <td>${data.categories[i].name}</td>
-          <td hidden>${data.categories[i].id}</td>
-          <td href="#modalChgCatNameIncomes" data-bs-toggle="modal">
-            <a class="dropdown-item editingTRbutton">
-              <i class="icon-pencil"></i>
-            </a>
-          </td>
-          <td href="#modalRemCatNameIncomes" data-bs-toggle="modal">
-            <a class="dropdown-item removingTRbutton">
-              <i class="icon-trash"></i>
-            </a></a>
-          </td>
-        </tr>`);
-    }
-  }
-
-  function updateExpensesCategoryList(data)
-  {
-    let table_rows = document.querySelectorAll("#tableExpensesCategories tr");
-    for(let i = 0; i<table_rows.length; i++) {
-      table_rows[i].remove();
-    }
-
-    let table_body = document.querySelector("#tableExpensesCategories tbody");
-    for (let i = 0; i < data.categories.length; i++) {
-      table_body.insertAdjacentHTML( "beforeend", `
-        <tr>
-          <td class="expenses-limit">
-            ${data.categories[i].name}
-            </br>
-            <small class="text-muted">limit: 9999.99</small>
-          </td>
-          <td hidden>${data.categories[i].id}</td>
-          <td href="#modalChgCatNameExpenses" data-bs-toggle="modal">
-            <a class="dropdown-item editingTRbutton">
-              <i class="icon-pencil"></i>
-            </a>
-          </td>
-          <td href="#modalRemCatNameExpenses" data-bs-toggle="modal">
-            <a class="dropdown-item removingTRbutton">
-              <i class="icon-trash"></i>
-            </a></a>
-          </td>
-        </tr>
-      `);
-    }
-  }
-
-  function updatePaymentMethodsList(data)
-  {
-    let table_rows = document.querySelectorAll("#tablePaymentMethods tr");
-    for(let i = 0; i<table_rows.length; i++) {
-      table_rows[i].remove();
-    }
-
-    let table_body = document.querySelector("#tablePaymentMethods tbody");
-    for (let i = 0; i < data.categories.length; i++) {
-      table_body.insertAdjacentHTML( "beforeend", `
-        <tr>
-          <td>${data.categories[i].name}</td>
-          <td hidden>${data.categories[i].id}</td>
-          <td href="#modalChgCatNamePayment" data-bs-toggle="modal">
-            <a class="dropdown-item editingTRbutton">
-              <i class="icon-pencil"></i>
-            </a>
-          </td>
-          <td href="#modalRemCatNamePayment" data-bs-toggle="modal">
-            <a class="dropdown-item removingTRbutton">
-              <i class="icon-trash"></i>
-            </a></a>
-          </td>
-        </tr>
-      `);
-    }
-  }
-
-  function printFlashMessages(data)
-  {
-    // remove flash messages
-    //$(".alert").remove();
-    var flash_id;
-    // print new alerts
-    for (var i = 0; i< data.flash_message_body.length; i++) {
-      flash_id = 'flash_message_id' + flash_message_id;
-      $(".flash_messages_print_from_ajax").append('<div id="' + flash_id + '" class="alert alert-' + data.flash_message_type[0] + '">'
-                                + data.flash_message_body[0] +
-                              '</div>');
-      setTimeout(function(){
-        $('#' + flash_id).remove();
-      }, 8000);
-
-      flash_message_id++;
-    }
-  }
-
-  function polishEnding(number) {
-    if ( number < 5 ) {
-      return 'e';
-    } else if ( number >= 5 && number < 20 ) {
-      return 'i';
-    } else {
-      let mod = number % 10;
-      if ( (mod >= 0 && mod <= 1) || (mod >= 5 && mod <= 9) ) {
-        return 'i';
-      } else {
-        return 'e';
-      }
-    }
-  }
-
-  // change password validation functions
-  let passwordOldValid;
-  function validateNewPassword(passwordInput) {
-    const regexpLetter = /.*[a-zA-Z]+.*/;
-    const regexpNumber = /.*\d+.*/;
-
-    if ( passwordInput.value.length < 6 ) {
-      passwordInput.classList.add('is-invalid');
-      document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło musi zawierać min. 6 znaków!';
-      return false;
-    } else if (!regexpLetter.test(passwordInput.value)) {
-      passwordInput.classList.add('is-invalid');
-      document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło musi zawierać conajmniej jedną literę!';
-      return false;
-    } else if (!regexpNumber.test(passwordInput.value)) {
-      passwordInput.classList.add('is-invalid');
-      document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło musi zawierać conajmniej jedną cyfrę!';
-      return false;
-    } else {
-      passwordInput.classList.remove('is-invalid');
-      document.getElementById(passwordInput.id + 'Label').textContent = 'Hasło';
-      return true;
-    }
-  }
-  function validateOldPassword(passwordInput, data) {
-    if (data === false) {
-      passwordInput.classList.add('is-invalid');
-      document.getElementById(passwordInput.id + 'Label').textContent = 'Podane hasło jest nieprawidłowe!';
-      return false;
-    } else {
-      passwordInput.classList.remove('is-invalid');
-      document.getElementById(passwordInput.id + 'Label').textContent = 'Podaj aktualne hasło';
-      return true;
-    }
-  }
-  async function getPasswordIsValid(passwordInput) {
-    let password = passwordInput.value;
-
-    const inData = { password: password };
-
-    try { 
-      const res = await fetch(`/Settings/checkIfOldPasswordCorrect`, {
-          method: 'post',
-          body: JSON.stringify(inData)
-      })
-      const data = await res.json();
-      passwordOldValid = validateOldPassword(passwordInput, data);
-    } catch (e) {
-      console.log('ERROR: ', e);
-    }
-  }
-  function validatePasswordChangeFormOnSubmit() {
-
-    getPasswordIsValid(document.getElementById("inputPasswordCurrent"));
-    let passwordNewValid = validateNewPassword(document.getElementById("inputPasswordNew"));
-
-    console.log(passwordOldValid, passwordNewValid);
-    if ( passwordOldValid && passwordNewValid ) {
-        return true;
-    } else {
-        return false;
-    }
-  }
-
-  // change password validation events
-  document.getElementById("inputPasswordCurrent").addEventListener('focusout', function () {
-    getPasswordIsValid(this);
-  });
-  document.getElementById("inputPasswordNew").addEventListener('focusout', function () {
-    if ( !validateNewPassword(this) ) {
-      this.addEventListener('input', function () {
-        validateNewPassword(this);
-      });
-    }
-  });
-  document.getElementById("formUpdateAccountPassword").addEventListener('submit', (event) => {
-    if (!validatePasswordChangeFormOnSubmit()) {
-        event.preventDefault();
-    }
-  });
-
-  // change email validation functions
-  let emailValid;
-  const getEmailIsValid = async (emailInput) => {
-      const inData = {
-          email: emailInput.value
-      };
-
-      try { 
-          const res = await fetch(`/Account/validateEmail`, {
-              method: 'post',
-              body: JSON.stringify(inData)
-          })
-          const data = await res.json();
-          emailValid = validateEmailInput(emailInput, data);
-      } catch (e) {
-          console.log('ERROR: ', e);
-      }
-  }
-  function validateEmailInput(emailInput, emailIsNotValid) {
-    const regexpEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if ( emailInput.value === '' ) {
-      emailInput.classList.add('is-invalid');
-      document.getElementById(emailInput.id + 'Label').textContent = 'Podaj adres email!';
-      return false;
-    } else if (!regexpEmail.test(emailInput.value)) {
-      emailInput.classList.add('is-invalid');
-      document.getElementById(emailInput.id + 'Label').textContent = 'Adres email jest niepoprawny!';
-      return false;
-    } else if (!emailIsNotValid) {
-      emailInput.classList.add('is-invalid');
-      document.getElementById(emailInput.id + 'Label').textContent = 'Adres email jest zajęty!';
-      return false;
-    } else {
-      emailInput.classList.remove('is-invalid');
-      document.getElementById(emailInput.id + 'Label').textContent = 'Adres email';
-      return true;
-    }
-  }
-  function validateEmail2Input(emailInput, emailInput2) {
-    const regexpEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if ( emailInput.value === '' ) {
-      emailInput.classList.add('is-invalid');
-      document.getElementById(emailInput.id + 'Label').textContent = 'Podaj adres email!';
-      return false;
-    } else if ( emailInput.value != emailInput2.value ) {
-      emailInput.classList.add('is-invalid');
-      document.getElementById(emailInput.id + 'Label').textContent = 'Podane adresy różnią się!';
-      return false;
-    } else {
-      emailInput.classList.remove('is-invalid');
-      document.getElementById(emailInput.id + 'Label').textContent = 'Adres email';
-      return true;
-    }
-  }
-  function validateNewEmailFormOnSubmit() {
-
-    getEmailIsValid(document.getElementById("inputEmail"));
-    let email2Valid = validateEmail2Input(document.getElementById("inputEmail2"), document.getElementById("inputEmail"));
-
-    if ( emailValid && email2Valid ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // change email validation events
-  document.getElementById("inputEmail").addEventListener('focusout', function () {
-    if ( getEmailIsValid(this) ) {
-      this.addEventListener('input', function () {
-          getEmailIsValid(this);
-      });
-    }
-  });
-  document.getElementById("inputEmail2").addEventListener('focusout', function () {
-    let emailNew = document.getElementById("inputEmail");
-    if ( !validateEmail2Input(this, emailNew) ) {
-      this.addEventListener('input', function () {
-        validateEmail2Input(this, emailNew);
-      });
-    }
-  });
-  document.getElementById("formUpdateAccountEmail").addEventListener('submit', (event) => {
-    if (!validateNewEmailFormOnSubmit()) {
-      event.preventDefault();
-    }
-  });
-
-  // passShowHide
-  document.getElementById("inputPasswordNewBtn").addEventListener('click', function () {
-    passShowHide(this.id);
-  });
-  document.getElementById("inputPasswordCurrentBtn").addEventListener('click', function () {
-    passShowHide(this.id);
-  });
-
-  // modal actions - Add, Change, Remove Categories
-  {
-    // Add Incomes Category
-    document.getElementById("buttonAddIncomesCategory").
-    addEventListener("click", async () => {
-
-      $("#modalAddCatNameIncomes").modal("hide");
-
-      let name = document.getElementById("floatingAddCatNameIncomes").value;
-
-      const inData = { name: name };
-
-      try { 
-        const res = await fetch(`/Settings/addIncomeCategory`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updateIncomesCategoryList(data);
-        document.getElementById("floatingAddCatNameIncomes").value = '';
-        printFlashMessages(data);
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-
-    // Select row from table
-    document.getElementById("tableIncomesCategories")
-    .addEventListener("click", function(ele) {
-
-      if( ele.srcElement.cellIndex < 2 ) {
-        return;
-      } else if (ele.target.className === "icon-trash") {
-        table_row = ele.target.parentNode.parentNode.parentNode;
-        document.getElementById("floatingRemCatNameIncomes").value = table_row.cells[0].textContent;
-      } else if (ele.target.className === "icon-pencil") {
-        table_row = ele.target.parentNode.parentNode.parentNode;
-        document.getElementById("floatingChgCatNameIncomesCurrent").value = table_row.cells[0].textContent;
-      } else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
-        table_row = ele.target.parentNode;
-        document.getElementById("floatingRemCatNameIncomes").value = table_row.cells[0].textContent;
-      } else if (ele.target.childNodes[1].childNodes[1].className === "icon-pencil") {
-        table_row = ele.target.parentNode;
-        document.getElementById("floatingChgCatNameIncomesCurrent").value = table_row.cells[0].textContent;
-      }
-    });
-
-    // Edit Incomes Category
-    document.getElementById("buttonUpdateIncomesCategory")
-    .addEventListener("click", async () => {
-      
-      let id = table_row.cells[1].textContent;
-      let name = document.getElementById("floatingChgCatNameIncomes").value;
-
-      let inData = {
-        id: id,
-        name: name
-      };
-
-      try { 
-        const res = await fetch(`/Settings/updateIncomeCategory`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updateIncomesCategoryList(data);
-        document.getElementById("floatingChgCatNameIncomes").value = '';
-        printFlashMessages(data);
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-
-    // Remove Incomes Category
-    // Check if removal category has transaction assigned, if not remove, if yes display confirmation
-    document.getElementById("buttonRemoveIncomesCategory")
-    .addEventListener("click", async () => {
-
-      id_to_delete = table_row.cells[1].textContent;
-      let force = 'n';
-
-      const inData = {
-        id: id_to_delete,
-        force: force
-      }
-
-      try { 
-        const res = await fetch(`/Settings/deleteIncomeCategory`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updateIncomesCategoryList(data);
-        printFlashMessages(data);
-        if(data.flash_message_type[0] === 'warning')
-        {
-          $("#modalRemCatNameIncomesAccept").modal('show');
-          document.getElementById("RemoveIncomeCategoryAcceptNote").innerHTML = `kategoria: "${data.category_name}" zawiera: (${data.transactions}) transakcj${polishEnding(data.transactions)}, usunięcie kategorii spowoduje również usunięcie tych tansakcji!`;
-        }
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-
-    // If removal category has transaction assigned, confirm removal
-    document.getElementById("buttonRemoveIncomesCategoryAccept")
-    .addEventListener("click", async () => {
-
-      let force = 'y';
-
-      const inData = {
-        id: id_to_delete,
-        force: force
-      }
-
-      try { 
-        const res = await fetch(`/Settings/deleteIncomeCategory`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updateIncomesCategoryList(data);
-        printFlashMessages(data);
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-
-    // Add Expenses Category
-    document.getElementById("buttonAddExpensesCategory")
-    .addEventListener("click", async () => {
-
-      $("#modalAddCatNameExpenses").modal("hide");
-
-      let name = document.getElementById("floatingAddCatNameExpenses").value;
-
-      const inData = { name: name };
-
-      try { 
-        const res = await fetch(`/Settings/addExpenseCategory`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updateExpensesCategoryList(data);
-        document.getElementById("floatingAddCatNameExpenses").value = '';
-        printFlashMessages(data);
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-
-    // Select row from table
-    document.getElementById("tableExpensesCategories")
-    .addEventListener("click", function(ele) {
-
-      if( ele.srcElement.cellIndex < 2 ) {
-        return;
-      } else if (ele.target.className === "icon-trash") {
-        table_row = ele.target.parentNode.parentNode.parentNode;
-        document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();
-      } else if (ele.target.className === "icon-pencil") {
-        table_row = ele.target.parentNode.parentNode.parentNode;
-        document.getElementById("floatingChgCatNameExpenseCurrent").value = table_row.cells[0].childNodes[0].textContent.trim();
-      } else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
-        table_row = ele.target.parentNode;
-        document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();
-      } else if (ele.target.childNodes[1].childNodes[1].className === "icon-pencil") {
-        table_row = ele.target.parentNode;
-        document.getElementById("floatingChgCatNameExpenseCurrent").value = table_row.cells[0].childNodes[0].textContent.trim();
-      }
-
-    });
-
-    // Edit Expenses Category
-    document.getElementById("buttonUpdateExpensesCategory")
-    .addEventListener("click", async () => {
-
-      let id = table_row.cells[1].textContent;
-      let name = document.getElementById("floatingChgCatNameExpenses").value;
-
-      let inData = {
-        id: id,
-        name: name
-      };
-
-      try { 
-        const res = await fetch(`/Settings/updateExpenseCategory`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updateExpensesCategoryList(data);
-        document.getElementById("floatingChgCatNameExpenses").value = '';
-        printFlashMessages(data);
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-      
-    });
-
-    // Remove Expenses Category
-    // Check if removal category has transaction assigned, if not remove, if yes display confirmation
-    document.getElementById("buttonRemoveExpensesCategory")
-    .addEventListener("click", async () => {
-
-      id_to_delete = table_row.cells[1].textContent;
-      let force = 'n';
-
-      const inData = {
-        id: id_to_delete,
-        force: force
-      }
-
-      try { 
-        const res = await fetch(`/Settings/deleteExpenseCategory`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updateExpensesCategoryList(data);
-        printFlashMessages(data);
-        if(data.flash_message_type[0] === 'warning')
-        {
-          $("#modalRemCatNameExpensesAccept").modal('show');
-          document.getElementById("RemoveExpenseCategoryAcceptNote").innerHTML = `kategoria: "${data.category_name}" zawiera: (${data.transactions}) transakcj${polishEnding(data.transactions)}, usunięcie kategorii spowoduje również usunięcie ${data.transactions <= 1 ? "tej tansakcji!" : "tych tansakcji!"}`;
-          console.log(document.getElementById("RemoveExpenseCategoryAcceptNote").innerHTML);
-        }
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-
-    // If removal category has transaction assigned, confirm removal
-    document.getElementById("buttonRemoveExpensesCategoryAccept")
-    .addEventListener("click", async () => {
-
-      let force = 'y';
-
-      const inData = {
-        id: id_to_delete,
-        force: force
-      }
-
-      try { 
-        const res = await fetch(`/Settings/deleteExpenseCategory`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updateExpensesCategoryList(data);
-        printFlashMessages(data);
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-
-    // Add Payment Method
-    document.getElementById("buttonAddPaymentMethod")
-    .addEventListener("click", async () => {
-
-      $("#modalAddCatNamePayment").modal("hide");
-
-      let name = document.getElementById("floatingAddCatNamePayment").value;
-
-      const inData = { name: name };
-
-      try { 
-        const res = await fetch(`/Settings/addPaymentMethod`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updatePaymentMethodsList(data);
-        document.getElementById("floatingAddCatNamePayment").value = '';
-        printFlashMessages(data);
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-
-    // Select row from table
-    document.getElementById("tablePaymentMethods")
-    .addEventListener("click", function(ele) {
-
-      if( ele.srcElement.cellIndex < 2 ) {
-        return;
-      } else if (ele.target.className === "icon-trash") {
-        table_row = ele.target.parentNode.parentNode.parentNode;
-        document.getElementById("floatingRemCatNamePayment").value = table_row.cells[0].textContent;
-      } else if (ele.target.className === "icon-pencil") {
-        table_row = ele.target.parentNode.parentNode.parentNode;
-        document.getElementById("floatingChgCatNamePaymentCurrent").value = table_row.cells[0].textContent;
-      } else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
-        table_row = ele.target.parentNode;
-        document.getElementById("floatingRemCatNamePayment").value = table_row.cells[0].textContent;
-      } else if (ele.target.childNodes[1].childNodes[1].className === "icon-pencil") {
-        table_row = ele.target.parentNode;
-        document.getElementById("floatingChgCatNamePaymentCurrent").value = table_row.cells[0].textContent;
-      }
-
-    });
-
-    // Edit Payment Method
-    document.getElementById("buttonUpdatePaymentMethod")
-    .addEventListener("click", async () => {
-      
-      let id = table_row.cells[1].textContent;
-      let name = document.getElementById("floatingChgCatNamePayment").value;
-
-      let inData = {
-        id: id,
-        name: name
-      };
-
-      try { 
-        const res = await fetch(`/Settings/updatePaymentMethod`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updatePaymentMethodsList(data);
-        document.getElementById("floatingChgCatNamePayment").value = '';
-        printFlashMessages(data);
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-
-    // Remove Payment Method
-    // Check if removal category has transaction assigned, if not remove, if yes display confirmation
-    document.getElementById("buttonRemovePaymentMethod")
-    .addEventListener("click", async () => {
-
-      id_to_delete = table_row.cells[1].textContent;
-      let force = 'n';
-
-      const inData = {
-        id: id_to_delete,
-        force: force
-      }
-
-      try { 
-        const res = await fetch(`/Settings/deletePaymentMethod`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updatePaymentMethodsList(data);
-        printFlashMessages(data);
-        if(data.flash_message_type[0] === 'warning')
-        {
-          $("#modalRemCatNamePaymentAccept").modal('show');
-          document.getElementById("modalRemCatNamePaymentAcceptNote").innerHTML = `kategoria: "${data.category_name}" zawiera: (${data.transactions}) transakcj${polishEnding(data.transactions)}, usunięcie kategorii spowoduje również usunięcie tych tansakcji!`;
-        }
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-
-    // If removal category has transaction assigned, confirm removal
-    document.getElementById("buttonRemovePaymentMethodAccept")
-    .addEventListener("click", async () => {
-
-      let force = 'y';
-
-      const inData = {
-        id: id_to_delete,
-        force: force
-      }
-
-      try { 
-        const res = await fetch(`/Settings/deletePaymentMethod`, {
-            method: 'post',
-            body: JSON.stringify(inData)
-        })
-        const data = await res.json();
-        updatePaymentMethodsList(data);
-        printFlashMessages(data);
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    });
-  }
-
-</script>
+<script src="/js/printFlashMessages.js"></script>
+<script src="/js/validateInputsSettings.js"></script>
+<script src="/js/settings.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -890,118 +194,6 @@
           </div>
         </div>
 
-
-        <!-- <div
-          class="w-100 h2 mb-3 text-center bg-dark rounded text-secondary py-2 mt-3"
-        >
-          Opcje edycji
-        </div>
-        <hr class="hr-edit" />
-        <div class="w-100 h5 mb-2 text-center">zmiana nazwy kategorii</div>
-        <div class="row mb-3 row-edit">
-          <div
-            class="col-12 col-md-4 btn btn-primary py-2 btn-edit-first fw-bold"
-            href="#modalChgCatNameIncomes"
-            data-bs-toggle="modal"
-          >
-            Przychody
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-primary py-2 btn-edit-mid fw-bold"
-            href="#modalChgCatNameExpenses"
-            data-bs-toggle="modal"
-          >
-            Wydatki
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-primary py-2 btn-edit-last fw-bold"
-            href="#modalChgCatNamePayment"
-            data-bs-toggle="modal"
-          >
-            Sposoby płatności
-          </div>
-        </div>
-        <hr class="hr-edit" />
-        <div class="w-100 h5 mb-2 text-center">dodanie kategorii</div>
-        <div class="row mb-3 row-edit">
-          <div
-            class="col-12 col-md-4 btn btn-success py-2 btn-edit-first fw-bold"
-            href="#modalAddCatNameIncomes"
-            data-bs-toggle="modal"
-          >
-            Przychody
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-success py-2 btn-edit-mid fw-bold"
-            href="#modalAddCatNameExpenses"
-            data-bs-toggle="modal"
-          >
-            Wydatki
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-success py-2 btn-edit-last fw-bold"
-            href="#modalAddCatNamePayment"
-            data-bs-toggle="modal"
-          >
-            Sposoby płatności
-          </div>
-        </div>
-        <hr class="hr-edit" />
-        <div class="w-100 h5 mb-2 text-center">usuwanie kategorii</div>
-        <div class="row mb-3 row-edit">
-          <div
-            class="col-12 col-md-4 btn btn-danger py-2 btn-edit-first fw-bold"
-            href="#modalRemCatNameIncomes"
-            data-bs-toggle="modal"
-          >
-            Przychody
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-danger py-2 btn-edit-mid fw-bold"
-            href="#modalRemCatNameExpenses"
-            data-bs-toggle="modal"
-          >
-            Wydatki
-          </div>
-          <div
-            class="col-12 col-md-4 btn btn-danger py-2 btn-edit-last fw-bold"
-            href="#modalRemCatNamePayment"
-            data-bs-toggle="modal"
-          >
-            Sposoby płatności
-          </div>
-        </div>
-        <hr class="hr-edit" />
-        <div class="w-100 h5 mb-2 text-center">edycja konta</div>
-
-        {% if user.errors is not empty %}
-        <div class="w-100 h6 mb-2 text-center">
-            <p>Errors:</p>
-            <ul>
-                {% for error in user.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
-        <div class="row mb-3 row-edit">
-          <div
-            class="col-12 btn btn-warning text-white py-2 mb-2 fw-bold"
-            href="#modalEditAccount"
-            data-bs-toggle="modal"
-          >
-            <i class="icon-tools"></i>dane użytkownika
-          </div>
-          <div
-            class="col-12 btn btn-danger py-2 fw-bold"
-            href="#modalRemAccount"
-            data-bs-toggle="modal"
-          >
-            <i class="icon-cancel-squared"></i>usuń konto
-          </div>
-        </div> -->
-
       </div>
     </div>
   </main>
@@ -1020,23 +212,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formUpdateIncomeCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formUpdateIncomeCategory">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectChgCatNameIncomes"
-                name="id"
-              >
-                <option>wybierz</option>
-                {% for category in incomes_categories %}
-                  <option value="{{ category.id }}">
-                    {{ category.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectChgCatNameIncomes"
-                >Kategoria przychodów</label
-              > -->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1084,23 +261,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formUpdateExpenseCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formUpdateExpenseCategory">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectChgCatNameExpenses"
-                name="id"
-              >
-                <option selected>Wybierz kategorię</option>
-                {% for category in expenses_categories %}
-                  <option value="{{ category.id }}">
-                    {{ category.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectChgCatNameExpenses"
-                >Kategoria wydatków</label
-              > -->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1175,23 +337,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formUpdatePaymentMethod" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formUpdatePaymentMethod">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectChgCatNamePayment"
-                name="id"
-              >
-                <option selected>Wybierz kategorię</option>
-                {% for methods in payment_methods %}
-                  <option value="{{ methods.id }}">
-                    {{ methods.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectChgCatNamePayment"
-                >Kategoria sposobów płatności</label
-              > -->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1241,7 +388,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formAddIncomeCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formAddIncomeCategory">
             <div class="form-floating mb-3">
               <input
                 type="text"
@@ -1282,7 +429,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formAddExpenseCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formAddExpenseCategory">
             <div class="form-floating mb-3">
 
               <input
@@ -1350,7 +497,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formAddPaymentMethod" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formAddPaymentMethod">
             <div class="form-floating mb-3">
               <input
                 type="text"
@@ -1391,24 +538,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemoveIncomeCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemoveIncomeCategory">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectRemCatNameIncomes"
-                name="id"
-              >
-                <option selected>Wybierz kategorię</option>
-                {% for category in incomes_categories %}
-                  <option value="{{ category.id }}">
-                    {{ category.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectRemCatNameIncomes"
-                >Kategoria przychodów</label
-              >                 placeholder="Salary"
-                value="Salary"-->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1445,23 +576,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemoveExpenseCategory" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemoveExpenseCategory">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectRemCatNameExpenses"
-                name="id"
-              >
-                <option selected>Wybierz kategorię</option>
-                {% for category in expenses_categories %}
-                  <option value="{{ category.id }}">
-                    {{ category.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectRemCatNameExpenses"
-                >Kategoria wydatków</label
-              > -->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1499,23 +615,8 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemovePaymentMethod" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemovePaymentMethod">
             <div class="form-floating mb-3">
-              <!-- <select
-                class="form-select"
-                id="floatingSelectRemCatNamePayment"
-                name="id"
-              >
-                <option selected>Wybierz kategorię</option>
-                {% for methods in payment_methods %}
-                  <option value="{{ methods.id }}">
-                    {{ methods.name }}
-                  </option>
-                {% endfor %}
-              </select>
-              <label for="floatingSelectRemCatNamePayment"
-                >Kategoria sposobów płatności</label
-              > -->
               <input 
                 type="text"
                 class="form-control rounded-3 fw-bold"
@@ -1553,7 +654,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemoveIncomeCategoryAccept" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemoveIncomeCategoryAccept">
             <div class="form-floating mb-3 text-white fw-bold" id="RemoveIncomeCategoryAcceptNote">
             </div>
             <button
@@ -1584,7 +685,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemoveExpenseCategoryAccept" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemoveExpenseCategoryAccept">
             <div class="form-floating mb-3">
               <div class="form-floating mb-3 text-white fw-bold" id="RemoveExpenseCategoryAcceptNote">
               </div>
@@ -1617,7 +718,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" method="post" id="formRemovePaymentMethodAccept" onsubmit="dontSubmit(); return false;">
+          <form class="" method="post" id="formRemovePaymentMethodAccept">
             <div class="form-floating mb-3">
               <div class="form-floating mb-3" id="RemovePaymentMethodAcceptNote">
               </div>
