@@ -131,7 +131,9 @@
                           <td class="expenses-limit">
                             {{ category.name }}
                             </br>
-                            <small class="text-muted">limit: 9999.99</small>
+                            {% if category.limit_value is not null %}
+                            <small class="text-muted">limit: {{ category.limit_value }}</small>
+                            {% endif %}
                           </td>
                           <td hidden>{{ category.id }}</td>
                           <td href="#modalChgCatNameExpenses" data-bs-toggle="modal">
