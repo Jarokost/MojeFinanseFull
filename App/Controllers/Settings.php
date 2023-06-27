@@ -446,6 +446,9 @@ class Settings extends Authenticated
             ExpensesCategoryAssignedToUsers::updateCategory($post_fetch_promise['id'], $post_fetch_promise['name'], $post_fetch_promise['limit_value'] ?? NULL);
 
             $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
+            if ( isset($post_fetch_promise['limit_value']) ) {
+                $data['flash_message_body'][0] .= ' oraz dodano limit: ' + $post_fetch_promise['limit_value'];
+            }
             $data['flash_message_type'][0] = 'info';
 
         }
