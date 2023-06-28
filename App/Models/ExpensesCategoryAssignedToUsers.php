@@ -234,4 +234,23 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
 
         return $stmt->fetch();
     }
+
+    public static function getLimitAction($user_id, $category_id) {
+        $sql = 'SELECT limit_value
+                FROM expenses_category_assigned_to_users
+                WHERE e.user_id = :user_id
+                AND e.expense_category_assigned_to_user_id = :category_id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
 }
