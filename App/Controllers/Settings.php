@@ -412,9 +412,13 @@ class Settings extends Authenticated
 
         } else {
 
-            ExpensesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $post_fetch_promise['name']);
+            ExpensesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $post_fetch_promise['name'], 
+            $post_fetch_promise['limit_checkbox'] ? $post_fetch_promise['limit_value'] : NULL);
 
             $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $post_fetch_promise['name'];
+            if ( $post_fetch_promise['limit_checkbox'] ) {
+                $data['flash_message_body'][0] .= ' z limitem: ' . $post_fetch_promise['limit_value'];
+            }
             $data['flash_message_type'][0] = 'info';
 
         }

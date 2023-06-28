@@ -142,16 +142,17 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
      * 
      * @return void
      */
-    public static function addCategory($user_id, $name)
+    public static function addCategory($user_id, $name, $limit_value)
     {
-        $sql = 'INSERT INTO expenses_category_assigned_to_users (user_id, name)
-                VALUES (:user_id, :name)';
+        $sql = 'INSERT INTO expenses_category_assigned_to_users (user_id, name, limit_value)
+                VALUES (:user_id, :name, :limit_value)';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
 
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+        $stmt->bindValue(':limit_value', $name, PDO::PARAM_STR);
 
         $stmt->execute();
     }
