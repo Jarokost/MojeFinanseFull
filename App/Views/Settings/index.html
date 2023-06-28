@@ -303,7 +303,7 @@
                 id="floatingChgCatLimitExpenses"
                 placeholder="Wartość limitu"
                 name="name"
-                value="9999.99"
+                min="0.00"
                 step="0.01"
               />
               <label for="floatingChgCatLimitExpenses">Wartość limitu</label>
@@ -450,7 +450,6 @@
                 name="limitCheckbox"
                 class="form-check-input"
                 id="limitCheckboxAddNewExpenseCategory"
-                checked
               />
               <label class="form-check-label text-white" for="limitCheckboxAddNewExpenseCategory">Limit</label>
             </div>
@@ -462,8 +461,8 @@
                 id="floatingAddCatLimitExpenses"
                 placeholder="Wartość limitu"
                 name="name"
-                value="9999.99"
                 step="0.01"
+                min="0.00"
                 disabled
               />
               <label for="floatingAddCatLimitExpenses">Wartość limitu</label>

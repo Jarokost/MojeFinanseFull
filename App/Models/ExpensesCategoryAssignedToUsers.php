@@ -152,7 +152,7 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
 
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindValue(':name', $name, PDO::PARAM_STR);
-        $stmt->bindValue(':limit_value', $name, PDO::PARAM_STR);
+        $stmt->bindValue(':limit_value', $limit_value, PDO::PARAM_STR);
 
         $stmt->execute();
     }

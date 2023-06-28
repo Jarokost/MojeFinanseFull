@@ -103,6 +103,14 @@ function polishEnding(number) {
   }
 }
 
+document.getElementById("limitCheckboxAddNewExpenseCategory").addEventListener('change', function(event) {
+  if (event.target.checked) {
+    document.getElementById("floatingAddCatLimitExpenses").disabled = false;
+  } else {
+    document.getElementById("floatingAddCatLimitExpenses").disabled = true;
+  }
+});
+
 document.getElementById("limitCheckboxChangeExpenseCategory").addEventListener('change', function(event) {
   if (event.target.checked) {
     document.getElementById("floatingChgCatLimitExpenses").disabled = false;
@@ -255,8 +263,13 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
     event.preventDefault();
 
     let name = document.getElementById("floatingAddCatNameExpenses").value;
+    let limit_value = document.getElementById("floatingAddCatLimitExpenses").value;
+    let limit_checkbox = document.getElementById("limitCheckboxAddNewExpenseCategory").checked;
 
-    const inData = { name: name };
+    const inData = { 
+      name: name,
+      limit_value: limit_value,
+      limit_checkbox: limit_checkbox };
 
     try { 
       const res = await fetch(`/Settings/addExpenseCategory`, {
@@ -266,6 +279,9 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
       const data = await res.json();
       updateExpensesCategoryList(data);
       document.getElementById("floatingAddCatNameExpenses").value = '';
+      document.getElementById("floatingAddCatLimitExpenses").value = '';
+      document.getElementById("limitCheckboxAddNewExpenseCategory").checked = false;
+      document.getElementById("floatingAddCatLimitExpenses").disabled = true;
       printFlashMessages(data);
     } catch (e) {
       console.log('ERROR: ', e);
@@ -321,7 +337,6 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
     let limit_value = document.getElementById("floatingChgCatLimitExpenses").value;
     let limit_checkbox = document.getElementById("limitCheckboxChangeExpenseCategory").checked;
 
-    console.log(limit_checkbox, limit_value);
     let inData = {
       id: id,
       name: name,
