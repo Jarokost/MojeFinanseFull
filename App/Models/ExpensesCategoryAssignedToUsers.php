@@ -235,7 +235,7 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
         return $stmt->fetch();
     }
 
-    public static function getLimitAction($user_id, $category_id) {
+    public static function getLimit($user_id, $category_id) {
         $sql = 'SELECT limit_value
                 FROM expenses_category_assigned_to_users
                 WHERE e.user_id = :user_id

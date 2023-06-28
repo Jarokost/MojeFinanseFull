@@ -110,4 +110,12 @@ class Expenses extends Authenticated
         exit;
     }
 
+    public function limitAction()
+    {
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+        $data = ExpensesCategoryAssignedToUsers::getLimit($_SESSION['user_id'], $post_fetch_promise['category_id']);
+
+        echo json_encode($data);
+        exit;
+    }
 }
