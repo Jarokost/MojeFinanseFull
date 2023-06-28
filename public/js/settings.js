@@ -306,10 +306,12 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
 
     let id = table_row.cells[1].textContent;
     let name = document.getElementById("floatingChgCatNameExpenses").value;
+    let limit_value = document.getElementById("floatingChgCatLimitExpenses").value;
 
     let inData = {
       id: id,
-      name: name
+      name: name,
+      limit_value: limit_value
     };
 
     try { 
