@@ -42,7 +42,7 @@ function updateExpensesCategoryList(data)
         <td class="expenses-limit">
           ${data.categories[i].name}
           </br>
-          <small class="text-muted">limit: 9999.99</small>
+          ${data.categories[i].limit_value ? `<small class="text-muted">limit: ${data.categories[i].limit_value}</small>` : ''}
         </td>
         <td hidden>${data.categories[i].id}</td>
         <td href="#modalChgCatNameExpenses" data-bs-toggle="modal">
