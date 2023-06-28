@@ -103,6 +103,14 @@ function polishEnding(number) {
   }
 }
 
+document.getElementById("limitCheckboxChangeExpenseCategory").addEventListener('change', function(event) {
+  if (event.target.checked) {
+    document.getElementById("floatingChgCatLimitExpenses").disabled = false;
+  } else {
+    document.getElementById("floatingChgCatLimitExpenses").disabled = true;
+  }
+});
+
 // passShowHide
 document.getElementById("inputPasswordNewBtn").addEventListener('click', function () {
   passShowHide(this.id);
@@ -278,8 +286,12 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
       document.getElementById("floatingChgCatNameExpenseCurrent").value = table_row.cells[0].childNodes[0].textContent.trim();
       if(table_row.cells[0].childNodes.length > 3) {
         document.getElementById("floatingChgCatLimitExpenses").value = table_row.cells[0].childNodes[3].childNodes[0].textContent.slice(7);
+        document.getElementById("limitCheckboxChangeExpenseCategory").checked = true;
+        document.getElementById("floatingChgCatLimitExpenses").disabled = false;
       } else {
         document.getElementById("floatingChgCatLimitExpenses").value = null;
+        document.getElementById("limitCheckboxChangeExpenseCategory").checked = false;
+        document.getElementById("floatingChgCatLimitExpenses").disabled = true;
       }   
     } else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
       table_row = ele.target.parentNode;
@@ -289,14 +301,14 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
       document.getElementById("floatingChgCatNameExpenseCurrent").value = table_row.cells[0].childNodes[0].textContent.trim();
       if(table_row.cells[0].childNodes.length > 3) {
         document.getElementById("floatingChgCatLimitExpenses").value = table_row.cells[0].childNodes[3].childNodes[0].textContent.slice(7);
+        document.getElementById("limitCheckboxChangeExpenseCategory").checked = true;
+        document.getElementById("floatingChgCatLimitExpenses").disabled = false;
       } else {
         document.getElementById("floatingChgCatLimitExpenses").value = null;
+        document.getElementById("limitCheckboxChangeExpenseCategory").checked = false;
+        document.getElementById("floatingChgCatLimitExpenses").disabled = true;
       }
     }
-
-    // alert('weszlo!');
-    console.log(ele);
-    console.log(table_row);
   });
 
   // Edit Expenses Category
@@ -307,11 +319,14 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
     let id = table_row.cells[1].textContent;
     let name = document.getElementById("floatingChgCatNameExpenses").value;
     let limit_value = document.getElementById("floatingChgCatLimitExpenses").value;
+    let limit_checkbox = document.getElementById("limitCheckboxChangeExpenseCategory").checked;
 
+    console.log(limit_checkbox, limit_value);
     let inData = {
       id: id,
       name: name,
-      limit_value: limit_value
+      limit_value: limit_value,
+      limit_checkbox: limit_checkbox
     };
 
     try { 
