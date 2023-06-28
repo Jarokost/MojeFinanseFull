@@ -447,9 +447,15 @@ class Settings extends Authenticated
             empty($post_fetch_promise['name']) ? NULL : $post_fetch_promise['name'],
             $post_fetch_promise['limit_value'] ?? NULL);
 
-            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
-            if ( isset($post_fetch_promise['limit_value']) ) {
-                $data['flash_message_body'][0] .= ' oraz dodano limit: ' + $post_fetch_promise['limit_value'];
+            if (!empty($post_fetch_promise['name']) && isset($post_fetch_promise['limit_value'])) {
+                $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
+                $data['flash_message_body'][0] .= ' oraz dodano limit: ' . $post_fetch_promise['limit_value'];
+            } else if (empty($post_fetch_promise['name']) && isset($post_fetch_promise['limit_value'])) {
+                $data['flash_message_body'][0] = 'Zmieniono limit dla kategorii: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['limit_value'];
+            } else if (!empty($post_fetch_promise['name']) && !isset($post_fetch_promise['limit_value'])) {
+                $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
+            } else {
+                $data['flash_message_body'][0] = 'Bez zmian';
             }
             $data['flash_message_type'][0] = 'info';
 
