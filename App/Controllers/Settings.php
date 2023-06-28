@@ -443,7 +443,9 @@ class Settings extends Authenticated
         } else {
 
             $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($post_fetch_promise['id']);
-            ExpensesCategoryAssignedToUsers::updateCategory($post_fetch_promise['id'], $post_fetch_promise['name'], $post_fetch_promise['limit_value'] ?? NULL);
+            ExpensesCategoryAssignedToUsers::updateCategory($post_fetch_promise['id'], 
+            empty($post_fetch_promise['name']) ? NULL : $post_fetch_promise['name'],
+            $post_fetch_promise['limit_value'] ?? NULL);
 
             $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
             if ( isset($post_fetch_promise['limit_value']) ) {

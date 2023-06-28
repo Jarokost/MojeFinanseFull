@@ -163,15 +163,22 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
      */
     public static function updateCategory($id, $name, $limit_value)
     {
-        $sql = 'UPDATE expenses_category_assigned_to_users
-                SET name = :name';
-
-        if (isset($limit_value)) {
-            $sql .= ',
-            limit_value = :limit_value';
+        if( !isset($limit_value) && !isset($name) ) {
+            return;
+        } else if (isset($name) && !isset($limit_value)) {
+            $sql = 'UPDATE expenses_category_assigned_to_users
+                SET name = :name
+                WHERE id = :id';
+        } else if (!isset($name) && isset($limit_value)) {
+            $sql = 'UPDATE expenses_category_assigned_to_users
+            SET limit_value = :limit_value
+            WHERE id = :id';
+        } else {
+            $sql = 'UPDATE expenses_category_assigned_to_users
+            SET name = :name,
+            limit_value = :limit_value
+            WHERE id = :id';
         }
-
-        $sql .= "\nWHERE id = :id";
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);

@@ -272,12 +272,7 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
       return;
     } else if (ele.target.className === "icon-trash") {
       table_row = ele.target.parentNode.parentNode.parentNode;
-      document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();
-      if(table_row.cells[0].childNodes.length > 3) {
-        document.getElementById("floatingChgCatLimitExpenses").value = table_row.cells[0].childNodes[3].childNodes[0].textContent.slice(7);
-      } else {
-        document.getElementById("floatingChgCatLimitExpenses").value = null;
-      }   
+      document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();  
     } else if (ele.target.className === "icon-pencil") {
       table_row = ele.target.parentNode.parentNode.parentNode;
       document.getElementById("floatingChgCatNameExpenseCurrent").value = table_row.cells[0].childNodes[0].textContent.trim();
@@ -288,12 +283,7 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
       }   
     } else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
       table_row = ele.target.parentNode;
-      document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();
-      if(table_row.cells[0].childNodes.length > 3) {
-        document.getElementById("floatingChgCatLimitExpenses").value = table_row.cells[0].childNodes[3].childNodes[0].textContent.slice(7);
-      } else {
-        document.getElementById("floatingChgCatLimitExpenses").value = null;
-      }    
+      document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();  
     } else if (ele.target.childNodes[1].childNodes[1].className === "icon-pencil") {
       table_row = ele.target.parentNode;
       document.getElementById("floatingChgCatNameExpenseCurrent").value = table_row.cells[0].childNodes[0].textContent.trim();
