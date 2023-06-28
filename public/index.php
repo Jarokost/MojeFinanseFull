@@ -39,6 +39,6 @@ $router->add('signup/activate/{token:[\da-f]+}', ['controller' => 'Signup', 'act
 $router->add('settings/emailChange/{token:[\da-f]+}', ['controller' => 'Settings', 'action' => 'emailChange']);
 $router->add('{controller}/{action}');
 
-$router->add('api/email/{email:[\wżźćńółęąśŻŹĆŃÓŁĘĄŚ]+}', ['controller' => 'Account', 'action' => 'validateEmail']);
+$router->add('expenses/limit/{category:[\wżźćńółęąśŻŹĆŃÓŁĘĄŚ]+}', ['controller' => 'Expenses', 'action' => 'limit']);
 
 $router->dispatch($_SERVER['QUERY_STRING']);
