@@ -327,24 +327,22 @@ class Expenses extends \Core\Model
      * 
      * @return array
      */
-    public static function getExpensesSumForCategory($user_id, $category_name, $date_start, $date_end)
+    public static function getExpensesSumForCategory($user_id, $category_id, $date_start, $date_end)
     {
         $sql = 'SELECT SUM(e.amount)
                 FROM expenses AS e, expenses_category_assigned_to_users AS eu
                 WHERE e.user_id = :user_id
                 AND e.date_of_expense BETWEEN :date_start AND :date_end
                 AND e.expense_category_assigned_to_user_id = eu.id
-                AND eu.name = :category_name';
+                AND eu.id = :category_id';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
 
-        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
-        $stmt->bindValue(':category_name', $category_name, PDO::PARAM_STR);
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':category_id', $category_id, PDO::PARAM_INT);
         $stmt->bindValue(':date_start', $date_start, PDO::PARAM_STR);
         $stmt->bindValue(':date_end', $date_end, PDO::PARAM_STR);
-
-        //$stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
         $stmt->execute();
 

@@ -235,17 +235,17 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
         return $stmt->fetch();
     }
 
-    public static function getLimit($user_id, $category) {
+    public static function getLimit($user_id, $category_id) {
         $sql = 'SELECT limit_value
                 FROM expenses_category_assigned_to_users
-                WHERE user_id = :user_id
-                AND name = :name';
+                WHERE id = :category_id
+                AND user_id = :user_id';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
 
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
-        $stmt->bindValue(':name', $category, PDO::PARAM_INT);
+        $stmt->bindValue(':category_id', $category_id, PDO::PARAM_STR);
 
         $stmt->execute();
 

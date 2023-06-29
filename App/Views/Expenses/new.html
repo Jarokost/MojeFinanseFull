@@ -6,6 +6,7 @@
 
 <script src="/js/validateInputsCommon.js"></script>
 <script src="/js/validateInputsNewExpense.js"></script>
+<script src="/js/newExpenseLimit.js"></script>
 
 {% endblock %}
 
@@ -39,8 +40,10 @@
             <label id="floatingInputKwotaLabel" for="floatingInputKwota">Kwota [PLN]</label>
           </div>
 
+          <div id="limitDisplayAmountInput" class="mb-2"></div>
+
           <!-- JS use class is-invalid when input validation -->
-          <div class="form-floating mb-2">
+          <div class="form-floating mb-0">
             <input
               type="date"
               class="form-control input-width"
@@ -52,8 +55,10 @@
             <label id="floatingDateLabel" for="floatingDate">Data</label>
           </div>
 
+          <div id="limitDisplayThisMonthSpent" class="mb-2"></div>
+
           <!-- JS use class is-invalid when input validation -->
-          <div class="form-floating mb-2">
+          <div class="form-floating mb-0">
             <select class="form-select input-width" 
             id="floatingSelect"
             name="expense_category_assigned_to_user_id"
@@ -68,6 +73,8 @@
             </select>
             <label id="floatingSelectLabel" for="floatingSelect">Kategoria</label>
           </div>
+
+          <div id="limitDisplayForThisCategory" class="mb-2"></div>
 
           <!-- JS use class is-invalid when input validation -->
           <div class="form-floating mb-2">
