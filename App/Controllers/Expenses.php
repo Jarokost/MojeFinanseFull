@@ -118,4 +118,16 @@ class Expenses extends Authenticated
         echo json_encode(ExpensesCategoryAssignedToUsers::getLimit($_SESSION['user_id'], $this->route_params['category']));
         exit;
     }
+
+    public function categorySumAction()
+    {
+        $date = strtotime($this->route_params['date']);
+        $date_start = date("Y-m-01", $date);
+        $date_end = date("Y-m-t", $date);
+
+        $data = \App\Models\Expenses::getExpensesSumForCategory($_SESSION['user_id'], $this->route_params['category'], $date_start, $date_end);
+        
+        echo json_encode($data);
+        exit;
+    }
 }
