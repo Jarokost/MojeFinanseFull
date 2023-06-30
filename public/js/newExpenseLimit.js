@@ -1,6 +1,7 @@
 let categoryHasLimit;
 let limitForCategory;
 let expensesSumForCategory;
+let difference;
 
 async function getLimitForCategory() {
 
@@ -66,9 +67,35 @@ async function displayMonthlyExpensesForCategory() {
     }
 }
 
-document.getElementById("floatingDate").addEventListener('change', displayMonthlyExpensesForCategory);
+async function displayLimitOnInputChange() {
+    expensesSumForCategory = await getExpsensesSumForCategory();
+    let inputValue = document.getElementById("floatingInputKwota").value;
+    difference = limitForCategory - expensesSumForCategory - inputValue;
+    document.getElementById("limitDisplayAmountInput").textContent = `Pozostałe środki w ramach limitu: ${difference} [PLN]`;
+    if (difference < 0) {
+        document.getElementById("limitDisplayAmountInput").classList.add("text-warning");
+    } else {
+        document.getElementById("limitDisplayAmountInput").classList.remove("text-warning");
+    }
+}
 
-document.getElementById("floatingSelect").addEventListener('change', function() {
-    displayLimitForCategory();
+async function redisplayAll() {
+    await displayLimitForCategory();
     displayMonthlyExpensesForCategory();
+    if (categoryHasLimit) {
+        displayLimitOnInputChange();
+    }
+}
+
+document.getElementById("floatingDate").addEventListener('change', redisplayAll);
+
+document.getElementById("floatingSelect").addEventListener('change', redisplayAll);
+
+document.getElementById("floatingInputKwota").addEventListener('input', redisplayAll);
+
+document.getElementById("formAddExpense").addEventListener('submit', async (event) => {
+    if (difference < 0) {
+      event.preventDefault();
+    }
 });
+ 

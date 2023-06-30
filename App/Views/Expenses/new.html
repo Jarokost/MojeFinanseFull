@@ -28,13 +28,14 @@
           {% endif %}
 
           <!-- JS use class is-invalid when input validation -->
-          <div class="form-floating mb-2">
+          <div class="form-floating mb-1">
             <input
               type="number"
               class="form-control input-width"
               id="floatingInputKwota"
               name="amount"
               placeholder="0.00"
+              min="0.00"
               step="0.01"
             />
             <label id="floatingInputKwotaLabel" for="floatingInputKwota">Kwota [PLN]</label>
@@ -43,7 +44,7 @@
           <div id="limitDisplayAmountInput" class="mb-2"></div>
 
           <!-- JS use class is-invalid when input validation -->
-          <div class="form-floating mb-0">
+          <div class="form-floating mb-1">
             <input
               type="date"
               class="form-control input-width"
@@ -58,7 +59,7 @@
           <div id="limitDisplayThisMonthSpent" class="mb-2"></div>
 
           <!-- JS use class is-invalid when input validation -->
-          <div class="form-floating mb-0">
+          <div class="form-floating mb-1">
             <select class="form-select input-width" 
             id="floatingSelect"
             name="expense_category_assigned_to_user_id"
