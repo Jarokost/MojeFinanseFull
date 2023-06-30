@@ -33,7 +33,14 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
      * @var string
      */
     public $name;
-    
+
+    /**
+     * expenses_category_assigned_to_users table limit_value
+     * 
+     * @var float
+     */
+    public $limit_value;
+
     public static function getCategoriesAssignedToUser($user_id)
     {
         $sql = 'SELECT * FROM expenses_category_assigned_to_users
@@ -135,16 +142,17 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
      * 
      * @return void
      */
-    public static function addCategory($user_id, $name)
+    public static function addCategory($user_id, $name, $limit_value)
     {
-        $sql = 'INSERT INTO expenses_category_assigned_to_users (user_id, name)
-                VALUES (:user_id, :name)';
+        $sql = 'INSERT INTO expenses_category_assigned_to_users (user_id, name, limit_value)
+                VALUES (:user_id, :name, :limit_value)';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
 
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+        $stmt->bindValue(':limit_value', $limit_value, PDO::PARAM_STR);
 
         $stmt->execute();
     }
@@ -154,17 +162,27 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
      * 
      * @return void
      */
-    public static function updateCategory($id, $name)
+    public static function updateCategory($id, $name, $limit_value)
     {
-        $sql = 'UPDATE expenses_category_assigned_to_users
-                SET name = :name
-                WHERE id = :id'; 
+        if( isset($name) ) {
+            $sql = 'UPDATE expenses_category_assigned_to_users
+            SET name = :name,
+            limit_value = :limit_value
+            WHERE id = :id';
+        } else {
+            $sql = 'UPDATE expenses_category_assigned_to_users
+            SET limit_value = :limit_value
+            WHERE id = :id';
+        }
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
 
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+        if (isset($name)) {
+            $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+        }
+        $stmt->bindValue(':limit_value', $limit_value, PDO::PARAM_STR);
 
         $stmt->execute();
     }
@@ -215,5 +233,22 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
         $stmt->execute();
 
         return $stmt->fetch();
+    }
+
+    public static function getLimit($user_id, $category_id) {
+        $sql = 'SELECT limit_value
+                FROM expenses_category_assigned_to_users
+                WHERE id = :category_id
+                AND user_id = :user_id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':category_id', $category_id, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
     }
 }

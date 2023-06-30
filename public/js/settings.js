@@ -42,7 +42,7 @@ function updateExpensesCategoryList(data)
         <td class="expenses-limit">
           ${data.categories[i].name}
           </br>
-          <small class="text-muted">limit: 9999.99</small>
+          ${data.categories[i].limit_value ? `<small class="text-muted">limit: ${data.categories[i].limit_value}</small>` : ''}
         </td>
         <td hidden>${data.categories[i].id}</td>
         <td href="#modalChgCatNameExpenses" data-bs-toggle="modal">
@@ -102,6 +102,22 @@ function polishEnding(number) {
     }
   }
 }
+
+document.getElementById("limitCheckboxAddNewExpenseCategory").addEventListener('change', function(event) {
+  if (event.target.checked) {
+    document.getElementById("floatingAddCatLimitExpenses").disabled = false;
+  } else {
+    document.getElementById("floatingAddCatLimitExpenses").disabled = true;
+  }
+});
+
+document.getElementById("limitCheckboxChangeExpenseCategory").addEventListener('change', function(event) {
+  if (event.target.checked) {
+    document.getElementById("floatingChgCatLimitExpenses").disabled = false;
+  } else {
+    document.getElementById("floatingChgCatLimitExpenses").disabled = true;
+  }
+});
 
 // passShowHide
 document.getElementById("inputPasswordNewBtn").addEventListener('click', function () {
@@ -247,8 +263,13 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
     event.preventDefault();
 
     let name = document.getElementById("floatingAddCatNameExpenses").value;
+    let limit_value = document.getElementById("floatingAddCatLimitExpenses").value;
+    let limit_checkbox = document.getElementById("limitCheckboxAddNewExpenseCategory").checked;
 
-    const inData = { name: name };
+    const inData = { 
+      name: name,
+      limit_value: limit_value,
+      limit_checkbox: limit_checkbox };
 
     try { 
       const res = await fetch(`/Settings/addExpenseCategory`, {
@@ -258,6 +279,9 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
       const data = await res.json();
       updateExpensesCategoryList(data);
       document.getElementById("floatingAddCatNameExpenses").value = '';
+      document.getElementById("floatingAddCatLimitExpenses").value = '';
+      document.getElementById("limitCheckboxAddNewExpenseCategory").checked = false;
+      document.getElementById("floatingAddCatLimitExpenses").disabled = true;
       printFlashMessages(data);
     } catch (e) {
       console.log('ERROR: ', e);
@@ -272,18 +296,35 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
       return;
     } else if (ele.target.className === "icon-trash") {
       table_row = ele.target.parentNode.parentNode.parentNode;
-      document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();
+      document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();  
     } else if (ele.target.className === "icon-pencil") {
       table_row = ele.target.parentNode.parentNode.parentNode;
       document.getElementById("floatingChgCatNameExpenseCurrent").value = table_row.cells[0].childNodes[0].textContent.trim();
+      if(table_row.cells[0].childNodes.length > 3) {
+        document.getElementById("floatingChgCatLimitExpenses").value = table_row.cells[0].childNodes[3].childNodes[0].textContent.slice(7);
+        document.getElementById("limitCheckboxChangeExpenseCategory").checked = true;
+        document.getElementById("floatingChgCatLimitExpenses").disabled = false;
+      } else {
+        document.getElementById("floatingChgCatLimitExpenses").value = null;
+        document.getElementById("limitCheckboxChangeExpenseCategory").checked = false;
+        document.getElementById("floatingChgCatLimitExpenses").disabled = true;
+      }   
     } else if (ele.target.childNodes[1].childNodes[1].className === "icon-trash") {
       table_row = ele.target.parentNode;
-      document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();
+      document.getElementById("floatingRemCatNameExpenses").value = table_row.cells[0].childNodes[0].textContent.trim();  
     } else if (ele.target.childNodes[1].childNodes[1].className === "icon-pencil") {
       table_row = ele.target.parentNode;
       document.getElementById("floatingChgCatNameExpenseCurrent").value = table_row.cells[0].childNodes[0].textContent.trim();
+      if(table_row.cells[0].childNodes.length > 3) {
+        document.getElementById("floatingChgCatLimitExpenses").value = table_row.cells[0].childNodes[3].childNodes[0].textContent.slice(7);
+        document.getElementById("limitCheckboxChangeExpenseCategory").checked = true;
+        document.getElementById("floatingChgCatLimitExpenses").disabled = false;
+      } else {
+        document.getElementById("floatingChgCatLimitExpenses").value = null;
+        document.getElementById("limitCheckboxChangeExpenseCategory").checked = false;
+        document.getElementById("floatingChgCatLimitExpenses").disabled = true;
+      }
     }
-
   });
 
   // Edit Expenses Category
@@ -293,10 +334,14 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
 
     let id = table_row.cells[1].textContent;
     let name = document.getElementById("floatingChgCatNameExpenses").value;
+    let limit_value = document.getElementById("floatingChgCatLimitExpenses").value;
+    let limit_checkbox = document.getElementById("limitCheckboxChangeExpenseCategory").checked;
 
     let inData = {
       id: id,
-      name: name
+      name: name,
+      limit_value: limit_value,
+      limit_checkbox: limit_checkbox
     };
 
     try { 

@@ -15,6 +15,9 @@ use \App\Flash;
  */
 class Expenses extends Authenticated
 {
+    /**
+     * user_id
+     */
 
     /**
      * display new income form
@@ -110,4 +113,27 @@ class Expenses extends Authenticated
         exit;
     }
 
+    public function limitAction()
+    {
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+
+        $data = ExpensesCategoryAssignedToUsers::getLimit($_SESSION['user_id'], $post_fetch_promise['category_id'] );
+
+        echo json_encode($data);
+        exit;
+    }
+
+    public function categorySumAction()
+    {
+        $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
+
+        $date = strtotime($post_fetch_promise['date']);
+        $date_start = date("Y-m-01", $date);
+        $date_end = date("Y-m-t", $date);
+
+        $data = \App\Models\Expenses::getExpensesSumForCategory($_SESSION['user_id'], $post_fetch_promise['category_id'], $date_start, $date_end);
+        
+        echo json_encode($data);
+        exit;
+    }
 }

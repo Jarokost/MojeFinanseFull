@@ -131,7 +131,9 @@
                           <td class="expenses-limit">
                             {{ category.name }}
                             </br>
-                            <small class="text-muted">limit: 9999.99</small>
+                            {% if category.limit_value is not null %}
+                            <small class="text-muted">limit: {{ category.limit_value }}</small>
+                            {% endif %}
                           </td>
                           <td hidden>{{ category.id }}</td>
                           <td href="#modalChgCatNameExpenses" data-bs-toggle="modal">
@@ -290,7 +292,6 @@
                   name="limitCheckbox"
                   class="form-check-input"
                   id="limitCheckboxChangeExpenseCategory"
-                  checked
                 />
                 <label class="form-check-label text-white" for="limitCheckboxChangeExpenseCategory">Limit</label>
             </div>
@@ -302,9 +303,8 @@
                 id="floatingChgCatLimitExpenses"
                 placeholder="Wartość limitu"
                 name="name"
-                value="9999.99"
+                min="0.00"
                 step="0.01"
-                disabled
               />
               <label for="floatingChgCatLimitExpenses">Wartość limitu</label>
             </div>
@@ -450,7 +450,6 @@
                 name="limitCheckbox"
                 class="form-check-input"
                 id="limitCheckboxAddNewExpenseCategory"
-                checked
               />
               <label class="form-check-label text-white" for="limitCheckboxAddNewExpenseCategory">Limit</label>
             </div>
@@ -462,8 +461,8 @@
                 id="floatingAddCatLimitExpenses"
                 placeholder="Wartość limitu"
                 name="name"
-                value="9999.99"
                 step="0.01"
+                min="0.00"
                 disabled
               />
               <label for="floatingAddCatLimitExpenses">Wartość limitu</label>

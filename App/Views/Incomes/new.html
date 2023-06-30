@@ -58,7 +58,7 @@
             id="floatingSelect"
             name="income_category_assigned_to_user_id"
             >
-              <option>wybierz</option>
+              <option value="0">wybierz</option>
               {% for category in income_categories %}
                 <option value="{{ category.id }}"
                 {{ (category.id==income.income_category_assigned_to_user_id) ? 'selected' }}>
