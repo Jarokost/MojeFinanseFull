@@ -64,7 +64,7 @@
             id="floatingSelect"
             name="expense_category_assigned_to_user_id"
             >
-              <option>wybierz</option>
+              <option value="0">wybierz</option>
               {% for category in expenses_categories %}
                 <option value="{{ category.id }}"
                 {{ (category.id==expense.expense_category_assigned_to_user_id) ? 'selected' }}>
@@ -83,7 +83,7 @@
             id="floatingSelectMethod"
             name="payment_method_assigned_to_user_id"
             >
-              <option>wybierz</option>
+              <option value="0">wybierz</option>
               {% for methods in payment_methods %}
                 <option value="{{ methods.id }}"
                 {{ (methods.id==expense.payment_method_assigned_to_user_id) ? 'selected' }}>
@@ -111,5 +111,64 @@
       </div>
     </div>
 </main>
+
+<!-- modal - accept overlimit expense -->
+<div class="modal fade" id="modalOverlimitAccept" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content settings-modal-bg">
+      <div class="modal-header p-5 pb-4 border-bottom-0">
+        <h1 class="fw-bold mb-0 fs-2 w-100 text-white">Przekroczono limit!</h1>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body p-5 pt-0">
+        <form method="post" action="/Expenses/add" id="formAddExpenseAccept">
+
+          <input
+            hidden
+            id="floatingInputKwotaHidden"
+            name="amount"
+          />
+
+          <input
+            hidden
+            id="floatingDateHidden"
+            name="date_of_expense"
+          />
+
+          <input 
+            hidden
+            id="floatingSelectHidden"
+            name="expense_category_assigned_to_user_id"
+          />
+
+          <input
+            hidden
+            id="floatingSelectMethodHidden"
+            name="payment_method_assigned_to_user_id"
+          />
+
+          <input
+            hidden
+            id="floatingTextareaHidden"
+            name="expense_comment"
+          />
+
+          <button
+            class="w-100 mb-2 btn btn-lg rounded-3 btn-warning fw-bold"
+            type="submit"
+            id="buttonRemovePaymentMethodAccept"
+            data-bs-dismiss="modal"
+          >
+            Dodaj mimo to
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}

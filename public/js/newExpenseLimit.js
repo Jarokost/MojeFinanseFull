@@ -47,7 +47,7 @@ async function getExpsensesSumForCategory() {
 
 async function displayLimitForCategory() {
     limitForCategory = await getLimitForCategory();
-    if (limitForCategory === null) {
+    if (limitForCategory === null || limitForCategory === false) {
         document.getElementById("limitDisplayForThisCategory").textContent = `Wybrana kategoria nie posiada limitu`;
         categoryHasLimit = false;
     } else {
@@ -71,7 +71,12 @@ async function displayLimitOnInputChange() {
     expensesSumForCategory = await getExpsensesSumForCategory();
     let inputValue = document.getElementById("floatingInputKwota").value;
     difference = limitForCategory - expensesSumForCategory - inputValue;
-    document.getElementById("limitDisplayAmountInput").textContent = `Pozostałe środki w ramach limitu: ${difference} [PLN]`;
+    console.log(categoryHasLimit);
+    if (categoryHasLimit === true) {
+        document.getElementById("limitDisplayAmountInput").textContent = `Pozostałe środki w ramach limitu: ${difference} [PLN]`;
+    } else {
+        document.getElementById("limitDisplayAmountInput").textContent = '';
+    }
     if (difference < 0) {
         document.getElementById("limitDisplayAmountInput").classList.add("text-warning");
     } else {
@@ -82,10 +87,12 @@ async function displayLimitOnInputChange() {
 async function redisplayAll() {
     await displayLimitForCategory();
     displayMonthlyExpensesForCategory();
-    if (categoryHasLimit) {
-        displayLimitOnInputChange();
-    }
+    displayLimitOnInputChange();
 }
+
+const modalOverlimitAccept = new bootstrap.Modal('#modalOverlimitAccept', {
+    keyboard: false
+});
 
 document.getElementById("floatingDate").addEventListener('change', redisplayAll);
 
@@ -94,8 +101,23 @@ document.getElementById("floatingSelect").addEventListener('change', redisplayAl
 document.getElementById("floatingInputKwota").addEventListener('input', redisplayAll);
 
 document.getElementById("formAddExpense").addEventListener('submit', async (event) => {
-    if (difference < 0) {
-      event.preventDefault();
+    if (!validateNewExpenseFormOnSubmit()) {
+        event.preventDefault();
+    } else {
+        if (difference < 0) {
+        event.preventDefault();
+        document.getElementById("floatingInputKwotaHidden").value =
+        document.getElementById("floatingInputKwota").value;
+        document.getElementById("floatingDateHidden").value =
+        document.getElementById("floatingDate").value;
+        document.getElementById("floatingSelectHidden").value =
+        document.getElementById("floatingSelect").value;
+        document.getElementById("floatingSelectMethodHidden").value =
+        document.getElementById("floatingSelectMethod").value;
+        document.getElementById("floatingTextareaHidden").value =
+        document.getElementById("floatingTextarea").value;
+        modalOverlimitAccept.show();
+        }
     }
 });
  

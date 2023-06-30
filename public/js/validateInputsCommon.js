@@ -37,7 +37,7 @@ function validateCategoryInput(categoryInput) {
         categoryInput.classList.add('is-invalid');
         document.getElementById(categoryInput.id + 'Label').textContent = 'Wybierz kategorię!';
         return false;
-    } else if ( categoryInput.value === 'wybierz' ) {
+    } else if ( categoryInput.value === '0' ) {
         categoryInput.classList.add('is-invalid');
         document.getElementById(categoryInput.id + 'Label').textContent = 'Wybierz kategorię!';
         return false;
@@ -53,7 +53,7 @@ function validateMethodInput(methodInput) {
         methodInput.classList.add('is-invalid');
         document.getElementById(methodInput.id + 'Label').textContent = 'Wybierz metodę płatności!';
         return false;
-    } else if ( methodInput.value === 'wybierz' ) {
+    } else if ( methodInput.value === '0' ) {
         methodInput.classList.add('is-invalid');
         document.getElementById(methodInput.id + 'Label').textContent = 'Wybierz metodę płatności!';
         return false;
