@@ -1,13 +1,8 @@
 let categoryHasLimit;
+let limitForCategory;
+let expensesSumForCategory;
 
-document.getElementById("floatingSelect").addEventListener('change', function() {
-    displayLimitForSelectedCategory();
-    displayMonthlySpendingsOnSelectedCategory();
-});
-
-document.getElementById("floatingDate").addEventListener('change',  displayMonthlySpendingsOnSelectedCategory);
-
-async function displayLimitForSelectedCategory() {
+async function getLimitForCategory() {
 
     const category_id = document.getElementById("floatingSelect").value;
 
@@ -21,19 +16,13 @@ async function displayLimitForSelectedCategory() {
             body: JSON.stringify(inData)
         });
         const data = await res.json();
-        if (data === null) {
-            document.getElementById("limitDisplayForThisCategory").textContent = `Wybrana kategoria nie posiada limitu`;
-            categoryHasLimit = false;
-        } else {
-            document.getElementById("limitDisplayForThisCategory").textContent = `Limit dla wybranej kategorii wynosi: ${data} [PLN]`;
-            categoryHasLimit = true;
-        }
+        return data;
     } catch (e) {
         console.log("ERROR: ", e);
     }
 }
 
-async function displayMonthlySpendingsOnSelectedCategory() {
+async function getExpsensesSumForCategory() {
 
     const category_id = document.getElementById("floatingSelect").value;
     const date = document.getElementById("floatingDate").value;
@@ -49,14 +38,37 @@ async function displayMonthlySpendingsOnSelectedCategory() {
             body: JSON.stringify(inData)
         });
         const data = await res.json();
-        if (categoryHasLimit && data !== null) {
-            document.getElementById("limitDisplayThisMonthSpent").textContent = `W wybranym miesiącu dla tej kategorii wydano: ${data} [PLN]`;
-        } else if (categoryHasLimit && data === null) {
-            document.getElementById("limitDisplayThisMonthSpent").textContent = `W wybranym miesiącu dla tej kategorii wydano: 0 [PLN]`;
-        } else {
-            document.getElementById("limitDisplayThisMonthSpent").textContent = ``;
-        }
+        return data;
     } catch (e) {
         console.log("ERROR: ", e);
     }
 }
+
+async function displayLimitForCategory() {
+    limitForCategory = await getLimitForCategory();
+    if (limitForCategory === null) {
+        document.getElementById("limitDisplayForThisCategory").textContent = `Wybrana kategoria nie posiada limitu`;
+        categoryHasLimit = false;
+    } else {
+        document.getElementById("limitDisplayForThisCategory").textContent = `Limit dla wybranej kategorii wynosi: ${limitForCategory} [PLN]`;
+        categoryHasLimit = true;
+    }
+}
+
+async function displayMonthlyExpensesForCategory() {
+    expensesSumForCategory = await getExpsensesSumForCategory();
+    if (categoryHasLimit && expensesSumForCategory !== null) {
+        document.getElementById("limitDisplayThisMonthSpent").textContent = `W wybranym miesiącu dla tej kategorii wydano: ${expensesSumForCategory} [PLN]`;
+    } else if (categoryHasLimit && expensesSumForCategory === null) {
+        document.getElementById("limitDisplayThisMonthSpent").textContent = `W wybranym miesiącu dla tej kategorii wydano: 0 [PLN]`;
+    } else {
+        document.getElementById("limitDisplayThisMonthSpent").textContent = ``;
+    }
+}
+
+document.getElementById("floatingDate").addEventListener('change', displayMonthlyExpensesForCategory);
+
+document.getElementById("floatingSelect").addEventListener('change', function() {
+    displayLimitForCategory();
+    displayMonthlyExpensesForCategory();
+});
