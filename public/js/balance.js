@@ -88,7 +88,7 @@ function updateBalanceData(data)
   }
 }
 
-const updateGraphsData = async () => {
+const updateIncomesGraphData = async () => {
 
   const date_start = document.getElementById("balanceDateStart").textContent;
   const date_end = document.getElementById("balanceDateEnd").textContent;
@@ -112,12 +112,36 @@ const updateGraphsData = async () => {
     chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
     chart_incomes.draw(chart_data_incomes, chart_options_incomes);
 
+  } catch (e) {
+      console.log('ERROR: ', e);
+  }
+
+}
+
+const updateExpensesGraphData = async () => {
+
+  const date_start = document.getElementById("balanceDateStart").textContent;
+  const date_end = document.getElementById("balanceDateEnd").textContent;
+
+  const inData = {
+    date_start: date_start,
+    date_end: date_end
+  };
+
+  try { 
+    const res = await fetch(`/Balance/getIncomesAndExpensesSumGroupedByCategory`, {
+        method: 'post',
+        body: JSON.stringify(inData)
+    })
+    const data = await res.json();
+
     expenses_categories_sum_table = [["Wydatki", "Wartość"]];
     for(let i=0; i < data.expenses_category_sum.length; i++) {
       expenses_categories_sum_table.push([data.expenses_category_sum[i].category_name, parseFloat(data.expenses_category_sum[i].category_amount_sum)]);
     }
     chart_data_expenses = google.visualization.arrayToDataTable(expenses_categories_sum_table);
     chart_expenses.draw(chart_data_expenses, chart_options_expenses);
+
   } catch (e) {
       console.log('ERROR: ', e);
   }
@@ -146,7 +170,8 @@ document.getElementById("modalEditIncome").addEventListener("shown.bs.modal", fu
 });
 
 window.addEventListener('load', function () {
-  updateGraphsData();
+  updateIncomesGraphData();
+  updateExpensesGraphData();
 })
 
 // Edit Expense 
