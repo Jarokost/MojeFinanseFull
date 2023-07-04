@@ -172,287 +172,292 @@ document.getElementById("modalEditIncome").addEventListener("shown.bs.modal", fu
 });
 
 window.addEventListener('load', function () {
+
   if ( graphIncomesDivElement !== null ) {
     updateIncomesGraphData();
-  }
-  if ( graphExpensesDivElement !== null ) {
-    updateExpensesGraphData();
-  }
-})
 
-// Edit Expense 
-document.getElementById("tableExpenses")
-.addEventListener("click", function(ele) {
+    // Edit Income
+    document.getElementById("tableIncomes")
+    .addEventListener("click", function(ele) {
 
-  if (ele.target.className === "icon-pencil") {
+      if (ele.target.className === "icon-pencil") {
 
-    tr = ele.target.parentNode.parentNode.parentNode;
+        tr = ele.target.parentNode.parentNode.parentNode;
 
-    let id = tr.cells[1].textContent;
-    let date = tr.cells[2].textContent;
-    let category = tr.cells[3].textContent;
-    let method = tr.cells[4].textContent;
-    let comment = tr.cells[5].textContent;
-    let amount = tr.cells[6].textContent;
+        let id = tr.cells[1].textContent;
+        let date = tr.cells[2].textContent;
+        let category = tr.cells[3].textContent;
+        let comment = tr.cells[4].textContent;
+        let amount = tr.cells[5].textContent;
 
-    document.getElementById("editExpenseId").value = id;
-    document.getElementById("editExpenseAmount").value = amount;
-    document.getElementById("editExpenseDate").value = date;
-    document.getElementById("editExpenseComment").value = comment;
-    setSelectByText("editExpenseCategory", category);
-    setSelectByText("editExpenseMethod", method);
+        document.getElementById("editIncomeId").value = id;
+        document.getElementById("editIncomeAmount").value = amount;
+        document.getElementById("editIncomeDate").value = date;
+        document.getElementById("editIncomeComment").value = comment;
+        setSelectByText("editIncomeCategory", category);
 
-  }
-
-});
-
-document.querySelector("button.button-expense-change")
-.addEventListener("click", async () => {
-
-  if ( validateEditExpenseFormOnSubmit() ) {
-
-    // const myModal = document.querySelector('#modalEditExpense');
-    // const modal = new bootstrap.Modal(myModal);
-    // modal.hide();// it is asynchronous
-    $("#modalEditExpense").modal("hide");
-    
-    let id = document.getElementById("editExpenseId").value;
-    let amount = document.getElementById("editExpenseAmount").value;
-    let date_of_expense = document.getElementById("editExpenseDate").value;
-    let expense_category_assigned_to_user_id = document.getElementById("editExpenseCategory").value;
-    let payment_method_assigned_to_user_id = document.getElementById("editExpenseMethod").value;
-    let expense_comment = document.getElementById("editExpenseComment").value;
-    let date_start = document.getElementById("balanceDateStart").textContent;
-    let date_end = document.getElementById("balanceDateEnd").textContent;
-
-    const inData = {
-      id: id,
-      amount: amount,
-      date_of_expense: date_of_expense,
-      expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
-      payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
-      expense_comment: expense_comment,
-      date_start: date_start,
-      date_end: date_end
-    };
-
-    try { 
-      const res = await fetch(`/Expenses/updateTableRowAjax`, {
-          method: 'post',
-          body: JSON.stringify(inData)
-      })
-      const data = await res.json();
-      if (data.success == false) {
-        alert(data.errors);
-      } else {
-        tr.cells[1].textContent = id;
-        tr.cells[2].textContent = date_of_expense;
-        const categorySelect = document.getElementById("editExpenseCategory");
-        tr.cells[3].textContent = categorySelect.options[categorySelect.selectedIndex].text;
-        const methodSelect = document.getElementById("editExpenseMethod");
-        tr.cells[4].textContent = methodSelect.options[methodSelect.selectedIndex].text;
-        tr.cells[5].textContent = expense_comment;
-        tr.cells[6].textContent = parseFloat(amount).toFixed(2);
-        
-        updateBalanceData(data);
-        updateExpensesGraphData();
       }
-    } catch (e) {
-      console.log('ERROR: ', e);
-    }
-  }
-});
 
-// Edit Income
-document.getElementById("tableIncomes")
-.addEventListener("click", function(ele) {
+    });
 
-  if (ele.target.className === "icon-pencil") {
+    document.querySelector("button.button-income-change")
+    .addEventListener("click", async () => {
 
-    tr = ele.target.parentNode.parentNode.parentNode;
+      if ( validateEditIncomeFormOnSubmit() ) {
 
-    let id = tr.cells[1].textContent;
-    let date = tr.cells[2].textContent;
-    let category = tr.cells[3].textContent;
-    let comment = tr.cells[4].textContent;
-    let amount = tr.cells[5].textContent;
+        $("#modalEditIncome").modal("hide");
 
-    document.getElementById("editIncomeId").value = id;
-    document.getElementById("editIncomeAmount").value = amount;
-    document.getElementById("editIncomeDate").value = date;
-    document.getElementById("editIncomeComment").value = comment;
-    setSelectByText("editIncomeCategory", category);
+        let id = document.getElementById("editIncomeId").value;
+        let amount = document.getElementById("editIncomeAmount").value;
+        let date_of_income = document.getElementById("editIncomeDate").value;
+        let income_category_assigned_to_user_id = document.getElementById("editIncomeCategory").value;
+        let income_comment = document.getElementById("editIncomeComment").value;
+        let date_start = document.getElementById("balanceDateStart").textContent;
+        let date_end = document.getElementById("balanceDateEnd").textContent;
 
-  }
+        const inData = {
+          id: id,
+          amount: amount,
+          date_of_income: date_of_income,
+          income_category_assigned_to_user_id: income_category_assigned_to_user_id,
+          income_comment: income_comment,
+          date_start: date_start,
+          date_end: date_end
+        }
 
-});
+        try {
+          const res = await fetch(`/Incomes/updateTableRowAjax`, {
+              method: 'post',
+              body: JSON.stringify(inData)
+          })
+          const data = await res.json();
+          if (data.success == false) {
+            alert(data.errors);
+          } else {
+            tr.cells[1].textContent = id;
+            tr.cells[2].textContent = date_of_income;
+            const categorySelect = document.getElementById("editIncomeCategory");
+            tr.cells[3].textContent = categorySelect.options[categorySelect.selectedIndex].text;
+            tr.cells[4].textContent = income_comment;
+            tr.cells[5].textContent = parseFloat(amount).toFixed(2);
 
-document.querySelector("button.button-income-change")
-.addEventListener("click", async () => {
+            updateBalanceData(data);
+            updateIncomesGraphData();
+          }
+        } catch (e) {
+          console.log('ERROR: ', e);
+        }
+      }
+    });
 
-  if ( validateEditIncomeFormOnSubmit() ) {
+    // Remove Income
+    document.getElementById("tableIncomes")
+    .addEventListener("click", function(ele) {
 
-    $("#modalEditIncome").modal("hide");
+      if (ele.target.className === "icon-trash") {
 
-    let id = document.getElementById("editIncomeId").value;
-    let amount = document.getElementById("editIncomeAmount").value;
-    let date_of_income = document.getElementById("editIncomeDate").value;
-    let income_category_assigned_to_user_id = document.getElementById("editIncomeCategory").value;
-    let income_comment = document.getElementById("editIncomeComment").value;
+        tr = ele.target.parentNode.parentNode.parentNode;
+
+        let id = tr.cells[1].textContent;
+        let date = tr.cells[2].textContent;
+        let category = tr.cells[3].textContent;
+        let comment = tr.cells[4].textContent;
+        let amount = tr.cells[5].textContent;
+
+        document.getElementById("removeIncomeId").value = id;
+
+        document.getElementById("incomeRowToRemove").innerHTML = 
+          "data: " + date
+          + "</br>kategoria: " + category
+          + "</br>opis: " + comment
+          + "</br>kwota: " + amount;
+
+      }
+
+    });
+
+    document.querySelector("button.button-income-remove")
+    .addEventListener("click", async () => {
+
+    let id = document.getElementById("removeIncomeId").value;
     let date_start = document.getElementById("balanceDateStart").textContent;
     let date_end = document.getElementById("balanceDateEnd").textContent;
 
     const inData = {
       id: id,
-      amount: amount,
-      date_of_income: date_of_income,
-      income_category_assigned_to_user_id: income_category_assigned_to_user_id,
-      income_comment: income_comment,
       date_start: date_start,
       date_end: date_end
     }
 
     try {
-      const res = await fetch(`/Incomes/updateTableRowAjax`, {
-          method: 'post',
-          body: JSON.stringify(inData)
-      })
+      const res = await fetch(`/Incomes/removeTableRowAjax`, {
+        method: "post",
+        body: JSON.stringify(inData)
+      });
       const data = await res.json();
-      if (data.success == false) {
-        alert(data.errors);
-      } else {
-        tr.cells[1].textContent = id;
-        tr.cells[2].textContent = date_of_income;
-        const categorySelect = document.getElementById("editIncomeCategory");
-        tr.cells[3].textContent = categorySelect.options[categorySelect.selectedIndex].text;
-        tr.cells[4].textContent = income_comment;
-        tr.cells[5].textContent = parseFloat(amount).toFixed(2);
-
-        updateBalanceData(data);
-        updateIncomesGraphData();
+      tr.remove();
+      let index = 1;
+      const table = document.querySelectorAll("tr.income-item-in-incomes-table")
+      for ( let i=0; i<table.length; i++) {
+        table[i].cells[0].textContent = index;
+        index++;
       }
+      updateBalanceData(data);
+      updateIncomesGraphData();
     } catch (e) {
       console.log('ERROR: ', e);
     }
-  }
-});
-
-// Remove Expense
-document.getElementById("tableExpenses")
-.addEventListener("click", function(ele) {
-
-  if (ele.target.className === "icon-trash") {
-
-    tr = ele.target.parentNode.parentNode.parentNode;
-
-    let id = tr.cells[1].textContent;
-    let date = tr.cells[2].textContent;
-    let category = tr.cells[3].textContent;
-    let method = tr.cells[4].textContent;
-    let comment = tr.cells[5].textContent;
-    let amount = tr.cells[6].textContent;
-
-    document.getElementById("removeExpenseId").value = id;
-
-    document.getElementById("expenseRowToRemove").innerHTML = 
-      "data: " + date 
-      + "</br>kategoria: " + category
-      + "</br>metada płatności: " + method
-      + "</br>opis: " + comment
-      + "</br>kwota: " + amount;
+    });
 
   }
 
-});
-
-document.querySelector("button.button-expense-remove")
-.addEventListener("click", async () => {
-
-  let id = document.getElementById("removeExpenseId").value;
-  let date_start = document.getElementById("balanceDateStart").textContent;
-  let date_end = document.getElementById("balanceDateEnd").textContent;
-
-  const inData = {
-    id: id,
-    date_start: date_start,
-    date_end: date_end
-  };
-
-  try {
-    const res = await fetch(`/Expenses/removeTableRowAjax`, {
-      method: "post",
-      body: JSON.stringify(inData)
-    })
-    const data = await res.json();
-    tr.remove();
-    let index = 1;
-    const table = document.querySelectorAll("tr.expense-item-in-expenses-table")
-    for ( let i=0; i<table.length; i++) {
-      table[i].cells[0].textContent = index;
-      index++;
-    }
-    updateBalanceData(data);
+  if ( graphExpensesDivElement !== null ) {
     updateExpensesGraphData();
-  } catch (e) {
-    console.log('ERROR: ', e);
+
+    // Edit Expense 
+    document.getElementById("tableExpenses")
+    .addEventListener("click", function(ele) {
+
+      if (ele.target.className === "icon-pencil") {
+
+        tr = ele.target.parentNode.parentNode.parentNode;
+
+        let id = tr.cells[1].textContent;
+        let date = tr.cells[2].textContent;
+        let category = tr.cells[3].textContent;
+        let method = tr.cells[4].textContent;
+        let comment = tr.cells[5].textContent;
+        let amount = tr.cells[6].textContent;
+
+        document.getElementById("editExpenseId").value = id;
+        document.getElementById("editExpenseAmount").value = amount;
+        document.getElementById("editExpenseDate").value = date;
+        document.getElementById("editExpenseComment").value = comment;
+        setSelectByText("editExpenseCategory", category);
+        setSelectByText("editExpenseMethod", method);
+
+      }
+
+    });
+
+    document.querySelector("button.button-expense-change")
+    .addEventListener("click", async () => {
+
+      if ( validateEditExpenseFormOnSubmit() ) {
+
+        // const myModal = document.querySelector('#modalEditExpense');
+        // const modal = new bootstrap.Modal(myModal);
+        // modal.hide();// it is asynchronous
+        $("#modalEditExpense").modal("hide");
+        
+        let id = document.getElementById("editExpenseId").value;
+        let amount = document.getElementById("editExpenseAmount").value;
+        let date_of_expense = document.getElementById("editExpenseDate").value;
+        let expense_category_assigned_to_user_id = document.getElementById("editExpenseCategory").value;
+        let payment_method_assigned_to_user_id = document.getElementById("editExpenseMethod").value;
+        let expense_comment = document.getElementById("editExpenseComment").value;
+        let date_start = document.getElementById("balanceDateStart").textContent;
+        let date_end = document.getElementById("balanceDateEnd").textContent;
+
+        const inData = {
+          id: id,
+          amount: amount,
+          date_of_expense: date_of_expense,
+          expense_category_assigned_to_user_id: expense_category_assigned_to_user_id,
+          payment_method_assigned_to_user_id: payment_method_assigned_to_user_id,
+          expense_comment: expense_comment,
+          date_start: date_start,
+          date_end: date_end
+        };
+
+        try { 
+          const res = await fetch(`/Expenses/updateTableRowAjax`, {
+              method: 'post',
+              body: JSON.stringify(inData)
+          })
+          const data = await res.json();
+          if (data.success == false) {
+            alert(data.errors);
+          } else {
+            tr.cells[1].textContent = id;
+            tr.cells[2].textContent = date_of_expense;
+            const categorySelect = document.getElementById("editExpenseCategory");
+            tr.cells[3].textContent = categorySelect.options[categorySelect.selectedIndex].text;
+            const methodSelect = document.getElementById("editExpenseMethod");
+            tr.cells[4].textContent = methodSelect.options[methodSelect.selectedIndex].text;
+            tr.cells[5].textContent = expense_comment;
+            tr.cells[6].textContent = parseFloat(amount).toFixed(2);
+            
+            updateBalanceData(data);
+            updateExpensesGraphData();
+          }
+        } catch (e) {
+          console.log('ERROR: ', e);
+        }
+      }
+    });
+
+    // Remove Expense
+    document.getElementById("tableExpenses")
+    .addEventListener("click", function(ele) {
+
+      if (ele.target.className === "icon-trash") {
+
+        tr = ele.target.parentNode.parentNode.parentNode;
+
+        let id = tr.cells[1].textContent;
+        let date = tr.cells[2].textContent;
+        let category = tr.cells[3].textContent;
+        let method = tr.cells[4].textContent;
+        let comment = tr.cells[5].textContent;
+        let amount = tr.cells[6].textContent;
+
+        document.getElementById("removeExpenseId").value = id;
+
+        document.getElementById("expenseRowToRemove").innerHTML = 
+          "data: " + date 
+          + "</br>kategoria: " + category
+          + "</br>metada płatności: " + method
+          + "</br>opis: " + comment
+          + "</br>kwota: " + amount;
+
+      }
+
+    });
+
+    document.querySelector("button.button-expense-remove")
+    .addEventListener("click", async () => {
+
+      let id = document.getElementById("removeExpenseId").value;
+      let date_start = document.getElementById("balanceDateStart").textContent;
+      let date_end = document.getElementById("balanceDateEnd").textContent;
+
+      const inData = {
+        id: id,
+        date_start: date_start,
+        date_end: date_end
+      };
+
+      try {
+        const res = await fetch(`/Expenses/removeTableRowAjax`, {
+          method: "post",
+          body: JSON.stringify(inData)
+        })
+        const data = await res.json();
+        tr.remove();
+        let index = 1;
+        const table = document.querySelectorAll("tr.expense-item-in-expenses-table")
+        for ( let i=0; i<table.length; i++) {
+          table[i].cells[0].textContent = index;
+          index++;
+        }
+        updateBalanceData(data);
+        updateExpensesGraphData();
+      } catch (e) {
+        console.log('ERROR: ', e);
+      }
+    });
+
   }
-});
-
-// Remove Income
-document.getElementById("tableIncomes")
-.addEventListener("click", function(ele) {
-
-  if (ele.target.className === "icon-trash") {
-
-    tr = ele.target.parentNode.parentNode.parentNode;
-
-    let id = tr.cells[1].textContent;
-    let date = tr.cells[2].textContent;
-    let category = tr.cells[3].textContent;
-    let comment = tr.cells[4].textContent;
-    let amount = tr.cells[5].textContent;
-
-    document.getElementById("removeIncomeId").value = id;
-
-    document.getElementById("incomeRowToRemove").innerHTML = 
-      "data: " + date
-      + "</br>kategoria: " + category
-      + "</br>opis: " + comment
-      + "</br>kwota: " + amount;
-
-  }
-
-});
-
-document.querySelector("button.button-income-remove")
-.addEventListener("click", async () => {
-
-let id = document.getElementById("removeIncomeId").value;
-let date_start = document.getElementById("balanceDateStart").textContent;
-let date_end = document.getElementById("balanceDateEnd").textContent;
-
-const inData = {
-  id: id,
-  date_start: date_start,
-  date_end: date_end
-}
-
-try {
-  const res = await fetch(`/Incomes/removeTableRowAjax`, {
-    method: "post",
-    body: JSON.stringify(inData)
-  });
-  const data = await res.json();
-  tr.remove();
-  let index = 1;
-  const table = document.querySelectorAll("tr.income-item-in-incomes-table")
-  for ( let i=0; i<table.length; i++) {
-    table[i].cells[0].textContent = index;
-    index++;
-  }
-  updateBalanceData(data);
-  updateIncomesGraphData();
-} catch (e) {
-  console.log('ERROR: ', e);
-}
-});
+  
+})
