@@ -10,11 +10,6 @@ let chart_options_incomes = null;
 const graphIncomesDivElement = document.getElementById("incomesDonutChart");
 const graphExpensesDivElement = document.getElementById("expensesDonutChart");
 
-google.charts.load("current", { packages: ["corechart"] });
-
-google.charts.setOnLoadCallback(drawChartIncomes);
-google.charts.setOnLoadCallback(drawChartExpenses);
-
 function drawChartIncomes() {
   chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
 
@@ -171,9 +166,14 @@ document.getElementById("modalEditIncome").addEventListener("shown.bs.modal", fu
   validateEditIncomeFormOnSubmit();
 });
 
+google.charts.load("current", { packages: ["corechart"] });
+
 window.addEventListener('load', function () {
 
   if ( graphIncomesDivElement !== null ) {
+    
+    google.charts.setOnLoadCallback(drawChartIncomes);
+
     updateIncomesGraphData();
 
     // Edit Income
@@ -312,6 +312,9 @@ window.addEventListener('load', function () {
   }
 
   if ( graphExpensesDivElement !== null ) {
+
+    google.charts.setOnLoadCallback(drawChartExpenses);
+
     updateExpensesGraphData();
 
     // Edit Expense 
@@ -459,5 +462,5 @@ window.addEventListener('load', function () {
     });
 
   }
-  
+
 })
