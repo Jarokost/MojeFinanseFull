@@ -7,6 +7,8 @@ let chart_data_expenses = null;
 let chart_data_incomes = null;
 let chart_options_expenses = null;
 let chart_options_incomes = null;
+const graphIncomesDivElement = document.getElementById("incomesDonutChart");
+const graphExpensesDivElement = document.getElementById("expensesDonutChart");
 
 google.charts.load("current", { packages: ["corechart"] });
 
@@ -170,8 +172,12 @@ document.getElementById("modalEditIncome").addEventListener("shown.bs.modal", fu
 });
 
 window.addEventListener('load', function () {
-  updateIncomesGraphData();
-  updateExpensesGraphData();
+  if ( graphIncomesDivElement !== null ) {
+    updateIncomesGraphData();
+  }
+  if ( graphExpensesDivElement !== null ) {
+    updateExpensesGraphData();
+  }
 })
 
 // Edit Expense 
@@ -249,7 +255,7 @@ document.querySelector("button.button-expense-change")
         tr.cells[6].textContent = parseFloat(amount).toFixed(2);
         
         updateBalanceData(data);
-        updateGraphsData();
+        updateExpensesGraphData();
       }
     } catch (e) {
       console.log('ERROR: ', e);
@@ -323,7 +329,7 @@ document.querySelector("button.button-income-change")
         tr.cells[5].textContent = parseFloat(amount).toFixed(2);
 
         updateBalanceData(data);
-        updateGraphsData();
+        updateIncomesGraphData();
       }
     } catch (e) {
       console.log('ERROR: ', e);
@@ -386,7 +392,7 @@ document.querySelector("button.button-expense-remove")
       index++;
     }
     updateBalanceData(data);
-    updateGraphsData();
+    updateExpensesGraphData();
   } catch (e) {
     console.log('ERROR: ', e);
   }
@@ -445,7 +451,7 @@ try {
     index++;
   }
   updateBalanceData(data);
-  updateGraphsData();
+  updateIncomesGraphData();
 } catch (e) {
   console.log('ERROR: ', e);
 }
