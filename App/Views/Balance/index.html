@@ -291,7 +291,7 @@
               id="editExpenseCategory"
               name="expense_category_assigned_to_user_id"
               >
-                <option>wybierz</option>
+                <option value="0">wybierz</option>
                 {% for category in balance.expenses_categories %}
                   <option value="{{ category.id }}">
                       {{ category.name }}
@@ -307,7 +307,7 @@
               id="editExpenseMethod"
               name="payment_method_assigned_to_user_id"
               >
-                <option>wybierz</option>
+                <option value="0">wybierz</option>
                 {% for methods in balance.expenses_payment_methods %}
                   <option value="{{ methods.id }}">
                       {{ methods.name }}
@@ -372,7 +372,7 @@
     </div>
   </div>
   {% endif %}
-  
+
   {% if balance.incomes_sum.amount_sum is not null %}
   <!-- MODAL - edit income -->
   <div class="modal fade" id="modalEditIncome" tabindex="-1">
@@ -425,7 +425,7 @@
               id="editIncomeCategory"
               name="income_category_assigned_to_user_id"
               >
-              <option>wybierz</option>
+              <option value="0">wybierz</option>
                 {% for category in balance.incomes_categories %}
                   <option value="{{ category.id }}">
                       {{ category.name }}

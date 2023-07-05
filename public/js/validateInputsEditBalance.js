@@ -1,9 +1,19 @@
+const editExpenseAmountElement = document.getElementById("editExpenseAmount");
+const editExpenseDateElement = document.getElementById("editExpenseDate");
+const editExpenseCategoryElement = document.getElementById("editExpenseCategory");
+const editExpenseMethodElement = document.getElementById("editExpenseMethod");
+
+const editIncomeAmountElement = document.getElementById("editIncomeAmount");
+const editIncomeDateElement = document.getElementById("editIncomeDate");
+const editIncomeCategoryElement = document.getElementById("editIncomeCategory");
+
+
 function validateEditExpenseFormOnSubmit() {
 
-    let amountValid = validateAmountInput(document.getElementById("editExpenseAmount"));
-    let dateValid = validateDateInput(document.getElementById("editExpenseDate"));
-    let categoryValid = validateCategoryInput(document.getElementById("editExpenseCategory"));
-    let methodValid = validateMethodInput(document.getElementById("editExpenseMethod"));
+    let amountValid = validateAmountInput(editExpenseAmountElement);
+    let dateValid = validateDateInput(editExpenseDateElement);
+    let categoryValid = validateCategoryInput(editExpenseCategoryElement);
+    let methodValid = validateMethodInput(editExpenseMethodElement);
 
     if ( amountValid && dateValid && categoryValid && methodValid ) {
         return true;
@@ -12,43 +22,45 @@ function validateEditExpenseFormOnSubmit() {
     }
 }
 
-document.getElementById("editExpenseAmount").addEventListener('focusout', function () {
-  if ( !validateAmountInput(this) ) {
-    this.addEventListener('input', function () {
-      validateAmountInput(this);
-    });
-  }
-});
+if ( editExpenseAmountElement !== null ) {
+  editExpenseAmountElement.addEventListener('focusout', function () {
+    if ( !validateAmountInput(this) ) {
+      this.addEventListener('input', function () {
+        validateAmountInput(this);
+      });
+    }
+  });
 
-document.getElementById("editExpenseDate").addEventListener('focusout', function () {
-  if ( !validateDateInput(this) ) {
-    this.addEventListener('input', function () {
-      validateDateInput(this);
-    });
-  }
-});
+  editExpenseDateElement.addEventListener('focusout', function () {
+    if ( !validateDateInput(this) ) {
+      this.addEventListener('input', function () {
+        validateDateInput(this);
+      });
+    }
+  });
 
-document.getElementById("editExpenseCategory").addEventListener('focusout', function () {
-  if ( !validateCategoryInput(this) ) {
-    this.addEventListener('input', function () {
-      validateCategoryInput(this);
-    });
-  }
-});
+  editExpenseCategoryElement.addEventListener('focusout', function () {
+    if ( !validateCategoryInput(this) ) {
+      this.addEventListener('input', function () {
+        validateCategoryInput(this);
+      });
+    }
+  });
 
-document.getElementById("editExpenseMethod").addEventListener('focusout', function () {
-  if ( !validateMethodInput(this) ) {
-    this.addEventListener('input', function () {
-      validateMethodInput(this);
-    });
-  }
-});
+  editExpenseMethodElement.addEventListener('focusout', function () {
+    if ( !validateMethodInput(this) ) {
+      this.addEventListener('input', function () {
+        validateMethodInput(this);
+      });
+    }
+  });
+}
 
 function validateEditIncomeFormOnSubmit() {
 
-  let amountValid = validateAmountInput(document.getElementById("editIncomeAmount"));
-  let dateValid = validateDateInput(document.getElementById("editIncomeDate"));
-  let categoryValid = validateCategoryInput(document.getElementById("editIncomeCategory"));
+  let amountValid = validateAmountInput(editIncomeAmountElement);
+  let dateValid = validateDateInput(editIncomeDateElement);
+  let categoryValid = validateCategoryInput(editIncomeCategoryElement);
 
   if ( amountValid && dateValid && categoryValid ) {
       return true;
@@ -57,26 +69,28 @@ function validateEditIncomeFormOnSubmit() {
   }
 }
 
-document.getElementById("editIncomeAmount").addEventListener('focusout', function () {
-  if ( !validateAmountInput(this) ) {
-    this.addEventListener('input', function () {
-      validateAmountInput(this);
-    });
-  }
-});
+if ( editIncomeAmountElement !== null ) {
+  editIncomeAmountElement.addEventListener('focusout', function () {
+    if ( !validateAmountInput(this) ) {
+      this.addEventListener('input', function () {
+        validateAmountInput(this);
+      });
+    }
+  });
 
-document.getElementById("editIncomeDate").addEventListener('focusout', function () {
-  if ( !validateDateInput(this) ) {
-    this.addEventListener('input', function () {
-      validateDateInput(this);
-    });
-  }
-});
+  editIncomeDateElement.addEventListener('focusout', function () {
+    if ( !validateDateInput(this) ) {
+      this.addEventListener('input', function () {
+        validateDateInput(this);
+      });
+    }
+  });
 
-document.getElementById("editIncomeCategory").addEventListener('focusout', function () {
-  if ( !validateCategoryInput(this) ) {
-    this.addEventListener('input', function () {
-      validateCategoryInput(this);
-    });
-  }
-});
+  editIncomeCategoryElement.addEventListener('focusout', function () {
+    if ( !validateCategoryInput(this) ) {
+      this.addEventListener('input', function () {
+        validateCategoryInput(this);
+      });
+    }
+  });
+}
