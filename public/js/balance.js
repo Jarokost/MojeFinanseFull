@@ -96,7 +96,7 @@ const updateIncomesGraphData = async () => {
   };
 
   try { 
-    const res = await fetch(`/Balance/getIncomesAndExpensesSumGroupedByCategory`, {
+    const res = await fetch(`/Balance/getIncomesSumGroupedByCategory`, {
         method: 'post',
         body: JSON.stringify(inData)
     })
@@ -126,7 +126,7 @@ const updateExpensesGraphData = async () => {
   };
 
   try { 
-    const res = await fetch(`/Balance/getIncomesAndExpensesSumGroupedByCategory`, {
+    const res = await fetch(`/Balance/getExpensesSumGroupedByCategory`, {
         method: 'post',
         body: JSON.stringify(inData)
     })
