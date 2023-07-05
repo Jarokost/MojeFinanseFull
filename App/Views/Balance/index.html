@@ -240,6 +240,7 @@
       </div>
   </div>
 
+  {% if balance.expenses_sum.amount_sum is not null %}
   <!-- MODAL - edit expense -->
   <div class="modal fade" id="modalEditExpense" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -338,6 +339,41 @@
     </div>
   </div>
 
+  <!-- MODAL - remove expense -->
+  <div class="modal fade" id="modalRemoveExpense" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body p-5 pt-0">
+
+          <form method="post" id="formRemoveExpense">
+
+            <input type="hidden" name="id" id="removeExpenseId"/>
+
+            <div class="w-100 my-2 text-center" id="expenseRowToRemove"></div>
+            <button
+              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-expense-remove"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Usuń wydatek
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
+  {% if balance.incomes_sum.amount_sum is not null %}
   <!-- MODAL - edit income -->
   <div class="modal fade" id="modalEditIncome" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -421,39 +457,6 @@
     </div>
   </div>
 
-  <!-- MODAL - remove expense -->
-  <div class="modal fade" id="modalRemoveExpense" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-          ></button>
-        </div>
-
-        <div class="modal-body p-5 pt-0">
-
-          <form method="post" id="formRemoveExpense">
-
-            <input type="hidden" name="id" id="removeExpenseId"/>
-
-            <div class="w-100 my-2 text-center" id="expenseRowToRemove"></div>
-            <button
-              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-expense-remove"
-              type="button"
-              data-bs-dismiss="modal"
-            >
-              Usuń wydatek
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- MODAL - remove income -->
   <div class="modal fade" id="modalRemoveIncome" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -486,5 +489,6 @@
       </div>
     </div>
   </div>
+  {% endif %}
 
 {% endblock %}

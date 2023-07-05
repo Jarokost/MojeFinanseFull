@@ -145,27 +145,6 @@ const updateExpensesGraphData = async () => {
 
 }
 
-// never submit modal form
-document.getElementById("formEditExpense").addEventListener("submit", (event) => {event.preventDefault()});
-document.getElementById("formEditIncome").addEventListener("submit", (event) => {event.preventDefault()});
-document.getElementById("formRemoveExpense").addEventListener("submit", (event) => {event.preventDefault()});
-document.getElementById("formRemoveIncome").addEventListener("submit", (event) => {event.preventDefault()});
-
-// make modal inputs validation when displayed, to clear validation errors, remove event listener on input change
-document.getElementById("modalEditExpense").addEventListener("shown.bs.modal", function() {
-  document.getElementById("editExpenseAmount").removeEventListener('input', function() {});
-  document.getElementById("editExpenseDate").removeEventListener('input', function() {});
-  document.getElementById("editExpenseCategory").removeEventListener('input', function() {});
-  document.getElementById("editExpenseMethod").removeEventListener('input', function() {});
-  validateEditExpenseFormOnSubmit();
-});
-document.getElementById("modalEditIncome").addEventListener("shown.bs.modal", function() {
-  document.getElementById("editIncomeAmount").removeEventListener('input', function() {});
-  document.getElementById("editIncomeDate").removeEventListener('input', function() {});
-  document.getElementById("editIncomeCategory").removeEventListener('input', function() {});
-  validateEditIncomeFormOnSubmit();
-});
-
 google.charts.load("current", { packages: ["corechart"] });
 
 window.addEventListener('load', function () {
@@ -175,6 +154,17 @@ window.addEventListener('load', function () {
     google.charts.setOnLoadCallback(drawChartIncomes);
 
     updateIncomesGraphData();
+
+    document.getElementById("formEditIncome").addEventListener("submit", (event) => {event.preventDefault()});
+    document.getElementById("formRemoveIncome").addEventListener("submit", (event) => {event.preventDefault()});
+
+    // make modal inputs validation when displayed, to clear validation errors, remove event listener on input change
+    document.getElementById("modalEditIncome").addEventListener("shown.bs.modal", function() {
+      document.getElementById("editIncomeAmount").removeEventListener('input', function() {});
+      document.getElementById("editIncomeDate").removeEventListener('input', function() {});
+      document.getElementById("editIncomeCategory").removeEventListener('input', function() {});
+      validateEditIncomeFormOnSubmit();
+    });
 
     // Edit Income
     document.getElementById("tableIncomes")
@@ -316,6 +306,18 @@ window.addEventListener('load', function () {
     google.charts.setOnLoadCallback(drawChartExpenses);
 
     updateExpensesGraphData();
+
+    document.getElementById("formEditExpense").addEventListener("submit", (event) => {event.preventDefault()});
+    document.getElementById("formRemoveExpense").addEventListener("submit", (event) => {event.preventDefault()});
+
+    // make modal inputs validation when displayed, to clear validation errors, remove event listener on input change
+    document.getElementById("modalEditExpense").addEventListener("shown.bs.modal", function() {
+      document.getElementById("editExpenseAmount").removeEventListener('input', function() {});
+      document.getElementById("editExpenseDate").removeEventListener('input', function() {});
+      document.getElementById("editExpenseCategory").removeEventListener('input', function() {});
+      document.getElementById("editExpenseMethod").removeEventListener('input', function() {});
+      validateEditExpenseFormOnSubmit();
+    });
 
     // Edit Expense 
     document.getElementById("tableExpenses")
