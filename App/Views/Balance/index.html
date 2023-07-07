@@ -215,6 +215,7 @@
                       name="dateFrom"
                       id="floatingDateFrom"
                       placeholder="Data od"
+                      min="2020-01-01"
                   />
                   <label for="floatingDateFrom">Data od</label>
                   </div>
@@ -225,6 +226,7 @@
                       name="dateTo"
                       id="floatingDateTo"
                       placeholder="Data do"
+                      min="2020-01-01"
                   />
                   <label for="floatingDateTo">Data do</label>
                   </div>
@@ -281,6 +283,7 @@
                 name="date_of_expense"
                 placeholder="Data"
                 value="{{ expense.date_of_expense }}"
+                min="2020-01-01"
               />
               <label id="editExpenseDateLabel" for="editExpenseDate">Data</label>
             </div>
@@ -415,6 +418,7 @@
                 name="date_of_income"
                 placeholder="Data"
                 value="{{ income.date_of_income }}"
+                min="2020-01-01"
               />
               <label id="editIncomeDateLabel" for="editIncomeDate">Data</label>
             </div>
