@@ -27,7 +27,7 @@
     <main class="container">
         <div class="bg-light px-5 py-4 mb-5 rounded">
             <div class="row">
-                <div class="w-100 text-center bg-dark rounded text-secondary py-3 mt-3">
+                <div id="summary" class="w-100 text-center bg-dark rounded text-secondary py-3 mt-3">
                     <div class="h3">PODSUMOWANIE</div>
                     <div class="h5">{{ action }}</div>
                     <div class="h5">BILANS:</div>
@@ -38,29 +38,29 @@
                 </div>
 
                 {% if balance.expenses_sum.amount_sum is null and balance.incomes_sum.amount_sum is null %}
-                  <div class="h5 w-100 text-center py-3 mt-3">
+                  <div class="summary-description h5 w-100 text-center py-3 mt-3">
                     Brak zarejestrowanych transakcji w danym okresie czasu
                   </div>
                 {% else %}
 
                   {% if balance.expenses_sum.amount_sum is null %}
-                    <div class="h5 w-100 text-center py-3 mt-3">
+                    <div class="summary-description h5 w-100 text-center py-3 mt-3">
                       Brak wydatków w danym okresie czasu
                     </div>
                   {% endif %}
 
                   {% if balance.incomes_sum.amount_sum is null %}
-                    <div class="h5 w-100 text-center py-3 mt-3">
+                    <div class="summary-description h5 w-100 text-center py-3 mt-3">
                       Brak przychodów w danym okresie czasu
                     </div>
                   {% endif %}
                 {% endif %}
 
                 {% if balance.expenses_sum.amount_sum is null %}
-                  <div class="d-flex justify-content-center">
+                  <div class="d-flex justify-content-center" id="expensesNullDonutChartDiv">
                 {% endif %}
                     {% if balance.incomes_sum.amount_sum is not null %}
-                      <div class="col-lg-6 d-flex justify-content-center">
+                      <div class="col-lg-6 d-flex justify-content-center" id="incomesDonutChartDiv">
                           <div id="incomesDonutChart" class=""></div>
                       </div>
                     {% endif %}
@@ -69,10 +69,10 @@
                 {% endif %}
 
                 {% if balance.incomes_sum.amount_sum is null %}
-                  <div class="d-flex justify-content-center">
+                  <div class="d-flex justify-content-center" id="incomesNullDonutChartDiv">
                 {% endif %}
                     {% if balance.expenses_sum.amount_sum is not null %}
-                      <div class="col-lg-6 d-flex justify-content-center">
+                      <div class="col-lg-6 d-flex justify-content-center" id="expensesDonutChartDiv">
                           <div id="expensesDonutChart" class=""></div>
                       </div>
                     {% endif %}
@@ -83,10 +83,10 @@
                 <div class="w-100 text-center"></div>
 
                 {% if balance.expenses_sum.amount_sum is null %}
-                  <div class="d-flex justify-content-center">
+                  <div class="d-flex justify-content-center" id="tableExpensesNullDiv">
                 {% endif %}
                   {% if balance.incomes_sum.amount_sum is not null %}
-                    <div class="col-xxl-6 d-flex justify-content-center">
+                    <div class="col-xxl-6 d-flex justify-content-center" id="tableIncomesDiv">
                         <div class="table-responsive">
                             <table class="table caption-top table-success" id="tableIncomes">
                                 <caption>
@@ -135,10 +135,10 @@
                 {% endif %}
 
                 {% if balance.incomes_sum.amount_sum is null %}
-                  <div class="d-flex justify-content-center">
+                  <div class="d-flex justify-content-center" id="tableIncomesNullDiv">
                 {% endif %}
                   {% if balance.expenses_sum.amount_sum is not null %}
-                    <div class="col-xxl-6 d-flex justify-content-center">
+                    <div class="col-xxl-6 d-flex justify-content-center" id="tableExpensesDiv">
                         <div class="table-responsive">
                             <table class="table caption-top table-danger" id="tableExpenses">
                                 <caption>
