@@ -9,6 +9,14 @@ let chart_options_expenses = null;
 let chart_options_incomes = null;
 const graphIncomesDivElement = document.getElementById("incomesDonutChart");
 const graphExpensesDivElement = document.getElementById("expensesDonutChart");
+const incomesTableWrapper = document.createElement("div");
+incomesTableWrapper.setAttribute("class", "d-flex justify-content-center");
+const incomesChartWrapper = document.createElement("div");
+incomesChartWrapper.setAttribute("class", "d-flex justify-content-center");
+const expensesTableWrapper = document.createElement("div");
+expensesTableWrapper.setAttribute("class", "d-flex justify-content-center");
+const expensesChartWrapper = document.createElement("div");
+expensesChartWrapper.setAttribute("class", "d-flex justify-content-center");
 
 function drawChartIncomes() {
   chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
@@ -69,6 +77,11 @@ function setSelectByText(eID,text)
       return true;
     }
   return false;
+}
+
+function wrap(el, wrapper) {
+  el.parentNode.insertBefore(wrapper, el);
+  wrapper.appendChild(el);
 }
 
 function updateBalanceData(data)
@@ -287,10 +300,38 @@ window.addEventListener('load', function () {
       const data = await res.json();
       tr.remove();
       let index = 1;
-      const table = document.querySelectorAll("tr.income-item-in-incomes-table")
-      for ( let i=0; i<table.length; i++) {
-        table[i].cells[0].textContent = index;
-        index++;
+      const table_expenses = document.querySelectorAll("tr.expense-item-in-expenses-table");
+      const table_incomes = document.querySelectorAll("tr.income-item-in-incomes-table");
+      console.log(table_incomes.length, table_expenses.length);
+      if ( table_incomes.length > 0 ) {
+        for ( let i=0; i<table_incomes.length; i++) {
+          table_incomes[i].cells[0].textContent = index;
+          index++;
+        }
+      } else {
+        if ( table_expenses.length > 0 ) {
+          document.getElementById("summary").insertAdjacentHTML( "afterend", `
+          <div class="summary-description h5 w-100 text-center py-3 mt-3">
+            Brak wydatków w danym okresie czasu
+          </div>
+          `);
+
+          wrap( document.getElementById("expensesDonutChartDiv"), incomesChartWrapper );
+          wrap( document.getElementById("tableExpensesDiv"), incomesTableWrapper );
+
+          document.getElementById("incomesDonutChartDiv").remove();
+          document.getElementById("tableIncomesDiv").remove();
+        } else {
+          document.querySelector(".summary-description").remove();
+          document.getElementById("summary").insertAdjacentHTML( "afterend", `
+          <div class="summary-description h5 w-100 text-center py-3 mt-3">
+            Brak zarejestrowanych transakcji w danym okresie czasu
+          </div>
+          `);
+
+          document.getElementById("incomesDonutChartDiv").remove();
+          document.getElementById("tableIncomesDiv").remove();
+        }
       }
       updateBalanceData(data);
       updateIncomesGraphData();
@@ -451,10 +492,38 @@ window.addEventListener('load', function () {
         const data = await res.json();
         tr.remove();
         let index = 1;
-        const table = document.querySelectorAll("tr.expense-item-in-expenses-table")
-        for ( let i=0; i<table.length; i++) {
-          table[i].cells[0].textContent = index;
-          index++;
+        const table_expenses = document.querySelectorAll("tr.expense-item-in-expenses-table");
+        const table_incomes = document.querySelectorAll("tr.income-item-in-incomes-table");
+        console.log(table_incomes.length, table_expenses.length);
+        if ( table_expenses.length > 0 ) {
+          for ( let i=0; i<table_expenses.length; i++) {
+            table_expenses[i].cells[0].textContent = index;
+            index++;
+          }
+        } else {
+          if ( table_incomes.length > 0 ) {
+            document.getElementById("summary").insertAdjacentHTML( "afterend", `
+            <div class="summary-description h5 w-100 text-center py-3 mt-3">
+              Brak wydatków w danym okresie czasu
+            </div>
+            `);
+
+            wrap( document.getElementById("incomesDonutChartDiv"), expensesChartWrapper );
+            wrap( document.getElementById("tableIncomesDiv"), expensesTableWrapper );
+
+            document.getElementById("expensesDonutChartDiv").remove();
+            document.getElementById("tableExpensesDiv").remove();
+          } else {
+            document.querySelector(".summary-description").remove();
+            document.getElementById("summary").insertAdjacentHTML( "afterend", `
+            <div class="summary-description h5 w-100 text-center py-3 mt-3">
+              Brak zarejestrowanych transakcji w danym okresie czasu
+            </div>
+            `);
+
+            document.getElementById("expensesDonutChartDiv").remove();
+            document.getElementById("tableExpensesDiv").remove();
+          }
         }
         updateBalanceData(data);
         updateExpensesGraphData();
