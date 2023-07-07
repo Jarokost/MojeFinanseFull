@@ -72,7 +72,7 @@
                     <a class="nav-link border rounded" href="/logout">Wyloguj się</a>
                 </li>
             {% else %}
-                <li class="nav-item m-1 m-xl-0">
+                <!-- <li class="nav-item m-1 m-xl-0">
                 <a class="nav-link border rounded disabled" href="#">Dodaj Przychód</a>
                 </li>
                 <li class="nav-item m-1 m-xl-0">
@@ -83,7 +83,7 @@
                 </li>
                 <li class="nav-item m-1 m-xl-0">
                 <a class="nav-link border rounded disabled" href="#">Ustawienia</a>
-                </li>
+                </li> -->
             {% endif %}
           </ul>
           <!-- JS Buttons in this div will be changed depends on login user state -->
@@ -96,7 +96,7 @@
               {% else %}
               <a
                 id="navbarLoginBtn"
-                class="btn btn-outline-success m-1 m-xl-0 d-block d-xl-inline-block mb-2 {{ (controllerType[0]=='password') ? 'invisible' }}"
+                class="btn btn-outline-success m-1 m-xl-0 d-block d-xl-inline-block mb-2 {% if controller is not empty %} invisible {% endif %}"
                 data-bs-toggle="modal"
                 href="#exampleModalToggle"
                 role="button"
@@ -104,7 +104,7 @@
               >
               <a
                 id="navbarRegistrationBtn"
-                class="btn btn-outline-primary m-1 m-xl-0 d-block d-xl-inline-block {{ (controllerType[0]=='password') ? 'invisible' }}"
+                class="btn btn-outline-primary m-1 m-xl-0 d-block d-xl-inline-block {% if controller is not empty %} invisible {% endif %}"
                 data-bs-toggle="modal"
                 href="#exampleModalToggle2"
                 role="button"
