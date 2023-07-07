@@ -65,7 +65,9 @@ class View
             $twig->addExtension(new \Twig\Extension\DebugExtension());
             $twig->addGlobal('current_user', \App\Auth::getUser());
             $twig->addGlobal('flash_messages', \App\Flash::getMessages());
-            $twig->addGlobal('controller', $_SERVER['QUERY_STRING']);
+            $queryString = $_SERVER['QUERY_STRING'];
+            $twig->addGlobal('controller', substr($queryString, 0, strpos($queryString,"/") ));
+            $twig->addGlobal('action', substr($queryString, strpos($queryString,"/")+1 , strlen($queryString)-1 ));
         }
 
         return $twig->render($template, $args);
