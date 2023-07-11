@@ -18,6 +18,11 @@ body {
   background-size: cover;
 }
 
+.container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .navbar-brand > img {
   width: 25px;
   height: 25px;
@@ -288,6 +293,21 @@ textarea {
   --bs-navbar-brand-hover-color: #fff;
   --bs-navbar-toggler-border-color: rgba(255, 255, 255, 0.1);
   --bs-navbar-toggler-icon-bg: url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e);
+}
+
+.dropdown-menu-dark {
+  --bs-dropdown-color: #3c5569;
+  --bs-dropdown-bg: #061c2d;
+  --bs-dropdown-border-color: var(--bs-border-color-translucent);
+  --bs-dropdown-box-shadow: ;
+  --bs-dropdown-link-color: #3c5569;
+  --bs-dropdown-link-hover-color: #46759c;
+  --bs-dropdown-divider-bg: var(--bs-border-color-translucent);
+  --bs-dropdown-link-hover-bg: rgba(255, 255, 255, 0.10);
+  --bs-dropdown-link-active-color: #71a00d;
+  --bs-dropdown-link-active-bg: rgba(255, 255, 255, 0.05);
+  --bs-dropdown-link-disabled-color: #adb5bd;
+  --bs-dropdown-header-color: #adb5bd;
 }
 
 .accordion {

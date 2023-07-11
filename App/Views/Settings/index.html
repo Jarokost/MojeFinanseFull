@@ -15,22 +15,31 @@
 
 {% block body %}
 <main class="container">
-    <div class="bg-light px-5 py-4 mb-5 rounded">
+    <div class="bg-light px-sm-0 px-xl-4 py-sm-0 py-xl-4 mb-5 rounded">
       <div class="row">
 
-        <!-- ACCORDIO ACCOUNT -->
+        <!-- ACCORDION ACCOUNT -->
         <div class="accordion mb-1" id="accordionAccount">
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingAccordionAccount">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAccordionAccount" aria-expanded="false" aria-controls="collapseAccordionAccount">
+              <button class="accordion-button collapsed" 
+                type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseAccordionAccount"
+                aria-expanded="false"
+                aria-controls="collapseAccordionAccount"
+              >
                 KONTO
               </button>
             </h2>
-            <div id="collapseAccordionAccount" class="accordion-collapse collapse" aria-labelledby="headingAccordionAccount" data-bs-parent="#accordionAccount">
-              <div class="accordion-body">
+            <div id="collapseAccordionAccount"
+              class="accordion-collapse collapse"
+              aria-labelledby="headingAccordionAccount"
+              data-bs-parent="#accordionAccount"
+            >
+              <div class="accordion-body px-1 px-xl-3">
 
                 <div
-                  class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
+                  class="table-item mb-3 py-2 fw-bold w-100"
                   href="#modalEditAccountName"
                   data-bs-toggle="modal"
                 >
@@ -38,7 +47,7 @@
                 </div>
 
                 <div
-                  class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
+                  class="table-item mb-3 py-2 fw-bold w-100"
                   href="#modalEditAccountEmail"
                   data-bs-toggle="modal"
                 >
@@ -46,7 +55,7 @@
                 </div>
 
                 <div
-                  class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
+                  class="table-item mb-3 py-2 fw-bold w-100"
                   href="#modalEditAccountPassword"
                   data-bs-toggle="modal"
                 >
@@ -54,7 +63,7 @@
                 </div>
 
                 <div
-                  class="col-12 col-md-4 table-item py-2 fw-bold w-100"
+                  class="table-item py-2 fw-bold w-100"
                   href="#modalRemAccount"
                   data-bs-toggle="modal"
                 >
@@ -67,19 +76,29 @@
         </div>
 
         <!-- ACCORDIONS CATEGORIES -->
-        <div class="row mb-3 row-edit">
-          <div class="col-12 col-md-4 py-2 fw-bold">
+        <div class="row row-edit">
+          <div class="col-12 col-xl-4 py-1 fw-bold">
             <div class="accordion mb-1" id="accordionIncomes">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingAccordionIncomes">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAccordionIncomes" aria-expanded="false" aria-controls="collapseAccordionIncomes">
+                  <button class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseAccordionIncomes"
+                    aria-expanded="false"
+                    aria-controls="collapseAccordionIncomes"
+                  >
                     KATEGORIE PRZYCHODÓW
                   </button>
                 </h2>
-                <div id="collapseAccordionIncomes" class="accordion-collapse collapse" aria-labelledby="headingAccordionIncomes" data-bs-parent="#accordionIncomes">
-                  <div class="accordion-body">
+                <div id="collapseAccordionIncomes"
+                  class="accordion-collapse collapse"
+                  aria-labelledby="headingAccordionIncomes"
+                  data-bs-parent="#accordionIncomes"
+                >
+                  <div class="accordion-body p-1 pt-3 p-xl-3">
                     <div
-                      class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
+                      class="table-item mb-3 py-2 fw-bold w-100"
                       href="#modalAddCatNameIncomes"
                       data-bs-toggle="modal"
                     >
@@ -108,18 +127,27 @@
               </div>
             </div>
           </div>
-          <div class="col-12 col-md-4 py-2 fw-bold">
+          <div class="col-12 col-xl-4 py-1 fw-bold">
             <div class="accordion mb-1" id="accordionExpenses">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingAccordionExpeneses">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAccordionExpenses" aria-expanded="false" aria-controls="collapseAccordionExpenses">
+                  <button class="accordion-button collapsed"
+                    type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseAccordionExpenses"
+                    aria-expanded="false"
+                    aria-controls="collapseAccordionExpenses"
+                  >
                     KATEGORIE WYDATKÓW
                   </button>
                 </h2>
-                <div id="collapseAccordionExpenses" class="accordion-collapse collapse" aria-labelledby="headingAccordionExpeneses" data-bs-parent="#accordionExpenses">
-                  <div class="accordion-body">
+                <div id="collapseAccordionExpenses"
+                  class="accordion-collapse collapse"
+                  aria-labelledby="headingAccordionExpeneses"
+                  data-bs-parent="#accordionExpenses"
+                >
+                  <div class="accordion-body p-1 pt-3 p-xl-3">
                     <div
-                      class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
+                      class="table-item mb-3 py-2 fw-bold w-100"
                       href="#modalAddCatNameExpenses"
                       data-bs-toggle="modal"
                     >
@@ -154,18 +182,28 @@
               </div>
             </div>
           </div>
-          <div class="col-12 col-md-4 py-2 fw-bold">
-            <div class="accordion mb-1" id="accordionPaymentMethods">
+          <div class="col-12 col-xl-4 pt-1 fw-bold">
+            <div class="accordion" id="accordionPaymentMethods">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingAccordionPaymentMethods">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAccordionPaymentMethods" aria-expanded="false" aria-controls="collapseAccordionPaymentMethods">
+                  <button class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseAccordionPaymentMethods"
+                    aria-expanded="false"
+                    aria-controls="collapseAccordionPaymentMethods"
+                  >
                     METODY PŁATNOŚCI
                   </button>
                 </h2>
-                <div id="collapseAccordionPaymentMethods" class="accordion-collapse collapse" aria-labelledby="headingAccordionPaymentMethods" data-bs-parent="#accordionPaymentMethods">
-                  <div class="accordion-body">
+                <div id="collapseAccordionPaymentMethods"
+                  class="accordion-collapse collapse"
+                  aria-labelledby="headingAccordionPaymentMethods"
+                  data-bs-parent="#accordionPaymentMethods"
+                >
+                  <div class="accordion-body p-1 pt-3 p-xl-3">
                     <div
-                      class="col-12 col-md-4 table-item mb-3 py-2 fw-bold w-100"
+                      class="table-item mb-3 py-2 fw-bold w-100"
                       href="#modalAddCatNamePayment"
                       data-bs-toggle="modal"
                     >
