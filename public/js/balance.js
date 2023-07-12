@@ -1,4 +1,5 @@
 let tr = null;
+let tr_expanded = null;
 let expenses_categories_sum_table = [["Wydatki", "Wartość"]];
 let incomes_categories_sum_table = [["Przychody", "Wartość"]];
 let chart_expenses = null;
@@ -304,7 +305,6 @@ window.addEventListener('load', function () {
       let index = 1;
       const table_expenses = document.querySelectorAll("tr.expense-item-in-expenses-table");
       const table_incomes = document.querySelectorAll("tr.income-item-in-incomes-table");
-      console.log(table_incomes.length, table_expenses.length);
       if ( table_incomes.length > 0 ) {
         for ( let i=0; i<table_incomes.length; i++) {
           table_incomes[i].cells[0].textContent = index;
@@ -366,9 +366,10 @@ window.addEventListener('load', function () {
     document.getElementById("tableExpenses")
     .addEventListener("click", function(ele) {
 
-      if (ele.target.className === "icon-pencil") {
+      if (ele.target.className === "icon-pencil balance-btn-div-link") {
 
-        tr = ele.target.parentNode.parentNode.parentNode;
+        tr_expanded = ele.target.parentNode.parentNode.parentNode;
+        tr = tr_expanded.previousElementSibling;
 
         let id = tr.cells[1].textContent;
         let date = tr.cells[2].textContent;
@@ -435,6 +436,9 @@ window.addEventListener('load', function () {
             tr.cells[4].textContent = methodSelect.options[methodSelect.selectedIndex].text;
             tr.cells[5].textContent = expense_comment;
             tr.cells[6].textContent = parseFloat(amount).toFixed(2);
+
+            document.querySelector(`#${tr_expanded.id} .method`).textContent = tr.cells[4].textContent;
+            document.querySelector(`#${tr_expanded.id} .comment`).textContent = tr.cells[5].textContent;
             
             updateBalanceData(data);
             updateExpensesGraphData();
@@ -449,9 +453,10 @@ window.addEventListener('load', function () {
     document.getElementById("tableExpenses")
     .addEventListener("click", function(ele) {
 
-      if (ele.target.className === "icon-trash") {
+      if (ele.target.className === "icon-trash balance-btn-div-link") {
 
-        tr = ele.target.parentNode.parentNode.parentNode;
+        tr_expanded = ele.target.parentNode.parentNode.parentNode;
+        tr = tr_expanded.previousElementSibling;
 
         let id = tr.cells[1].textContent;
         let date = tr.cells[2].textContent;
@@ -493,10 +498,10 @@ window.addEventListener('load', function () {
         })
         const data = await res.json();
         tr.remove();
+        tr_expanded.remove();
         let index = 1;
         const table_expenses = document.querySelectorAll("tr.expense-item-in-expenses-table");
         const table_incomes = document.querySelectorAll("tr.income-item-in-incomes-table");
-        console.log(table_incomes.length, table_expenses.length);
         if ( table_expenses.length > 0 ) {
           for ( let i=0; i<table_expenses.length; i++) {
             table_expenses[i].cells[0].textContent = index;
