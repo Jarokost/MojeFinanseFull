@@ -367,64 +367,75 @@ table.rounded-corners > tfoot:not(:last-child) {
   border-bottom: var(--border);
 }
 
-table.rounded-corners tr td:not(:first-child):hover {
+table.rounded-corners.table-settings tr td:not(:first-child):hover {
   color: #71a00d !important;
   cursor: pointer;
 }
 
-table.rounded-corners tr td:first-child {
+table.rounded-corners.table-settings tr td:first-child {
   width: 90%;
   text-align: left;
   padding: 10px;
 }
 
-table.rounded-corners tr td:nth-child(n+3) {
+table.rounded-corners.table-settings tr td:nth-child(n+3) {
   width: 5%;
   text-align: center;
   padding: 10px 5px;
 }
 
-table.rounded-corners tr td:last-child {
+table.rounded-corners.table-settings tr td:last-child {
   width: 5%;
   text-align: center;
   padding: 10px 10px 10px 5px;
 }
 
-table.rounded-corners.expenses-categories tr td:not(:first-child):hover {
+table.rounded-corners.table-settings tr td small.text-muted {
+  color: #3c5569 !important;
+}
+
+table.rounded-corners.table-balance {
+  max-width: 300px;
+}
+
+table.rounded-corners.table-balance tr td {
+  vertical-align: middle;
+}
+
+table.rounded-corners.table-balance tr td:first-child {
+  text-align: center;
+  padding: 10px;
+  min-width: 48px;
+}
+
+table.rounded-corners.table-balance tr td:nth-child(3) {
+  text-align: center;
+  padding: 10px 5px;
+  min-width: 95px;
+}
+
+table.rounded-corners.table-balance tr td:nth-child(4) {
+  text-align: center;
+  margin: 50px;
+  padding: 10px 5px;
+  max-width: 150px;
+  word-wrap: break-word;
+  /* overflow: hidden; */
+}
+
+table.rounded-corners.table-balance tr td:nth-child(7) {
+  text-align: right;
+  padding: 10px 10px 10px 5px;
+  min-width: 90px;
+}
+
+table.rounded-corners.table-balance tr td:nth-child(n+8):hover {
   color: #71a00d !important;
   cursor: pointer;
 }
 
-table.rounded-corners.expenses-categories tr td:first-child {
-  width: 70%;
-  text-align: left;
-  padding: 10px 5px 10px 10px;
-}
-/* 
-table.rounded-corners.expenses-categories tr td:nth-child(3) {
-  width: 20%;
-  text-align: center;
-  padding: 10px 5px;
-} */
-
-table.rounded-corners.expenses-categories tr td:nth-child(n+3) {
-  width: 5%;
-  text-align: center;
-  padding: 10px 5px;
-}
-
-table.rounded-corners.expenses-categories tr td:last-child {
-  width: 5%;
-  text-align: center;
-  padding: 10px 10px 10px 5px;
-}
-
 .expenses-limit {
   line-height: 100%;
-}
-
-table.rounded-corners tr td small.text-muted {
-  color: #3c5569 !important;
 }
 
 .settings-modal-bg {
@@ -442,4 +453,8 @@ table.rounded-corners tr td small.text-muted {
 
 .form-floating > .form-control:not(:focus)::placeholder {
   color: transparent;
+}
+
+tr.hide-table-padding td {
+  padding: 0 !important;
 }

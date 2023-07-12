@@ -21,6 +21,19 @@
 
 <script src="/js/balance.js"></script>
 
+<script>
+  var toggle_all = $('#toggle_all')
+  toggle_all.on('click', function(event) {
+    if (toggle_all.attr("aria-expanded") === 'false') {
+      $('.multi-collapse').collapse('show')
+      toggle_all.attr('aria-expanded', 'true');
+    } else {
+      $('.multi-collapse').collapse('hide')
+      toggle_all.attr('aria-expanded', 'false');
+    }
+  });
+</script>
+
 {% endblock %}
 
 {% block body %}
@@ -139,49 +152,85 @@
                 {% endif %}
                   {% if balance.expenses_sum.amount_sum is not null %}
                     <div class="col-xxl-6 d-flex justify-content-center" id="tableExpensesDiv">
-                        <div class="table-responsive">
-                            <table class="table caption-top table-danger" id="tableExpenses">
-                                <caption>
-                                    Wydatki
-                                </caption>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col" hidden>id</th>
-                                        <th scope="col">Data</th>
-                                        <th scope="col">Kategoria</th>
-                                        <th scope="col">Forma płatności</th>
-                                        <th scope="col">Opis</th>
-                                        <th scope="col">Kwota</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for expense in balance.expenses %}
-                                    <tr class="expense-item-in-expenses-table">
-                                        <td>{{ loop.index0+1 }}</td>
-                                        <td hidden>{{ expense.id }}</td>
-                                        <td>{{ expense.date_of_expense }}</td>
-                                        <td>{{ expense.category_name }}</td>
-                                        <td>{{ expense.payment_method_name }}</td>
-                                        <td>{{ expense.expense_comment }}</td>
-                                        <td>{{ expense.amount }}</td>
-                                        <td>
-                                          <a class="dropdown-item editingTRbutton" href="#modalEditExpense" data-bs-toggle="modal">
-                                            <i class="icon-pencil"></i>
-                                          </a>
-                                        </td>
-                                        <td>
-                                          <a class="dropdown-item removingTRbutton" href="#modalRemoveExpense" data-bs-toggle="modal">
-                                            <i class="icon-trash"></i>
-                                          </a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+
+                      <div class="table-responsive">
+                        <table class="table caption-top rounded-corners table-balance" id="tableExpenses">
+                            <caption>
+                                Wydatki 
+                                <button class="btn btn-secondary" 
+                                id="toggle_all"
+                                type="button" 
+                                data-bs-toggle="collapse" 
+                                aria-expanded="false" 
+                                >Pokaż szczegóły
+                              </button>
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" hidden>id</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Kategoria</th>
+                                    <th scope="col" hidden>Forma płatności</th>
+                                    <th scope="col" hidden>Opis</th>
+                                    <th scope="col">Kwota</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              {% for expense in balance.expenses %}
+                              <tr class="expense-item-in-expenses-table accordion-toggle collapsed"
+                              id="accordion{{ loop.index0+1 }}"
+                              data-bs-toggle="collapse"
+                              href="#collapse{{ loop.index0+1 }}"
+                              aria-controls="collapse{{ loop.index0+1 }}"
+                              >
+                                <td>{{ loop.index0+1 }}</td>
+                                <td hidden>{{ expense.id }}</td>
+                                <td>{{ expense.date_of_expense }}</td>
+                                <td>{{ expense.category_name }}</td>
+                                <td hidden>{{ expense.payment_method_name }}</td>
+                                <td hidden>{{ expense.expense_comment }}</td>
+                                <td>{{ expense.amount }}</td>
+                                <td>
+                                  <a class="dropdown-item editingTRbutton" href="#modalEditExpense" data-bs-toggle="modal">
+                                  <i class="icon-pencil"></i>
+                                  </a>
+                                </td>
+                                <td>
+                                  <a class="dropdown-item removingTRbutton" href="#modalRemoveExpense" data-bs-toggle="modal">
+                                  <i class="icon-trash"></i>
+                                  </a>
+                                </td>
+                              </tr>
+                              <tr id="collapse{{ loop.index0+1 }}" class="collapse multi-collapse in p-5">
+                                <td></td>
+                                <td colspan="3">
+                                <div>
+                                  <div class="row">
+                                  <div class="col-2">label</div>
+                                  <div class="col-6">value 1</div>
+                                  </div>
+                                  <div class="row">
+                                  <div class="col-2">label</div>
+                                  <div class="col-6">value 2</div>
+                                  </div>
+                                  <div class="row">
+                                  <div class="col-2">label</div>
+                                  <div class="col-6">value 3</div>
+                                  </div>
+                                  <div class="row">
+                                  <div class="col-2">label</div>
+                                  <div class="col-6">value 4</div>
+                                  </div>
+                                </div></td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                        </table>
+                      </div>
+
                     </div>
                   {% endif %}
                 {% if balance.incomes_sum.amount_sum is null %}

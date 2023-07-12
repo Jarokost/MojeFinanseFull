@@ -104,7 +104,7 @@
                     >
                     Dodaj nową <i class="icon-plus"></i>
                     </div>
-                    <table id="tableIncomesCategories" class="rounded-corners">
+                    <table id="tableIncomesCategories" class="rounded-corners table-settings">
                       {% for category in incomes_categories %}
                       <tr>
                           <td>{{ category.name }}</td>
@@ -153,7 +153,7 @@
                     >
                     Dodaj nową <i class="icon-plus"></i>
                     </div>
-                    <table id="tableExpensesCategories" class="rounded-corners">
+                    <table id="tableExpensesCategories" class="rounded-corners table-settings">
                       {% for category in expenses_categories %}
                       <tr>
                           <td class="expenses-limit">
@@ -209,7 +209,7 @@
                     >
                     Dodaj nową <i class="icon-plus"></i>
                     </div>
-                    <table id="tablePaymentMethods" class="rounded-corners">
+                    <table id="tablePaymentMethods" class="rounded-corners table-settings">
                       {% for method in payment_methods %}
                       <tr>
                           <td>{{ method.name }}</td>
