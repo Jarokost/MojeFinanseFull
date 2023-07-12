@@ -33,8 +33,9 @@ function drawChartIncomes() {
     pieHole: 0.3,
     legend: "none",
     backgroundColor: "transparent",
-    width: 400,
-    height: 400,
+    width: 450,
+    height: 450,
+    fontSize: 18
   };
 
   chart_incomes = new google.visualization.PieChart(
@@ -58,8 +59,9 @@ function drawChartExpenses() {
     pieHole: 0.3,
     legend: "none",
     backgroundColor: "transparent",
-    width: 400,
-    height: 400,
+    width: 450,
+    height: 450,
+    fontSize: 18
   };
 
   chart_expenses = new google.visualization.PieChart(

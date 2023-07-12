@@ -22,16 +22,29 @@
 <script src="/js/balance.js"></script>
 
 <script>
-  var toggle_all = $('#toggle_all')
-  toggle_all.on('click', function(event) {
-    if (toggle_all.attr("aria-expanded") === 'false') {
-      $('.multi-collapse').collapse('show')
-      toggle_all.attr('aria-expanded', 'true');
-    } else {
-      $('.multi-collapse').collapse('hide')
-      toggle_all.attr('aria-expanded', 'false');
+const collapseElementList = [].slice.call(document.querySelectorAll('#tableExpenses > tbody > tr.collapse'))
+const collapseList = collapseElementList.map(function (collapseEl) {
+  return new bootstrap.Collapse(collapseEl, { toggle: false });
+});
+
+const show_all = document.getElementById("show_all");
+const hide_all = document.getElementById("hide_all");
+
+show_all.addEventListener('click', function(event) {
+    for(let i=0;i<collapseList.length;i++)
+    {
+      collapseList[i].show();
     }
-  });
+  }
+);
+
+hide_all.addEventListener('click', function(event) {
+    for(let i=0;i<collapseList.length;i++)
+    {
+      collapseList[i].hide();
+    }
+  }
+);
 </script>
 
 {% endblock %}
@@ -154,16 +167,29 @@
                     <div class="col-xxl-6 d-flex justify-content-center" id="tableExpensesDiv">
 
                       <div class="table-responsive">
-                        <table class="table caption-top rounded-corners table-balance" id="tableExpenses">
+                        <table class="table caption-top rounded-corners table-balance fw-bold" id="tableExpenses">
                             <caption>
-                                Wydatki 
-                                <button class="btn btn-secondary" 
-                                id="toggle_all"
-                                type="button" 
-                                data-bs-toggle="collapse" 
-                                aria-expanded="false" 
-                                >Pokaż szczegóły
-                              </button>
+                              <div class="table-caption-div">
+                                <div class="table-caption-div-caption fs-5">
+                                  Wydatki
+                                </div>
+                                <div class="table-caption-div-btn">
+                                  <button class="btn btn-secondary fw-bold" 
+                                    id="show_all"
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    aria-expanded="false" 
+                                    >Pokaż szczegóły
+                                  </button>
+                                  <button class="btn btn-secondary fw-bold" 
+                                    id="hide_all"
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    aria-expanded="true" 
+                                    >Ukryj szczegóły
+                                  </button>
+                                </div>
+                              </div>
                             </caption>
                             <thead>
                                 <tr>
@@ -174,8 +200,8 @@
                                     <th scope="col" hidden>Forma płatności</th>
                                     <th scope="col" hidden>Opis</th>
                                     <th scope="col">Kwota</th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
+                                    <th scope="col" hidden></th>
+                                    <th scope="col" hidden></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -193,12 +219,12 @@
                                 <td hidden>{{ expense.payment_method_name }}</td>
                                 <td hidden>{{ expense.expense_comment }}</td>
                                 <td>{{ expense.amount }}</td>
-                                <td>
+                                <td hidden>
                                   <a class="dropdown-item editingTRbutton" href="#modalEditExpense" data-bs-toggle="modal">
                                   <i class="icon-pencil"></i>
                                   </a>
                                 </td>
-                                <td>
+                                <td hidden>
                                   <a class="dropdown-item removingTRbutton" href="#modalRemoveExpense" data-bs-toggle="modal">
                                   <i class="icon-trash"></i>
                                   </a>
@@ -206,25 +232,34 @@
                               </tr>
                               <tr id="collapse{{ loop.index0+1 }}" class="collapse multi-collapse in p-5">
                                 <td></td>
-                                <td colspan="3">
-                                <div>
-                                  <div class="row">
-                                  <div class="col-2">label</div>
-                                  <div class="col-6">value 1</div>
+                                <td colspan="2">
+                                  <div>
+                                    <div class="text-start">
+                                      <div class="pt-1">
+                                        <div class="d-inline">Metoda płatności:</div>
+                                        <div class="ps-1 d-inline">{{ expense.payment_method_name }}</div>
+                                      </div>
+                                      <div class="py-2">
+                                        <div class="d-inline">Opis:</div>
+                                        <div class="ps-1 d-inline">{{ expense.expense_comment }}</div>
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div class="row">
-                                  <div class="col-2">label</div>
-                                  <div class="col-6">value 2</div>
+                                </td>
+                                <td class="balance-btn-td">
+                                  <div class="balance-btn-div">
+                                    <div class="icon-pencil balance-btn-div-link" 
+                                      href="#modalEditExpense" 
+                                      data-bs-toggle="modal"
+                                    >
+                                    </div>
+                                    <div class="icon-trash balance-btn-div-link"
+                                      href="#modalRemoveExpense"
+                                      data-bs-toggle="modal"
+                                    >
+                                    </div>
                                   </div>
-                                  <div class="row">
-                                  <div class="col-2">label</div>
-                                  <div class="col-6">value 3</div>
-                                  </div>
-                                  <div class="row">
-                                  <div class="col-2">label</div>
-                                  <div class="col-6">value 4</div>
-                                  </div>
-                                </div></td>
+                                </td>
                               </tr>
                               {% endfor %}
                             </tbody>

@@ -411,7 +411,7 @@ table.rounded-corners.table-balance tr td:first-child {
 table.rounded-corners.table-balance tr td:nth-child(3) {
   text-align: center;
   padding: 10px 5px;
-  min-width: 95px;
+  min-width: 105px;
 }
 
 table.rounded-corners.table-balance tr td:nth-child(4) {
@@ -432,6 +432,25 @@ table.rounded-corners.table-balance tr td:nth-child(7) {
 table.rounded-corners.table-balance tr td:nth-child(n+8):hover {
   color: #71a00d !important;
   cursor: pointer;
+}
+
+table.rounded-corners.table-balance tbody tr:hover {
+  cursor: pointer;
+}
+
+table.rounded-corners.table-balance tr:hover td {
+  background-color: #061c2d;
+  color: #fff;
+}
+
+table.rounded-corners.table-balance tr.collapse:hover td {
+  background-color: #7acb7e;
+  color: #000;
+  cursor: default;
+}
+
+table.rounded-corners.table-balance thead {
+  font-size: larger;
 }
 
 .expenses-limit {
@@ -457,4 +476,51 @@ table.rounded-corners.table-balance tr td:nth-child(n+8):hover {
 
 tr.hide-table-padding td {
   padding: 0 !important;
+}
+
+.balance-btn-td {
+  vertical-align: top !important;
+  height: 150px;
+}
+
+.balance-btn-div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 120px;
+}
+
+.balance-btn-div-link {
+  width: 50%;
+  margin: 6px 0;
+  padding: 8px 0;
+  /* font-size: 24px; */
+}
+
+.balance-btn-div-link {
+  transition: font-size 0.15s ease-in-out,
+  color 0.15s ease-in-out;
+}
+
+.balance-btn-div-link:hover {
+  cursor: pointer;
+  font-size: 24px;
+}
+.balance-btn-div-link.icon-trash:hover {
+  color: #dc3912;
+}
+.balance-btn-div-link.icon-pencil:hover {
+  color: #3366cc;
+}
+
+.table-caption-div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.table-caption-div-caption {
+  flex-grow: 1;
 }
