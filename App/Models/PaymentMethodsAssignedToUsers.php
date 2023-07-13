@@ -66,7 +66,7 @@ class PaymentMethodsAssignedToUsers extends \Core\Model
 
         $stmt->execute();
 
-        return $stmt->fetch();
+        return $stmt->fetchColumn();
 
     }
 

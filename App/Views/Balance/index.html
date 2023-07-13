@@ -18,7 +18,7 @@
 
 <script src="/js/validateInputsCommon.js"></script>
 <script src="/js/validateInputsEditBalance.js"></script>
-
+<script src="/js/printFlashMessages.js"></script>
 <script src="/js/balance.js"></script>
 
 <script>
@@ -135,7 +135,7 @@ hideAllIncomes.addEventListener('click', function(event) {
                   <div class="d-flex justify-content-center" id="tableIncomesNullDiv">
                 {% endif %}
                   {% if balance.incomes_sum.amount_sum is not null %}
-                    <div class="col-lg-6" id="tableExpensesDiv">
+                    <div class="col-lg-6" id="tableIncomesDiv">
                       <!-- <div class="rectangle_red"></div> -->
 
                         <table class="table caption-top rounded-corners table-balance fw-bold m-auto" id="tableIncomes">

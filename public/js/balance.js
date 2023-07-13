@@ -261,6 +261,7 @@ window.addEventListener('load', function () {
 
             updateBalanceData(data);
             updateIncomesGraphData();
+            printFlashMessages(data);
           }
         } catch (e) {
           console.log('ERROR: ', e);
@@ -351,6 +352,7 @@ window.addEventListener('load', function () {
       }
       updateBalanceData(data);
       updateIncomesGraphData();
+      printFlashMessages(data);
     } catch (e) {
       console.log('ERROR: ', e);
     }
@@ -456,6 +458,7 @@ window.addEventListener('load', function () {
             
             updateBalanceData(data);
             updateExpensesGraphData();
+            printFlashMessages(data);
           }
         } catch (e) {
           console.log('ERROR: ', e);
@@ -548,6 +551,7 @@ window.addEventListener('load', function () {
         }
         updateBalanceData(data);
         updateExpensesGraphData();
+        printFlashMessages(data);
       } catch (e) {
         console.log('ERROR: ', e);
       }

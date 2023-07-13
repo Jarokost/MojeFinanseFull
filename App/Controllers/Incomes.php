@@ -81,9 +81,21 @@ class Incomes extends Authenticated
     {
         $data = [];
         $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
-        $incomes = new \App\Models\Incomes($post_fetch_promise);
-        $data['success'] = $incomes->updateTableRowAjax();
-        $data['errors'] = $incomes->errors;
+        $income = new \App\Models\Incomes($post_fetch_promise);
+        $data['success'] = $income->updateTableRowAjax();
+        $data['errors'] = $income->errors;
+
+        if ($income->errors == NULL) {
+            $data['flash_message_body'][0] = 'dokonano zmian przychodu: ' 
+            . $income->date_of_income . ' '
+            . IncomesCategoryAssignedToUsers::getCategoryName($income->income_category_assigned_to_user_id) . ' '
+            . $income->amount . '[PLN] opis: '
+            . $income->income_comment;
+            $data['flash_message_type'][0] = 'success';
+        } else {
+            $data['flash_message_body'][0] = 'nie udało się dokonać zmian przychodu';
+            $data['flash_message_type'][0] = 'warning';
+        }
 
         $data = $this->queries($data);
 
@@ -95,10 +107,17 @@ class Incomes extends Authenticated
     {
         $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
         $row_id = $post_fetch_promise['id'];
+        $income = \App\Models\Incomes::getIncomeById($row_id);
         \App\Models\Incomes::removeTableRowAjax($row_id);
 
         $data = [];
         $data = $this->queries($data);
+        $data['flash_message_body'][0] = 'usunięto przychód: ' 
+            . $income->date_of_income . ' '
+            . IncomesCategoryAssignedToUsers::getCategoryName($income->income_category_assigned_to_user_id) . ' '
+            . $income->amount . '[PLN] opis: '
+            . $income->income_comment;
+            $data['flash_message_type'][0] = 'success';
 
         echo json_encode($data);
         exit;
