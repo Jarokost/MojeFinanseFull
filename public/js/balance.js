@@ -32,7 +32,8 @@ function drawChartIncomes() {
       // italic: <boolean>   // true of false
     },
     pieHole: 0.3,
-    legend: "none",
+    //legend: "none",
+    legend: {position: 'top', maxLines: 10, textStyle: {color: 'black', fontSize: 16}},
     backgroundColor: "transparent",
     width: 450,
     height: 450,
@@ -58,7 +59,8 @@ function drawChartExpenses() {
       // italic: <boolean>   // true of false
     },
     pieHole: 0.3,
-    legend: "none",
+    //legend: "none",
+    legend: {position: 'top', maxLines: 10, textStyle: {color: 'black', fontSize: 16}},
     backgroundColor: "transparent",
     width: 450,
     height: 450,
