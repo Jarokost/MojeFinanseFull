@@ -22,26 +22,49 @@
 <script src="/js/balance.js"></script>
 
 <script>
-const collapseElementList = [].slice.call(document.querySelectorAll('#tableExpenses > tbody > tr.collapse'))
-const collapseList = collapseElementList.map(function (collapseEl) {
+const collapseElementListExpenses = [].slice.call(document.querySelectorAll('#tableExpenses > tbody > tr.collapse'))
+const collapseListExpenses = collapseElementListExpenses.map(function (collapseEl) {
   return new bootstrap.Collapse(collapseEl, { toggle: false });
 });
 
-const show_all = document.getElementById("show_all");
-const hide_all = document.getElementById("hide_all");
+const collapseElementListIncomes = [].slice.call(document.querySelectorAll('#tableIncomes > tbody > tr.collapse'))
+const collapseListIncomes = collapseElementListIncomes.map(function (collapseEl) {
+  return new bootstrap.Collapse(collapseEl, { toggle: false });
+});
 
-show_all.addEventListener('click', function(event) {
-    for(let i=0;i<collapseList.length;i++)
+const showAllExpenses = document.getElementById("showAllExpenses");
+const hideAllExpenses = document.getElementById("hideAllExpenses");
+const showAllIncomes = document.getElementById("showAllIncomes");
+const hideAllIncomes = document.getElementById("hideAllIncomes");
+
+showAllExpenses.addEventListener('click', function(event) {
+    for(let i=0;i<collapseListExpenses.length;i++)
     {
-      collapseList[i].show();
+      collapseListExpenses[i].show();
     }
   }
 );
 
-hide_all.addEventListener('click', function(event) {
-    for(let i=0;i<collapseList.length;i++)
+hideAllExpenses.addEventListener('click', function(event) {
+    for(let i=0;i<collapseListExpenses.length;i++)
     {
-      collapseList[i].hide();
+      collapseListExpenses[i].hide();
+    }
+  }
+);
+
+showAllIncomes.addEventListener('click', function(event) {
+    for(let i=0;i<collapseListIncomes.length;i++)
+    {
+      collapseListIncomes[i].show();
+    }
+  }
+);
+
+hideAllIncomes.addEventListener('click', function(event) {
+    for(let i=0;i<collapseListIncomes.length;i++)
+    {
+      collapseListIncomes[i].hide();
     }
   }
 );
@@ -109,80 +132,28 @@ hide_all.addEventListener('click', function(event) {
                 <div class="w-100 text-center"></div>
 
                 {% if balance.expenses_sum.amount_sum is null %}
-                  <div class="d-flex justify-content-center" id="tableExpensesNullDiv">
-                {% endif %}
-                  {% if balance.incomes_sum.amount_sum is not null %}
-                    <div class="col-xxl-6 d-flex justify-content-center" id="tableIncomesDiv">
-                        <div class="table-responsive">
-                            <table class="table caption-top table-success" id="tableIncomes">
-                                <caption>
-                                    Przychody
-                                </caption>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col" hidden>id</th>
-                                        <th scope="col">Data</th>
-                                        <th scope="col">Kategoria</th>
-                                        <th scope="col">Opis</th>
-                                        <th scope="col">Kwota</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for income in balance.incomes %}
-                                    <tr class="income-item-in-incomes-table">
-                                        <td>{{ loop.index0+1 }}</td>
-                                        <td hidden>{{ income.id }}</td>
-                                        <td>{{ income.date_of_income }}</td>
-                                        <td>{{ income.category_name }}</td>
-                                        <td>{{ income.income_comment }}</td>
-                                        <td>{{ income.amount }}</td>
-                                        <td>
-                                          <a class="dropdown-item editingTRbutton" href="#modalEditIncome" data-bs-toggle="modal">
-                                            <i class="icon-pencil"></i>
-                                          </a>
-                                        </td>
-                                        <td>
-                                          <a class="dropdown-item removingTRbutton" href="#modalRemoveIncome" data-bs-toggle="modal">
-                                            <i class="icon-trash"></i>
-                                          </a></a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                  {% endif %}
-                {% if balance.expenses_sum.amount_sum is null %}
-                  </div>
-                {% endif %}
-
-                {% if balance.incomes_sum.amount_sum is null %}
                   <div class="d-flex justify-content-center" id="tableIncomesNullDiv">
                 {% endif %}
-                  {% if balance.expenses_sum.amount_sum is not null %}
-                    <div class="col-xxl-6 d-flex justify-content-center" id="tableExpensesDiv">
+                  {% if balance.incomes_sum.amount_sum is not null %}
+                    <div class="col-lg-6" id="tableExpensesDiv">
+                      <!-- <div class="rectangle_red"></div> -->
 
-                      <div class="table-responsive">
-                        <table class="table caption-top rounded-corners table-balance fw-bold" id="tableExpenses">
+                        <table class="table caption-top rounded-corners table-balance fw-bold m-auto" id="tableIncomes">
                             <caption>
                               <div class="table-caption-div">
                                 <div class="table-caption-div-caption fs-5">
-                                  Wydatki
+                                  Przychody
                                 </div>
                                 <div class="table-caption-div-btn">
                                   <button class="btn btn-secondary fw-bold" 
-                                    id="show_all"
+                                    id="showAllIncomes"
                                     type="button" 
                                     data-bs-toggle="collapse" 
                                     aria-expanded="false" 
                                     >Pokaż szczegóły
                                   </button>
                                   <button class="btn btn-secondary fw-bold" 
-                                    id="hide_all"
+                                    id="hideAllIncomes"
                                     type="button" 
                                     data-bs-toggle="collapse" 
                                     aria-expanded="true" 
@@ -200,17 +171,110 @@ hide_all.addEventListener('click', function(event) {
                                     <th scope="col" hidden>Forma płatności</th>
                                     <th scope="col" hidden>Opis</th>
                                     <th scope="col">Kwota</th>
-                                    <th scope="col" hidden></th>
-                                    <th scope="col" hidden></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              {% for income in balance.incomes %}
+                              <tr class="income-item-in-incomes-table accordion-toggle collapsed"
+                              id="accordionIncomes{{ loop.index0+1 }}"
+                              data-bs-toggle="collapse"
+                              href="#collapseIncomes{{ loop.index0+1 }}"
+                              aria-controls="collapseIncomes{{ loop.index0+1 }}"
+                              >
+                                <td>{{ loop.index0+1 }}</td>
+                                <td hidden>{{ income.id }}</td>
+                                <td>{{ income.date_of_income }}</td>
+                                <td>{{ income.category_name }}</td>
+                                <td hidden></td>
+                                <td hidden>{{ income.income_comment }}</td>
+                                <td>{{ income.amount }}</td>
+                              </tr>
+                              <tr id="collapseIncomes{{ loop.index0+1 }}" class="collapse multi-collapse in p-5">
+                                <td></td>
+                                <td colspan="2">
+                                  <div>
+                                    <div class="text-start">
+                                      <div class="py-2">
+                                        <div class="d-inline">Opis:</div>
+                                        <div class="ps-1 d-inline comment">{{ income.income_comment }}</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="balance-btn-td">
+                                  <div class="balance-btn-div">
+                                    <div class="icon-pencil balance-btn-div-link" 
+                                      href="#modalEditIncome" 
+                                      data-bs-toggle="modal"
+                                    >
+                                    </div>
+                                    <div class="icon-trash balance-btn-div-link"
+                                      href="#modalRemoveIncome"
+                                      data-bs-toggle="modal"
+                                    >
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                  {% endif %}
+                {% if balance.expenses_sum.amount_sum is null %}
+                  </div>
+                {% endif %}
+
+                {% if balance.incomes_sum.amount_sum is null %}
+                  <div class="d-flex justify-content-center" id="tableIncomesNullDiv">
+                {% endif %}
+                  {% if balance.expenses_sum.amount_sum is not null %}
+                    <div class="col-lg-6" id="tableExpensesDiv">
+                      <!-- <div class="rectangle_blue"></div> -->
+
+                        <table class="table caption-top rounded-corners table-balance fw-bold m-auto" id="tableExpenses">
+                            <caption>
+                              <div class="table-caption-div">
+                                <div class="table-caption-div-caption fs-5">
+                                  Wydatki
+                                </div>
+                                <div class="table-caption-div-btn">
+                                  <button class="btn btn-secondary fw-bold" 
+                                    id="showAllExpenses"
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    aria-expanded="false" 
+                                    >Pokaż szczegóły
+                                  </button>
+                                  <button class="btn btn-secondary fw-bold" 
+                                    id="hideAllExpenses"
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    aria-expanded="true" 
+                                    >Ukryj szczegóły
+                                  </button>
+                                </div>
+                              </div>
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" hidden>id</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Kategoria</th>
+                                    <th scope="col" hidden>Forma płatności</th>
+                                    <th scope="col" hidden>Opis</th>
+                                    <th scope="col">Kwota</th>
                                 </tr>
                             </thead>
                             <tbody>
                               {% for expense in balance.expenses %}
                               <tr class="expense-item-in-expenses-table accordion-toggle collapsed"
-                              id="accordion{{ loop.index0+1 }}"
+                              id="accordionExpenses{{ loop.index0+1 }}"
                               data-bs-toggle="collapse"
-                              href="#collapse{{ loop.index0+1 }}"
-                              aria-controls="collapse{{ loop.index0+1 }}"
+                              href="#collapseExpenses{{ loop.index0+1 }}"
+                              aria-controls="collapseExpenses{{ loop.index0+1 }}"
                               >
                                 <td>{{ loop.index0+1 }}</td>
                                 <td hidden>{{ expense.id }}</td>
@@ -219,18 +283,8 @@ hide_all.addEventListener('click', function(event) {
                                 <td hidden>{{ expense.payment_method_name }}</td>
                                 <td hidden>{{ expense.expense_comment }}</td>
                                 <td>{{ expense.amount }}</td>
-                                <td hidden>
-                                  <a class="dropdown-item editingTRbutton" href="#modalEditExpense" data-bs-toggle="modal">
-                                  <i class="icon-pencil"></i>
-                                  </a>
-                                </td>
-                                <td hidden>
-                                  <a class="dropdown-item removingTRbutton" href="#modalRemoveExpense" data-bs-toggle="modal">
-                                  <i class="icon-trash"></i>
-                                  </a>
-                                </td>
                               </tr>
-                              <tr id="collapse{{ loop.index0+1 }}" class="collapse multi-collapse in p-5">
+                              <tr id="collapseExpenses{{ loop.index0+1 }}" class="collapse multi-collapse in p-5">
                                 <td></td>
                                 <td colspan="2">
                                   <div>
@@ -264,7 +318,6 @@ hide_all.addEventListener('click', function(event) {
                               {% endfor %}
                             </tbody>
                         </table>
-                      </div>
 
                     </div>
                   {% endif %}

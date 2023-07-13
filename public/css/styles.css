@@ -406,18 +406,21 @@ table.rounded-corners.table-balance tr td:first-child {
   text-align: center;
   padding: 10px;
   min-width: 48px;
+  max-width: 48px;
 }
 
 table.rounded-corners.table-balance tr td:nth-child(3) {
   text-align: center;
   padding: 10px 5px;
   min-width: 105px;
+  max-width: 105px;
 }
 
 table.rounded-corners.table-balance tr td:nth-child(4) {
   text-align: center;
   margin: 50px;
   padding: 10px 5px;
+  min-width: 150px;
   max-width: 150px;
   word-wrap: break-word;
   /* overflow: hidden; */
@@ -427,11 +430,7 @@ table.rounded-corners.table-balance tr td:nth-child(7) {
   text-align: right;
   padding: 10px 10px 10px 5px;
   min-width: 90px;
-}
-
-table.rounded-corners.table-balance tr td:nth-child(n+8):hover {
-  color: #71a00d !important;
-  cursor: pointer;
+  max-width: 90px;
 }
 
 table.rounded-corners.table-balance tbody tr:hover {
@@ -523,4 +522,16 @@ tr.hide-table-padding td {
 
 .table-caption-div-caption {
   flex-grow: 1;
+}
+
+.rectangle_red {
+  background-color: red;
+  width: 300px !important;
+  height: 300px !important;
+}
+
+.rectangle_blue {
+  background-color: blue;
+  width: 300px !important;
+  height: 400px !important;
 }
