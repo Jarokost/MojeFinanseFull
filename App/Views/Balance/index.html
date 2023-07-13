@@ -391,12 +391,12 @@ hideAllIncomes.addEventListener('click', function(event) {
   <!-- MODAL - edit expense -->
   <div class="modal fade" id="modalEditExpense" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Edycja wydatku</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Edycja wydatku</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -410,7 +410,7 @@ hideAllIncomes.addEventListener('click', function(event) {
             <div class="form-floating mb-2">
               <input
                 type="number"
-                class="form-control"
+                class="form-control fw-bold"
                 id="editExpenseAmount"
                 name="amount"
                 placeholder="0.00"
@@ -423,7 +423,7 @@ hideAllIncomes.addEventListener('click', function(event) {
             <div class="form-floating mb-2">
               <input
                 type="date"
-                class="form-control"
+                class="form-control fw-bold"
                 id="editExpenseDate"
                 name="date_of_expense"
                 placeholder="Data"
@@ -435,7 +435,7 @@ hideAllIncomes.addEventListener('click', function(event) {
 
             <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2">
-              <select class="form-select" 
+              <select class="form-select fw-bold" 
               id="editExpenseCategory"
               name="expense_category_assigned_to_user_id"
               >
@@ -451,7 +451,7 @@ hideAllIncomes.addEventListener('click', function(event) {
 
             <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2">
-              <select class="form-select" 
+              <select class="form-select fw-bold" 
               id="editExpenseMethod"
               name="payment_method_assigned_to_user_id"
               >
@@ -467,7 +467,7 @@ hideAllIncomes.addEventListener('click', function(event) {
 
             <div class="form-floating mb-2">
               <textarea
-                class="form-control"
+                class="form-control fw-bold"
                 placeholder="Komentarz"
                 id="editExpenseComment"
                 name="expense_comment"
@@ -476,7 +476,7 @@ hideAllIncomes.addEventListener('click', function(event) {
             </div>
 
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-expense-change"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-expense-change fw-bold"
               type="submit"
             >
               Dokonaj zmian
@@ -490,12 +490,12 @@ hideAllIncomes.addEventListener('click', function(event) {
   <!-- MODAL - remove expense -->
   <div class="modal fade" id="modalRemoveExpense" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg fw-bold text-white">
         <div class="modal-header p-5 pb-4 border-bottom-0">
           <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -508,7 +508,7 @@ hideAllIncomes.addEventListener('click', function(event) {
 
             <div class="w-100 my-2 text-center" id="expenseRowToRemove"></div>
             <button
-              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-expense-remove"
+              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-expense-remove fw-bold"
               type="button"
               data-bs-dismiss="modal"
             >
@@ -525,12 +525,12 @@ hideAllIncomes.addEventListener('click', function(event) {
   <!-- MODAL - edit income -->
   <div class="modal fade" id="modalEditIncome" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Edycja przychodu</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Edycja przychodu</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -545,7 +545,7 @@ hideAllIncomes.addEventListener('click', function(event) {
             <div class="form-floating mb-2">
               <input
                 type="number"
-                class="form-control"
+                class="form-control fw-bold"
                 id="editIncomeAmount"
                 name="amount"
                 placeholder="0.00"
@@ -558,7 +558,7 @@ hideAllIncomes.addEventListener('click', function(event) {
             <div class="form-floating mb-2">
               <input
                 type="date"
-                class="form-control"
+                class="form-control fw-bold"
                 id="editIncomeDate"
                 name="date_of_income"
                 placeholder="Data"
@@ -570,7 +570,7 @@ hideAllIncomes.addEventListener('click', function(event) {
 
             <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2">
-              <select class="form-select" 
+              <select class="form-select fw-bold" 
               id="editIncomeCategory"
               name="income_category_assigned_to_user_id"
               >
@@ -586,7 +586,7 @@ hideAllIncomes.addEventListener('click', function(event) {
 
             <div class="form-floating mb-2">
               <textarea
-                class="form-control"
+                class="form-control fw-bold"
                 placeholder="Komentarz"
                 id="editIncomeComment"
                 name="income_comment"
@@ -595,7 +595,7 @@ hideAllIncomes.addEventListener('click', function(event) {
             </div>
 
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-income-change"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-income-change fw-bold"
               type="submit"
             >
               Dokonaj zmian
@@ -609,12 +609,12 @@ hideAllIncomes.addEventListener('click', function(event) {
   <!-- MODAL - remove income -->
   <div class="modal fade" id="modalRemoveIncome" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg fw-bold text-white">
         <div class="modal-header p-5 pb-4 border-bottom-0">
           <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -627,7 +627,7 @@ hideAllIncomes.addEventListener('click', function(event) {
 
             <div class="w-100 my-2 text-center" id="incomeRowToRemove"></div>
             <button
-              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-income-remove"
+              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-income-remove fw-bold"
               type="button"
               data-bs-dismiss="modal"
             >

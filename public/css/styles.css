@@ -521,7 +521,7 @@ tr.hide-table-padding td {
 
 .balance-btn-div-link:hover {
   cursor: pointer;
-  font-size: 24px;
+  /* font-size: 24px; */
 }
 .balance-btn-div-link.icon-trash:hover {
   color: #dc3912;
