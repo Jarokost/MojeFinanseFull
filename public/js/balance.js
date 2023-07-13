@@ -195,15 +195,16 @@ window.addEventListener('load', function () {
     document.getElementById("tableIncomes")
     .addEventListener("click", function(ele) {
 
-      if (ele.target.className === "icon-pencil") {
+      if (ele.target.className === "icon-pencil balance-btn-div-link") {
 
-        tr = ele.target.parentNode.parentNode.parentNode;
+        tr_expanded = ele.target.parentNode.parentNode.parentNode;
+        tr = tr_expanded.previousElementSibling;
 
         let id = tr.cells[1].textContent;
         let date = tr.cells[2].textContent;
         let category = tr.cells[3].textContent;
-        let comment = tr.cells[4].textContent;
-        let amount = tr.cells[5].textContent;
+        let comment = tr.cells[5].textContent;
+        let amount = tr.cells[6].textContent;
 
         document.getElementById("editIncomeId").value = id;
         document.getElementById("editIncomeAmount").value = amount;
@@ -253,8 +254,10 @@ window.addEventListener('load', function () {
             tr.cells[2].textContent = date_of_income;
             const categorySelect = document.getElementById("editIncomeCategory");
             tr.cells[3].textContent = categorySelect.options[categorySelect.selectedIndex].text;
-            tr.cells[4].textContent = income_comment;
-            tr.cells[5].textContent = parseFloat(amount).toFixed(2);
+            tr.cells[5].textContent = income_comment;
+            tr.cells[6].textContent = parseFloat(amount).toFixed(2);
+
+            document.querySelector(`#${tr_expanded.id} .comment`).textContent = tr.cells[5].textContent;
 
             updateBalanceData(data);
             updateIncomesGraphData();
@@ -269,15 +272,16 @@ window.addEventListener('load', function () {
     document.getElementById("tableIncomes")
     .addEventListener("click", function(ele) {
 
-      if (ele.target.className === "icon-trash") {
+      if (ele.target.className === "icon-trash balance-btn-div-link") {
 
-        tr = ele.target.parentNode.parentNode.parentNode;
+        tr_expanded = ele.target.parentNode.parentNode.parentNode;
+        tr = tr_expanded.previousElementSibling;
 
         let id = tr.cells[1].textContent;
         let date = tr.cells[2].textContent;
         let category = tr.cells[3].textContent;
-        let comment = tr.cells[4].textContent;
-        let amount = tr.cells[5].textContent;
+        let comment = tr.cells[5].textContent;
+        let amount = tr.cells[6].textContent;
 
         document.getElementById("removeIncomeId").value = id;
 
@@ -311,6 +315,7 @@ window.addEventListener('load', function () {
       });
       const data = await res.json();
       tr.remove();
+      tr_expanded.remove();
       let index = 1;
       const table_expenses = document.querySelectorAll("tr.expense-item-in-expenses-table");
       const table_incomes = document.querySelectorAll("tr.income-item-in-incomes-table");
