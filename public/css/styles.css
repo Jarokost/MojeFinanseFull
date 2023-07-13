@@ -433,6 +433,13 @@ table.rounded-corners.table-balance tr td:nth-child(7) {
   max-width: 90px;
 }
 
+table.rounded-corners.table-balance tr td:nth-child(3).balance-btn-td {
+  text-align: right;
+  padding: 10px 10px 10px 5px;
+  min-width: 75px !important;
+  max-width: 75px !important;
+}
+
 table.rounded-corners.table-balance tbody tr:hover {
   cursor: pointer;
 }
