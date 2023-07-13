@@ -8,6 +8,8 @@ let chart_data_expenses = null;
 let chart_data_incomes = null;
 let chart_options_expenses = null;
 let chart_options_incomes = null;
+let incomes_sum = 0;
+let expenses_sum = 0;
 const graphIncomesDivElement = document.getElementById("incomesDonutChart");
 const graphExpensesDivElement = document.getElementById("expensesDonutChart");
 const incomesTableWrapper = document.createElement("div");
@@ -120,13 +122,15 @@ const updateIncomesGraphData = async () => {
     })
     const data = await res.json();
 
+    incomes_sum = data.incomes_sum.amount_sum;
     incomes_categories_sum_table = [["Przychody", "Wartość"]];
     for(let i=0; i < data.incomes_category_sum.length; i++) {
       incomes_categories_sum_table.push([data.incomes_category_sum[i].category_name, parseFloat(data.incomes_category_sum[i].category_amount_sum)]);
     }
     chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
     chart_incomes.draw(chart_data_incomes, chart_options_incomes);
-
+    document.querySelector("#incomesDonutChart g text").textContent = `Przychody: ${incomes_sum}`;
+    document.getElementById("tableSumIncomes").textContent = incomes_sum;
   } catch (e) {
       console.log('ERROR: ', e);
   }
@@ -150,12 +154,15 @@ const updateExpensesGraphData = async () => {
     })
     const data = await res.json();
 
+    expenses_sum = data.expenses_sum.amount_sum;
     expenses_categories_sum_table = [["Wydatki", "Wartość"]];
     for(let i=0; i < data.expenses_category_sum.length; i++) {
       expenses_categories_sum_table.push([data.expenses_category_sum[i].category_name, parseFloat(data.expenses_category_sum[i].category_amount_sum)]);
     }
     chart_data_expenses = google.visualization.arrayToDataTable(expenses_categories_sum_table);
     chart_expenses.draw(chart_data_expenses, chart_options_expenses);
+    document.querySelector("#expensesDonutChart g text").textContent = `Wydatki: ${expenses_sum}`;
+    document.getElementById("tableSumExpenses").textContent = expenses_sum;
 
   } catch (e) {
       console.log('ERROR: ', e);

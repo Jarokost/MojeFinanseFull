@@ -18,6 +18,10 @@ body {
   background-size: cover;
 }
 
+#summary {
+  max-width: 94%;
+}
+
 .container {
   padding-left: 0;
   padding-right: 0;
@@ -442,6 +446,12 @@ table.rounded-corners.table-balance tr td:nth-child(3).balance-btn-td {
 
 table.rounded-corners.table-balance tbody tr:hover {
   cursor: pointer;
+}
+
+table.rounded-corners.table-balance tr.table-sum:hover td {
+  background-color: #7acb7e;
+  color: #000;
+  cursor: default;
 }
 
 table.rounded-corners.table-balance tr:hover td {
