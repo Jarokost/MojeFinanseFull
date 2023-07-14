@@ -417,7 +417,8 @@ class Settings extends Authenticated
 
             $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $post_fetch_promise['name'];
             if ( $post_fetch_promise['limit_checkbox'] ) {
-                $data['flash_message_body'][0] .= ' z limitem: ' . $post_fetch_promise['limit_value'];
+                $data['flash_message_body'][0] .= ' z limitem: ' . 
+                (empty($post_fetch_promise['limit_value'])?'0.00':number_format($post_fetch_promise['limit_value'], 2, '.', ''));
             }
             $data['flash_message_type'][0] = 'info';
 
