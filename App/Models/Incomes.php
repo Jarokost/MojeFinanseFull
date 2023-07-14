@@ -292,4 +292,25 @@ class Incomes extends \Core\Model
 
         return $stmt->execute();
     }
+
+    /**
+     * Returns Income object selected by id
+     * 
+     * @return object
+     */
+    public static function getIncomeById($id) {
+        $sql = 'SELECT * FROM incomes
+                WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
 }

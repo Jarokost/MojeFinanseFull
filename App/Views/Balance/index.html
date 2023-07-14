@@ -18,16 +18,65 @@
 
 <script src="/js/validateInputsCommon.js"></script>
 <script src="/js/validateInputsEditBalance.js"></script>
-
+<script src="/js/printFlashMessages.js"></script>
 <script src="/js/balance.js"></script>
+
+<script>
+const collapseElementListExpenses = [].slice.call(document.querySelectorAll('#tableExpenses > tbody > tr.collapse'))
+const collapseListExpenses = collapseElementListExpenses.map(function (collapseEl) {
+  return new bootstrap.Collapse(collapseEl, { toggle: false });
+});
+
+const collapseElementListIncomes = [].slice.call(document.querySelectorAll('#tableIncomes > tbody > tr.collapse'))
+const collapseListIncomes = collapseElementListIncomes.map(function (collapseEl) {
+  return new bootstrap.Collapse(collapseEl, { toggle: false });
+});
+
+const showAllExpenses = document.getElementById("showAllExpenses");
+const hideAllExpenses = document.getElementById("hideAllExpenses");
+const showAllIncomes = document.getElementById("showAllIncomes");
+const hideAllIncomes = document.getElementById("hideAllIncomes");
+
+showAllExpenses.addEventListener('click', function(event) {
+    for(let i=0;i<collapseListExpenses.length;i++)
+    {
+      collapseListExpenses[i].show();
+    }
+  }
+);
+
+hideAllExpenses.addEventListener('click', function(event) {
+    for(let i=0;i<collapseListExpenses.length;i++)
+    {
+      collapseListExpenses[i].hide();
+    }
+  }
+);
+
+showAllIncomes.addEventListener('click', function(event) {
+    for(let i=0;i<collapseListIncomes.length;i++)
+    {
+      collapseListIncomes[i].show();
+    }
+  }
+);
+
+hideAllIncomes.addEventListener('click', function(event) {
+    for(let i=0;i<collapseListIncomes.length;i++)
+    {
+      collapseListIncomes[i].hide();
+    }
+  }
+);
+</script>
 
 {% endblock %}
 
 {% block body %}
     <main class="container">
-        <div class="bg-light px-5 py-4 mb-5 rounded">
+        <div class="bg-light px-sm-0 px-xl-4 py-sm-0 py-xl-4 mb-5 rounded">
             <div class="row">
-                <div id="summary" class="w-100 text-center bg-dark rounded text-secondary py-3 mt-3">
+                <div id="summary" class="text-center bg-dark rounded text-secondary py-3 my-3 mx-auto">
                     <div class="h3">PODSUMOWANIE</div>
                     <div class="h5">{{ action }}</div>
                     <div class="h5">BILANS:</div>
@@ -83,51 +132,98 @@
                 <div class="w-100 text-center"></div>
 
                 {% if balance.expenses_sum.amount_sum is null %}
-                  <div class="d-flex justify-content-center" id="tableExpensesNullDiv">
+                  <div class="d-flex justify-content-center" id="tableIncomesNullDiv">
                 {% endif %}
                   {% if balance.incomes_sum.amount_sum is not null %}
-                    <div class="col-xxl-6 d-flex justify-content-center" id="tableIncomesDiv">
-                        <div class="table-responsive">
-                            <table class="table caption-top table-success" id="tableIncomes">
-                                <caption>
-                                    Przychody
-                                </caption>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col" hidden>id</th>
-                                        <th scope="col">Data</th>
-                                        <th scope="col">Kategoria</th>
-                                        <th scope="col">Opis</th>
-                                        <th scope="col">Kwota</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for income in balance.incomes %}
-                                    <tr class="income-item-in-incomes-table">
-                                        <td>{{ loop.index0+1 }}</td>
-                                        <td hidden>{{ income.id }}</td>
-                                        <td>{{ income.date_of_income }}</td>
-                                        <td>{{ income.category_name }}</td>
-                                        <td>{{ income.income_comment }}</td>
-                                        <td>{{ income.amount }}</td>
-                                        <td>
-                                          <a class="dropdown-item editingTRbutton" href="#modalEditIncome" data-bs-toggle="modal">
-                                            <i class="icon-pencil"></i>
-                                          </a>
-                                        </td>
-                                        <td>
-                                          <a class="dropdown-item removingTRbutton" href="#modalRemoveIncome" data-bs-toggle="modal">
-                                            <i class="icon-trash"></i>
-                                          </a></a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="col-lg-6" id="tableIncomesDiv">
+                      <!-- <div class="rectangle_red"></div> -->
+
+                        <table class="table caption-top rounded-corners table-balance fw-bold m-auto" id="tableIncomes">
+                            <caption>
+                              <div class="table-caption-div">
+                                <div class="table-caption-div-caption fs-5">
+                                  Przychody
+                                </div>
+                                <div class="table-caption-div-btn">
+                                  <button class="btn btn-secondary fw-bold" 
+                                    id="showAllIncomes"
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    aria-expanded="false" 
+                                    >Pokaż szczegóły
+                                  </button>
+                                  <button class="btn btn-secondary fw-bold" 
+                                    id="hideAllIncomes"
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    aria-expanded="true" 
+                                    >Ukryj szczegóły
+                                  </button>
+                                </div>
+                              </div>
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" hidden>id</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Kategoria</th>
+                                    <th scope="col" hidden>Forma płatności</th>
+                                    <th scope="col" hidden>Opis</th>
+                                    <th scope="col">Kwota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              {% for income in balance.incomes %}
+                              <tr class="income-item-in-incomes-table accordion-toggle collapsed"
+                              id="accordionIncomes{{ loop.index0+1 }}"
+                              data-bs-toggle="collapse"
+                              href="#collapseIncomes{{ loop.index0+1 }}"
+                              aria-controls="collapseIncomes{{ loop.index0+1 }}"
+                              >
+                                <td>{{ loop.index0+1 }}</td>
+                                <td hidden>{{ income.id }}</td>
+                                <td>{{ income.date_of_income }}</td>
+                                <td>{{ income.category_name }}</td>
+                                <td hidden></td>
+                                <td hidden>{{ income.income_comment }}</td>
+                                <td>{{ income.amount }}</td>
+                              </tr>
+                              <tr id="collapseIncomes{{ loop.index0+1 }}" class="collapse multi-collapse in p-5">
+                                <td></td>
+                                <td colspan="2">
+                                  <div>
+                                    <div class="text-start">
+                                      <div class="py-2">
+                                        <div class="d-inline">Opis:</div>
+                                        <div class="ps-1 d-inline comment">{{ income.income_comment }}</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="balance-btn-td">
+                                  <div class="balance-btn-div">
+                                    <div class="icon-pencil balance-btn-div-link" 
+                                      href="#modalEditIncome" 
+                                      data-bs-toggle="modal"
+                                    >
+                                    </div>
+                                    <div class="icon-trash balance-btn-div-link"
+                                      href="#modalRemoveIncome"
+                                      data-bs-toggle="modal"
+                                    >
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                              {% endfor %}
+                              <tr class="table-sum">
+                                <td colspan="3" class="text-end">Suma:</td>
+                                <td id="tableSumIncomes" class="text-end"></td>
+                              </tr>
+                            </tbody>
+                        </table>
+
                     </div>
                   {% endif %}
                 {% if balance.expenses_sum.amount_sum is null %}
@@ -138,50 +234,99 @@
                   <div class="d-flex justify-content-center" id="tableIncomesNullDiv">
                 {% endif %}
                   {% if balance.expenses_sum.amount_sum is not null %}
-                    <div class="col-xxl-6 d-flex justify-content-center" id="tableExpensesDiv">
-                        <div class="table-responsive">
-                            <table class="table caption-top table-danger" id="tableExpenses">
-                                <caption>
-                                    Wydatki
-                                </caption>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col" hidden>id</th>
-                                        <th scope="col">Data</th>
-                                        <th scope="col">Kategoria</th>
-                                        <th scope="col">Forma płatności</th>
-                                        <th scope="col">Opis</th>
-                                        <th scope="col">Kwota</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for expense in balance.expenses %}
-                                    <tr class="expense-item-in-expenses-table">
-                                        <td>{{ loop.index0+1 }}</td>
-                                        <td hidden>{{ expense.id }}</td>
-                                        <td>{{ expense.date_of_expense }}</td>
-                                        <td>{{ expense.category_name }}</td>
-                                        <td>{{ expense.payment_method_name }}</td>
-                                        <td>{{ expense.expense_comment }}</td>
-                                        <td>{{ expense.amount }}</td>
-                                        <td>
-                                          <a class="dropdown-item editingTRbutton" href="#modalEditExpense" data-bs-toggle="modal">
-                                            <i class="icon-pencil"></i>
-                                          </a>
-                                        </td>
-                                        <td>
-                                          <a class="dropdown-item removingTRbutton" href="#modalRemoveExpense" data-bs-toggle="modal">
-                                            <i class="icon-trash"></i>
-                                          </a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="col-lg-6" id="tableExpensesDiv">
+                      <!-- <div class="rectangle_blue"></div> -->
+
+                        <table class="table caption-top rounded-corners table-balance fw-bold m-auto" id="tableExpenses">
+                            <caption>
+                              <div class="table-caption-div">
+                                <div class="table-caption-div-caption fs-5">
+                                  Wydatki
+                                </div>
+                                <div class="table-caption-div-btn">
+                                  <button class="btn btn-secondary fw-bold" 
+                                    id="showAllExpenses"
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    aria-expanded="false" 
+                                    >Pokaż szczegóły
+                                  </button>
+                                  <button class="btn btn-secondary fw-bold" 
+                                    id="hideAllExpenses"
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    aria-expanded="true" 
+                                    >Ukryj szczegóły
+                                  </button>
+                                </div>
+                              </div>
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" hidden>id</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Kategoria</th>
+                                    <th scope="col" hidden>Forma płatności</th>
+                                    <th scope="col" hidden>Opis</th>
+                                    <th scope="col">Kwota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              {% for expense in balance.expenses %}
+                              <tr class="expense-item-in-expenses-table accordion-toggle collapsed"
+                              id="accordionExpenses{{ loop.index0+1 }}"
+                              data-bs-toggle="collapse"
+                              href="#collapseExpenses{{ loop.index0+1 }}"
+                              aria-controls="collapseExpenses{{ loop.index0+1 }}"
+                              >
+                                <td>{{ loop.index0+1 }}</td>
+                                <td hidden>{{ expense.id }}</td>
+                                <td>{{ expense.date_of_expense }}</td>
+                                <td>{{ expense.category_name }}</td>
+                                <td hidden>{{ expense.payment_method_name }}</td>
+                                <td hidden>{{ expense.expense_comment }}</td>
+                                <td>{{ expense.amount }}</td>
+                              </tr>
+                              <tr id="collapseExpenses{{ loop.index0+1 }}" class="collapse multi-collapse in p-5">
+                                <td></td>
+                                <td colspan="2">
+                                  <div>
+                                    <div class="text-start">
+                                      <div class="pt-1">
+                                        <div class="d-inline">Metoda płatności:</div>
+                                        <div class="ps-1 d-inline method">{{ expense.payment_method_name }}</div>
+                                      </div>
+                                      <div class="py-2">
+                                        <div class="d-inline">Opis:</div>
+                                        <div class="ps-1 d-inline comment">{{ expense.expense_comment }}</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="balance-btn-td">
+                                  <div class="balance-btn-div">
+                                    <div class="icon-pencil balance-btn-div-link" 
+                                      href="#modalEditExpense" 
+                                      data-bs-toggle="modal"
+                                    >
+                                    </div>
+                                    <div class="icon-trash balance-btn-div-link"
+                                      href="#modalRemoveExpense"
+                                      data-bs-toggle="modal"
+                                    >
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                              {% endfor %}
+                              <tr class="table-sum">
+                                <td colspan="3" class="text-end">Suma:</td>
+                                <td id="tableSumExpenses" class="text-end"></td>
+                              </tr>
+                            </tbody>
+                        </table>
+
                     </div>
                   {% endif %}
                 {% if balance.incomes_sum.amount_sum is null %}
@@ -246,12 +391,12 @@
   <!-- MODAL - edit expense -->
   <div class="modal fade" id="modalEditExpense" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Edycja wydatku</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Edycja wydatku</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -265,7 +410,7 @@
             <div class="form-floating mb-2">
               <input
                 type="number"
-                class="form-control"
+                class="form-control fw-bold"
                 id="editExpenseAmount"
                 name="amount"
                 placeholder="0.00"
@@ -278,7 +423,7 @@
             <div class="form-floating mb-2">
               <input
                 type="date"
-                class="form-control"
+                class="form-control fw-bold"
                 id="editExpenseDate"
                 name="date_of_expense"
                 placeholder="Data"
@@ -290,7 +435,7 @@
 
             <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2">
-              <select class="form-select" 
+              <select class="form-select fw-bold" 
               id="editExpenseCategory"
               name="expense_category_assigned_to_user_id"
               >
@@ -306,7 +451,7 @@
 
             <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2">
-              <select class="form-select" 
+              <select class="form-select fw-bold" 
               id="editExpenseMethod"
               name="payment_method_assigned_to_user_id"
               >
@@ -322,7 +467,7 @@
 
             <div class="form-floating mb-2">
               <textarea
-                class="form-control"
+                class="form-control fw-bold"
                 placeholder="Komentarz"
                 id="editExpenseComment"
                 name="expense_comment"
@@ -331,7 +476,7 @@
             </div>
 
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-expense-change"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-expense-change fw-bold"
               type="submit"
             >
               Dokonaj zmian
@@ -345,12 +490,12 @@
   <!-- MODAL - remove expense -->
   <div class="modal fade" id="modalRemoveExpense" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg fw-bold text-white">
         <div class="modal-header p-5 pb-4 border-bottom-0">
           <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -363,7 +508,7 @@
 
             <div class="w-100 my-2 text-center" id="expenseRowToRemove"></div>
             <button
-              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-expense-remove"
+              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-expense-remove fw-bold"
               type="button"
               data-bs-dismiss="modal"
             >
@@ -380,12 +525,12 @@
   <!-- MODAL - edit income -->
   <div class="modal fade" id="modalEditIncome" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Edycja przychodu</h1>
+          <h1 class="fw-bold mb-0 fs-2 text-white">Edycja przychodu</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -400,7 +545,7 @@
             <div class="form-floating mb-2">
               <input
                 type="number"
-                class="form-control"
+                class="form-control fw-bold"
                 id="editIncomeAmount"
                 name="amount"
                 placeholder="0.00"
@@ -413,7 +558,7 @@
             <div class="form-floating mb-2">
               <input
                 type="date"
-                class="form-control"
+                class="form-control fw-bold"
                 id="editIncomeDate"
                 name="date_of_income"
                 placeholder="Data"
@@ -425,7 +570,7 @@
 
             <!-- JS use class is-invalid when input validation -->
             <div class="form-floating mb-2">
-              <select class="form-select" 
+              <select class="form-select fw-bold" 
               id="editIncomeCategory"
               name="income_category_assigned_to_user_id"
               >
@@ -441,7 +586,7 @@
 
             <div class="form-floating mb-2">
               <textarea
-                class="form-control"
+                class="form-control fw-bold"
                 placeholder="Komentarz"
                 id="editIncomeComment"
                 name="income_comment"
@@ -450,7 +595,7 @@
             </div>
 
             <button
-              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-income-change"
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-warning text-white button-income-change fw-bold"
               type="submit"
             >
               Dokonaj zmian
@@ -464,12 +609,12 @@
   <!-- MODAL - remove income -->
   <div class="modal fade" id="modalRemoveIncome" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content settings-modal-bg fw-bold text-white">
         <div class="modal-header p-5 pb-4 border-bottom-0">
           <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
           ></button>
         </div>
@@ -482,7 +627,7 @@
 
             <div class="w-100 my-2 text-center" id="incomeRowToRemove"></div>
             <button
-              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-income-remove"
+              class="w-100 mb-1 mt-4 btn btn-lg rounded-3 btn-danger button-income-remove fw-bold"
               type="button"
               data-bs-dismiss="modal"
             >

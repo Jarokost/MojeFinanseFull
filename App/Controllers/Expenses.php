@@ -89,9 +89,21 @@ class Expenses extends Authenticated
     {
         $data = [];
         $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
-        $expenses = new \App\Models\Expenses($post_fetch_promise);
-        $data['success'] = $expenses->updateTableRowAjax();;
-        $data['errors'] = $expenses->errors;
+        $expense = new \App\Models\Expenses($post_fetch_promise);
+        $data['success'] = $expense->updateTableRowAjax();
+        $data['errors'] = $expense->errors;
+
+        if ($expense->errors == NULL) {
+            $data['flash_message_body'][0] = 'dokonano zmian wydatku: ' 
+            . $expense->date_of_expense . ' '
+            . ExpensesCategoryAssignedToUsers::getCategoryName($expense->expense_category_assigned_to_user_id) . ' '
+            . $expense->amount . '[PLN] opis: '
+            . $expense->expense_comment;
+            $data['flash_message_type'][0] = 'success';
+        } else {
+            $data['flash_message_body'][0] = 'nie udało się dokonać zmian wydatku';
+            $data['flash_message_type'][0] = 'warning';
+        }
 
         $data = $this->queries($data);
 
@@ -103,11 +115,17 @@ class Expenses extends Authenticated
     {
         $post_fetch_promise = json_decode(file_get_contents('php://input'), true);
         $row_id = $post_fetch_promise['id'];
-
+        $expense = \App\Models\Expenses::getExpenseById($row_id);
         \App\Models\Expenses::removeTableRowAjax($row_id);
 
         $data = [];
         $data = $this->queries($data);
+        $data['flash_message_body'][0] = 'usunięto przychód: ' 
+            . $expense->date_of_expense . ' '
+            . ExpensesCategoryAssignedToUsers::getCategoryName($expense->expense_category_assigned_to_user_id) . ' '
+            . $expense->amount . '[PLN] opis: '
+            . $expense->expense_comment;
+            $data['flash_message_type'][0] = 'success';
 
         echo json_encode($data);
         exit;

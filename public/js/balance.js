@@ -1,4 +1,5 @@
 let tr = null;
+let tr_expanded = null;
 let expenses_categories_sum_table = [["Wydatki", "Wartość"]];
 let incomes_categories_sum_table = [["Przychody", "Wartość"]];
 let chart_expenses = null;
@@ -7,6 +8,8 @@ let chart_data_expenses = null;
 let chart_data_incomes = null;
 let chart_options_expenses = null;
 let chart_options_incomes = null;
+let incomes_sum = 0;
+let expenses_sum = 0;
 const graphIncomesDivElement = document.getElementById("incomesDonutChart");
 const graphExpensesDivElement = document.getElementById("expensesDonutChart");
 const incomesTableWrapper = document.createElement("div");
@@ -31,10 +34,12 @@ function drawChartIncomes() {
       // italic: <boolean>   // true of false
     },
     pieHole: 0.3,
-    legend: "none",
+    //legend: "none",
+    legend: {position: 'top', maxLines: 10, textStyle: {color: 'black', fontSize: 16}},
     backgroundColor: "transparent",
-    width: 400,
-    height: 400,
+    width: 450,
+    height: 450,
+    fontSize: 18
   };
 
   chart_incomes = new google.visualization.PieChart(
@@ -56,10 +61,12 @@ function drawChartExpenses() {
       // italic: <boolean>   // true of false
     },
     pieHole: 0.3,
-    legend: "none",
+    //legend: "none",
+    legend: {position: 'top', maxLines: 10, textStyle: {color: 'black', fontSize: 16}},
     backgroundColor: "transparent",
-    width: 400,
-    height: 400,
+    width: 450,
+    height: 450,
+    fontSize: 18
   };
 
   chart_expenses = new google.visualization.PieChart(
@@ -115,13 +122,15 @@ const updateIncomesGraphData = async () => {
     })
     const data = await res.json();
 
+    incomes_sum = data.incomes_sum.amount_sum;
     incomes_categories_sum_table = [["Przychody", "Wartość"]];
     for(let i=0; i < data.incomes_category_sum.length; i++) {
       incomes_categories_sum_table.push([data.incomes_category_sum[i].category_name, parseFloat(data.incomes_category_sum[i].category_amount_sum)]);
     }
     chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
     chart_incomes.draw(chart_data_incomes, chart_options_incomes);
-
+    document.querySelector("#incomesDonutChart g text").textContent = `Przychody: ${incomes_sum}`;
+    document.getElementById("tableSumIncomes").textContent = incomes_sum;
   } catch (e) {
       console.log('ERROR: ', e);
   }
@@ -145,12 +154,15 @@ const updateExpensesGraphData = async () => {
     })
     const data = await res.json();
 
+    expenses_sum = data.expenses_sum.amount_sum;
     expenses_categories_sum_table = [["Wydatki", "Wartość"]];
     for(let i=0; i < data.expenses_category_sum.length; i++) {
       expenses_categories_sum_table.push([data.expenses_category_sum[i].category_name, parseFloat(data.expenses_category_sum[i].category_amount_sum)]);
     }
     chart_data_expenses = google.visualization.arrayToDataTable(expenses_categories_sum_table);
     chart_expenses.draw(chart_data_expenses, chart_options_expenses);
+    document.querySelector("#expensesDonutChart g text").textContent = `Wydatki: ${expenses_sum}`;
+    document.getElementById("tableSumExpenses").textContent = expenses_sum;
 
   } catch (e) {
       console.log('ERROR: ', e);
@@ -183,15 +195,16 @@ window.addEventListener('load', function () {
     document.getElementById("tableIncomes")
     .addEventListener("click", function(ele) {
 
-      if (ele.target.className === "icon-pencil") {
+      if (ele.target.className === "icon-pencil balance-btn-div-link") {
 
-        tr = ele.target.parentNode.parentNode.parentNode;
+        tr_expanded = ele.target.parentNode.parentNode.parentNode;
+        tr = tr_expanded.previousElementSibling;
 
         let id = tr.cells[1].textContent;
         let date = tr.cells[2].textContent;
         let category = tr.cells[3].textContent;
-        let comment = tr.cells[4].textContent;
-        let amount = tr.cells[5].textContent;
+        let comment = tr.cells[5].textContent;
+        let amount = tr.cells[6].textContent;
 
         document.getElementById("editIncomeId").value = id;
         document.getElementById("editIncomeAmount").value = amount;
@@ -241,11 +254,14 @@ window.addEventListener('load', function () {
             tr.cells[2].textContent = date_of_income;
             const categorySelect = document.getElementById("editIncomeCategory");
             tr.cells[3].textContent = categorySelect.options[categorySelect.selectedIndex].text;
-            tr.cells[4].textContent = income_comment;
-            tr.cells[5].textContent = parseFloat(amount).toFixed(2);
+            tr.cells[5].textContent = income_comment;
+            tr.cells[6].textContent = parseFloat(amount).toFixed(2);
+
+            document.querySelector(`#${tr_expanded.id} .comment`).textContent = tr.cells[5].textContent;
 
             updateBalanceData(data);
             updateIncomesGraphData();
+            printFlashMessages(data);
           }
         } catch (e) {
           console.log('ERROR: ', e);
@@ -257,15 +273,16 @@ window.addEventListener('load', function () {
     document.getElementById("tableIncomes")
     .addEventListener("click", function(ele) {
 
-      if (ele.target.className === "icon-trash") {
+      if (ele.target.className === "icon-trash balance-btn-div-link") {
 
-        tr = ele.target.parentNode.parentNode.parentNode;
+        tr_expanded = ele.target.parentNode.parentNode.parentNode;
+        tr = tr_expanded.previousElementSibling;
 
         let id = tr.cells[1].textContent;
         let date = tr.cells[2].textContent;
         let category = tr.cells[3].textContent;
-        let comment = tr.cells[4].textContent;
-        let amount = tr.cells[5].textContent;
+        let comment = tr.cells[5].textContent;
+        let amount = tr.cells[6].textContent;
 
         document.getElementById("removeIncomeId").value = id;
 
@@ -299,10 +316,10 @@ window.addEventListener('load', function () {
       });
       const data = await res.json();
       tr.remove();
+      tr_expanded.remove();
       let index = 1;
       const table_expenses = document.querySelectorAll("tr.expense-item-in-expenses-table");
       const table_incomes = document.querySelectorAll("tr.income-item-in-incomes-table");
-      console.log(table_incomes.length, table_expenses.length);
       if ( table_incomes.length > 0 ) {
         for ( let i=0; i<table_incomes.length; i++) {
           table_incomes[i].cells[0].textContent = index;
@@ -335,6 +352,7 @@ window.addEventListener('load', function () {
       }
       updateBalanceData(data);
       updateIncomesGraphData();
+      printFlashMessages(data);
     } catch (e) {
       console.log('ERROR: ', e);
     }
@@ -364,9 +382,10 @@ window.addEventListener('load', function () {
     document.getElementById("tableExpenses")
     .addEventListener("click", function(ele) {
 
-      if (ele.target.className === "icon-pencil") {
+      if (ele.target.className === "icon-pencil balance-btn-div-link") {
 
-        tr = ele.target.parentNode.parentNode.parentNode;
+        tr_expanded = ele.target.parentNode.parentNode.parentNode;
+        tr = tr_expanded.previousElementSibling;
 
         let id = tr.cells[1].textContent;
         let date = tr.cells[2].textContent;
@@ -433,9 +452,13 @@ window.addEventListener('load', function () {
             tr.cells[4].textContent = methodSelect.options[methodSelect.selectedIndex].text;
             tr.cells[5].textContent = expense_comment;
             tr.cells[6].textContent = parseFloat(amount).toFixed(2);
+
+            document.querySelector(`#${tr_expanded.id} .method`).textContent = tr.cells[4].textContent;
+            document.querySelector(`#${tr_expanded.id} .comment`).textContent = tr.cells[5].textContent;
             
             updateBalanceData(data);
             updateExpensesGraphData();
+            printFlashMessages(data);
           }
         } catch (e) {
           console.log('ERROR: ', e);
@@ -447,9 +470,10 @@ window.addEventListener('load', function () {
     document.getElementById("tableExpenses")
     .addEventListener("click", function(ele) {
 
-      if (ele.target.className === "icon-trash") {
+      if (ele.target.className === "icon-trash balance-btn-div-link") {
 
-        tr = ele.target.parentNode.parentNode.parentNode;
+        tr_expanded = ele.target.parentNode.parentNode.parentNode;
+        tr = tr_expanded.previousElementSibling;
 
         let id = tr.cells[1].textContent;
         let date = tr.cells[2].textContent;
@@ -491,10 +515,10 @@ window.addEventListener('load', function () {
         })
         const data = await res.json();
         tr.remove();
+        tr_expanded.remove();
         let index = 1;
         const table_expenses = document.querySelectorAll("tr.expense-item-in-expenses-table");
         const table_incomes = document.querySelectorAll("tr.income-item-in-incomes-table");
-        console.log(table_incomes.length, table_expenses.length);
         if ( table_expenses.length > 0 ) {
           for ( let i=0; i<table_expenses.length; i++) {
             table_expenses[i].cells[0].textContent = index;
@@ -527,6 +551,7 @@ window.addEventListener('load', function () {
         }
         updateBalanceData(data);
         updateExpensesGraphData();
+        printFlashMessages(data);
       } catch (e) {
         console.log('ERROR: ', e);
       }

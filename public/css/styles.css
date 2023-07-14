@@ -18,6 +18,10 @@ body {
   background-size: cover;
 }
 
+#summary {
+  max-width: 94%;
+}
+
 .container {
   padding-left: 0;
   padding-right: 0;
@@ -367,64 +371,106 @@ table.rounded-corners > tfoot:not(:last-child) {
   border-bottom: var(--border);
 }
 
-table.rounded-corners tr td:not(:first-child):hover {
+table.rounded-corners.table-settings tr td:not(:first-child):hover {
   color: #71a00d !important;
   cursor: pointer;
 }
 
-table.rounded-corners tr td:first-child {
+table.rounded-corners.table-settings tr td:first-child {
   width: 90%;
   text-align: left;
   padding: 10px;
 }
 
-table.rounded-corners tr td:nth-child(n+3) {
+table.rounded-corners.table-settings tr td:nth-child(n+3) {
   width: 5%;
   text-align: center;
   padding: 10px 5px;
 }
 
-table.rounded-corners tr td:last-child {
+table.rounded-corners.table-settings tr td:last-child {
   width: 5%;
   text-align: center;
   padding: 10px 10px 10px 5px;
 }
 
-table.rounded-corners.expenses-categories tr td:not(:first-child):hover {
-  color: #71a00d !important;
+table.rounded-corners.table-settings tr td small.text-muted {
+  color: #3c5569 !important;
+}
+
+table.rounded-corners.table-balance {
+  max-width: 300px;
+}
+
+table.rounded-corners.table-balance tr td {
+  vertical-align: middle;
+}
+
+table.rounded-corners.table-balance tr td:first-child {
+  text-align: center;
+  padding: 10px;
+  min-width: 50px;
+  max-width: 50px;
+}
+
+table.rounded-corners.table-balance tr td:nth-child(3) {
+  text-align: center;
+  padding: 10px 5px;
+  min-width: 110px;
+  max-width: 110px;
+}
+
+table.rounded-corners.table-balance tr td:nth-child(4) {
+  text-align: center;
+  margin: 50px;
+  padding: 10px 5px;
+  min-width: 150px;
+  max-width: 150px;
+  word-wrap: break-word;
+  /* overflow: hidden; */
+}
+
+table.rounded-corners.table-balance tr td:nth-child(7) {
+  text-align: right;
+  padding: 10px 10px 10px 5px;
+  min-width: 100px;
+  max-width: 100px;
+}
+
+table.rounded-corners.table-balance tr td:nth-child(3).balance-btn-td {
+  text-align: right;
+  padding: 10px 10px 10px 5px;
+  min-width: 75px !important;
+  max-width: 75px !important;
+}
+
+table.rounded-corners.table-balance tbody tr:hover {
   cursor: pointer;
 }
 
-table.rounded-corners.expenses-categories tr td:first-child {
-  width: 70%;
-  text-align: left;
-  padding: 10px 5px 10px 10px;
-}
-/* 
-table.rounded-corners.expenses-categories tr td:nth-child(3) {
-  width: 20%;
-  text-align: center;
-  padding: 10px 5px;
-} */
-
-table.rounded-corners.expenses-categories tr td:nth-child(n+3) {
-  width: 5%;
-  text-align: center;
-  padding: 10px 5px;
+table.rounded-corners.table-balance tr.table-sum:hover td {
+  background-color: #7acb7e;
+  color: #000;
+  cursor: default;
 }
 
-table.rounded-corners.expenses-categories tr td:last-child {
-  width: 5%;
-  text-align: center;
-  padding: 10px 10px 10px 5px;
+table.rounded-corners.table-balance tr:hover td {
+  background-color: #061c2d;
+  color: #fff;
+}
+
+table.rounded-corners.table-balance tr.collapse:hover td {
+  background-color: #7acb7e;
+  color: #000;
+  cursor: default;
+}
+
+table.rounded-corners.table-balance thead {
+  font-size: larger;
 }
 
 .expenses-limit {
   line-height: 100%;
-}
-
-table.rounded-corners tr td small.text-muted {
-  color: #3c5569 !important;
 }
 
 .settings-modal-bg {
@@ -442,4 +488,69 @@ table.rounded-corners tr td small.text-muted {
 
 .form-floating > .form-control:not(:focus)::placeholder {
   color: transparent;
+}
+
+tr.hide-table-padding td {
+  padding: 0 !important;
+}
+
+.balance-btn-td {
+  vertical-align: top !important;
+  height: 150px;
+}
+
+.balance-btn-div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 120px;
+}
+
+.balance-btn-div-link {
+  width: 50%;
+  margin: 6px 0;
+  padding: 8px 0;
+  /* font-size: 24px; */
+}
+
+.balance-btn-div-link {
+  transition: font-size 0.15s ease-in-out,
+  color 0.15s ease-in-out;
+}
+
+.balance-btn-div-link:hover {
+  cursor: pointer;
+  /* font-size: 24px; */
+}
+.balance-btn-div-link.icon-trash:hover {
+  color: #dc3912;
+}
+.balance-btn-div-link.icon-pencil:hover {
+  color: #3366cc;
+}
+
+.table-caption-div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.table-caption-div-caption {
+  flex-grow: 1;
+  position: relative;
+  top: 4px;
+}
+
+.rectangle_red {
+  background-color: red;
+  width: 300px !important;
+  height: 300px !important;
+}
+
+.rectangle_blue {
+  background-color: blue;
+  width: 300px !important;
+  height: 400px !important;
 }

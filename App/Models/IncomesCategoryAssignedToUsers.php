@@ -62,11 +62,9 @@ class IncomesCategoryAssignedToUsers extends \Core\Model
 
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-
         $stmt->execute();
 
-        return $stmt->fetch();
+        return $stmt->fetchColumn();
 
     }
 

@@ -211,6 +211,7 @@ class Balance extends Authenticated
         $date_end = $post_fetch_promise['date_end'];
 
         $data['incomes_category_sum'] = Incomes::getIncomesSumGroupedByCategories($user_id, $date_start, $date_end);
+        $data['incomes_sum'] = Incomes::getIncomesSum($user_id, $date_start, $date_end);
 
         echo json_encode($data);
         exit;
@@ -229,6 +230,7 @@ class Balance extends Authenticated
         $date_end = $post_fetch_promise['date_end'];
 
         $data['expenses_category_sum'] = Expenses::getExpensesSumGroupedByCategories($user_id, $date_start, $date_end);
+        $data['expenses_sum'] = Expenses::getExpensesSum($user_id, $date_start, $date_end);
 
         echo json_encode($data);
         exit;

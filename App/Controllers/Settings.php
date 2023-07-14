@@ -346,7 +346,7 @@ class Settings extends Authenticated
             $category_name = IncomesCategoryAssignedToUsers::getCategoryName($post_fetch_promise['id']);
             IncomesCategoryAssignedToUsers::updateCategory($post_fetch_promise['id'], $post_fetch_promise['name']);
 
-            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
+            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name . ' na: ' . $post_fetch_promise['name'];
             $data['flash_message_type'][0] = 'info';
             
         }
@@ -374,7 +374,7 @@ class Settings extends Authenticated
 
             $ending1 = Flash::polishEnding1($transactions['transactions']);
             $ending2 = Flash::polishEnding2($transactions['transactions']);
-            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istniej' . $ending2 . ' (' . $transactions['transactions'] . ') transakcj' . $ending1 . ', niepowodzenie';
+            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name . '" istniej' . $ending2 . ' (' . $transactions['transactions'] . ') transakcj' . $ending1 . ', niepowodzenie';
             $data['flash_message_type'][0] = 'warning';
 
             $data['category_name'] = $transactions['category_name'];
@@ -452,7 +452,7 @@ class Settings extends Authenticated
             $post_fetch_promise['limit_checkbox'] ? $post_fetch_promise['limit_value'] : NULL);
 
             if (!empty($post_fetch_promise['name']) && isset($post_fetch_promise['limit_value'])) {
-                $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
+                $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name . ' na: ' . $post_fetch_promise['name'];
                 $data['flash_message_body'][0] .= ' oraz dodano limit: ' . $post_fetch_promise['limit_value'];
             } else if (empty($post_fetch_promise['name']) && isset($post_fetch_promise['limit_value'])) {
                 $data['flash_message_body'][0] = 'Zmieniono limit dla kategorii: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['limit_value'];
@@ -491,7 +491,7 @@ class Settings extends Authenticated
 
             $ending1 = Flash::polishEnding1($transactions['transactions']);
             $ending2 = Flash::polishEnding2($transactions['transactions']);
-            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istniej' . $ending2 . ' (' . $transactions['transactions'] . ') transakcj' . $ending1 . ', niepowodzenie';
+            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name . '" istniej' . $ending2 . ' (' . $transactions['transactions'] . ') transakcj' . $ending1 . ', niepowodzenie';
             $data['flash_message_type'][0] = 'warning';
 
             $data['category_name'] = $transactions['category_name'];
@@ -562,7 +562,7 @@ class Settings extends Authenticated
             $category_name = PaymentMethodsAssignedToUsers::getCategoryName($post_fetch_promise['id']);
             PaymentMethodsAssignedToUsers::updateCategory($post_fetch_promise['id'], $post_fetch_promise['name']);
 
-            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
+            $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name . ' na: ' . $post_fetch_promise['name'];
             $data['flash_message_type'][0] = 'info';
             
         }
@@ -591,7 +591,7 @@ class Settings extends Authenticated
 
             $ending1 = Flash::polishEnding1($transactions['transactions']);
             $ending2 = Flash::polishEnding2($transactions['transactions']);
-            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name['name'] . '" istniej' . $ending2 . ' (' . $transactions['transactions'] . ') transakcj' . $ending1 . ', niepowodzenie';
+            $data['flash_message_body'][0] = 'dla podanej kategorii: "' . $category_name . '" istniej' . $ending2 . ' (' . $transactions['transactions'] . ') transakcj' . $ending1 . ', niepowodzenie';
             $data['flash_message_type'][0] = 'warning';
 
             $data['category_name'] = $transactions['category_name'];

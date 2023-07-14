@@ -318,6 +318,27 @@ class Expenses extends \Core\Model
     }
 
     /**
+     * Returns Expense object selected by id
+     * 
+     * @return object
+     */
+    public static function getExpenseById($id) {
+        $sql = 'SELECT * FROM expenses
+                WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
+
+    /**
      * Get expenses sum on category in selected time period
      * 
      * @return string
