@@ -104,7 +104,6 @@ document.getElementById("formAddExpense").addEventListener('submit', async (even
     if (!validateNewExpenseFormOnSubmit()) {
         event.preventDefault();
     } else {
-        console.log(difference);
         if (difference < 0) {
         event.preventDefault();
         document.getElementById("floatingInputKwotaHidden").value =
