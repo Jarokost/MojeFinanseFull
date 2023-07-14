@@ -160,12 +160,12 @@
 <!-- MODAL 1 - USER LOGIN -->
 <div class="modal fade" id="exampleModalToggle" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-content settings-modal-bg">
       <div class="modal-header p-5 pb-4 border-bottom-0">
-        <h1 class="fw-bold mb-0 fs-2">Zaloguj się!</h1>
+        <h1 class="fw-bold mb-0 fs-2 text-white">Zaloguj się!</h1>
         <button
           type="button"
-          class="btn-close"
+          class="btn-close btn-close-white"
           data-bs-dismiss="modal"
         ></button>
       </div>
@@ -174,7 +174,7 @@
           <div class="form-floating mb-3">
             <input
               type="email"
-              class="form-control"
+              class="form-control fw-bold"
               id="inputEmail"
               name="email"
               placeholder="Adres email"
@@ -188,7 +188,7 @@
             <div class="form-floating">
               <input
                 type="password"
-                class="form-control"
+                class="form-control fw-bold"
                 id="inputPassword"
                 name="password"
                 placeholder="Hasło"
@@ -204,7 +204,7 @@
               id="inputPasswordBtn"
             >Pokaż</button>
           </div>
-          <div class="form-check mb-3">
+          <div class="form-check mb-3 text-white">
             <label>
               <input
                 type="checkbox"
@@ -217,7 +217,7 @@
                 {%
                 endif
                 %}
-                class="form-check-input"
+                class="form-check-input fw-bold"
               />
               Zapamiętaj mnie!
             </label>
@@ -237,7 +237,7 @@
         </form>
         <div class="form-floating mb-3">
           <button
-            class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+            class="w-100 mb-2 btn btn-lg rounded-3 btn-primary fw-bold"
             data-bs-target="#exampleModalToggle2"
             data-bs-toggle="modal"
             data-bs-dismiss="modal"
@@ -253,12 +253,12 @@
 <!-- MODAL 2 - NEW USER REGISTRATION -->
 <div class="modal fade" id="exampleModalToggle2" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-content settings-modal-bg">
       <div class="modal-header p-5 pb-4 border-bottom-0">
-        <h1 class="fw-bold mb-0 fs-2">Zarejestruj się!</h1>
+        <h1 class="fw-bold mb-0 fs-2 text-white">Zarejestruj się!</h1>
         <button
           type="button"
-          class="btn-close"
+          class="btn-close btn-close-white"
           data-bs-dismiss="modal"
         ></button>
       </div>
@@ -267,7 +267,7 @@
           <div class="form-floating mb-3">
             <input
               type="text"
-              class="form-control"
+              class="form-control fw-bold"
               id="inputNameReg"
               name="name"
               placeholder="Imię"
@@ -278,7 +278,7 @@
           <div class="form-floating mb-3">
             <input
               type="email"
-              class="form-control"
+              class="form-control fw-bold"
               id="inputEmailReg"
               name="email"
               placeholder="Adres email"
@@ -291,7 +291,7 @@
             <div class="form-floating">
               <input
                 type="password"
-                class="form-control"
+                class="form-control fw-bold"
                 id="inputPasswordReg"
                 name="password"
                 placeholder="Hasło"
@@ -309,7 +309,7 @@
           </div>
 
           <button
-            class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+            class="w-100 mb-2 btn btn-lg rounded-3 btn-primary fw-bold"
             type="submit"
           >
             Rejestracja
