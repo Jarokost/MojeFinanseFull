@@ -384,7 +384,7 @@ class Settings extends Authenticated
 
             IncomesCategoryAssignedToUsers::removeCategory($post_fetch_promise['id']);
 
-            $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
+            $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name;
             $data['flash_message_type'][0] = 'info';
 
         }
@@ -455,11 +455,11 @@ class Settings extends Authenticated
                 $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name . ' na: ' . $post_fetch_promise['name'];
                 $data['flash_message_body'][0] .= ' oraz dodano limit: ' . $post_fetch_promise['limit_value'];
             } else if (empty($post_fetch_promise['name']) && isset($post_fetch_promise['limit_value'])) {
-                $data['flash_message_body'][0] = 'Zmieniono limit dla kategorii: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['limit_value'];
+                $data['flash_message_body'][0] = 'Zmieniono limit dla kategorii: ' . $category_name . ' na: ' . $post_fetch_promise['limit_value'];
             } else if (!empty($post_fetch_promise['name']) && !isset($post_fetch_promise['limit_value'])) {
                 $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
             } else if (empty($post_fetch_promise['name']) && !isset($post_fetch_promise['limit_value'])) {
-                $data['flash_message_body'][0] = 'Usunięto limit dla kategorii: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['limit_value'];
+                $data['flash_message_body'][0] = 'Usunięto limit dla kategorii: ' . $category_name . ' na: ' . $post_fetch_promise['limit_value'];
             }
 
 
@@ -501,7 +501,7 @@ class Settings extends Authenticated
 
             ExpensesCategoryAssignedToUsers::removeCategory($post_fetch_promise['id']);
 
-            $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
+            $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name;
             $data['flash_message_type'][0] = 'info';
 
         }
@@ -601,7 +601,7 @@ class Settings extends Authenticated
 
             PaymentMethodsAssignedToUsers::removeCategory($post_fetch_promise['id']);
 
-            $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name['name'];
+            $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name;
             $data['flash_message_type'][0] = 'info';
 
         }
