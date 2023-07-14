@@ -70,11 +70,11 @@ async function displayMonthlyExpensesForCategory() {
 async function displayLimitOnInputChange() {
     expensesSumForCategory = await getExpsensesSumForCategory();
     let inputValue = document.getElementById("floatingInputKwota").value;
-    difference = limitForCategory - expensesSumForCategory - inputValue;
-    console.log(categoryHasLimit);
     if (categoryHasLimit === true) {
+        difference = limitForCategory - expensesSumForCategory - inputValue;
         document.getElementById("limitDisplayAmountInput").textContent = `Pozostałe środki w ramach limitu: ${difference} [PLN]`;
     } else {
+        difference = 0;
         document.getElementById("limitDisplayAmountInput").textContent = '';
     }
     if (difference < 0) {
