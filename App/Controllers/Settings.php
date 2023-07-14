@@ -317,7 +317,7 @@ class Settings extends Authenticated
             IncomesCategoryAssignedToUsers::addCategory($_SESSION['user_id'], $post_fetch_promise['name']);
 
             $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $post_fetch_promise['name'];
-            $data['flash_message_type'][0] = 'info';
+            $data['flash_message_type'][0] = 'success';
 
         }
 
@@ -347,7 +347,7 @@ class Settings extends Authenticated
             IncomesCategoryAssignedToUsers::updateCategory($post_fetch_promise['id'], $post_fetch_promise['name']);
 
             $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name . ' na: ' . $post_fetch_promise['name'];
-            $data['flash_message_type'][0] = 'info';
+            $data['flash_message_type'][0] = 'success';
             
         }
 
@@ -385,7 +385,7 @@ class Settings extends Authenticated
             IncomesCategoryAssignedToUsers::removeCategory($post_fetch_promise['id']);
 
             $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name;
-            $data['flash_message_type'][0] = 'info';
+            $data['flash_message_type'][0] = 'success';
 
         }
 
@@ -420,7 +420,7 @@ class Settings extends Authenticated
                 $data['flash_message_body'][0] .= ' z limitem: ' . 
                 (empty($post_fetch_promise['limit_value'])?'0.00':number_format($post_fetch_promise['limit_value'], 2, '.', ''));
             }
-            $data['flash_message_type'][0] = 'info';
+            $data['flash_message_type'][0] = 'success';
 
         }
 
@@ -515,7 +515,7 @@ class Settings extends Authenticated
             ExpensesCategoryAssignedToUsers::removeCategory($post_fetch_promise['id']);
 
             $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name;
-            $data['flash_message_type'][0] = 'info';
+            $data['flash_message_type'][0] = 'success';
 
         }
 
@@ -545,7 +545,7 @@ class Settings extends Authenticated
             PaymentMethodsAssignedToUsers::addCategory($_SESSION['user_id'], $post_fetch_promise['name']);
 
             $data['flash_message_body'][0] = 'dodano nową kategorię: ' . $post_fetch_promise['name'];
-            $data['flash_message_type'][0] = 'info';
+            $data['flash_message_type'][0] = 'success';
 
         }
 
@@ -576,7 +576,7 @@ class Settings extends Authenticated
             PaymentMethodsAssignedToUsers::updateCategory($post_fetch_promise['id'], $post_fetch_promise['name']);
 
             $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name . ' na: ' . $post_fetch_promise['name'];
-            $data['flash_message_type'][0] = 'info';
+            $data['flash_message_type'][0] = 'success';
             
         }
 
@@ -615,7 +615,7 @@ class Settings extends Authenticated
             PaymentMethodsAssignedToUsers::removeCategory($post_fetch_promise['id']);
 
             $data['flash_message_body'][0] = 'usunięto kategorię: ' . $category_name;
-            $data['flash_message_type'][0] = 'info';
+            $data['flash_message_type'][0] = 'success';
 
         }
 
