@@ -559,4 +559,52 @@ window.addEventListener('load', function () {
 
   }
 
+  // Collapse and Expand all rows on button click
+  const collapseElementListExpenses = [].slice.call(document.querySelectorAll('#tableExpenses > tbody > tr.collapse'))
+  const collapseListExpenses = collapseElementListExpenses.map(function (collapseEl) {
+    return new bootstrap.Collapse(collapseEl, { toggle: false });
+  });
+
+  const collapseElementListIncomes = [].slice.call(document.querySelectorAll('#tableIncomes > tbody > tr.collapse'))
+  const collapseListIncomes = collapseElementListIncomes.map(function (collapseEl) {
+    return new bootstrap.Collapse(collapseEl, { toggle: false });
+  });
+
+  const showAllExpenses = document.getElementById("showAllExpenses");
+  const hideAllExpenses = document.getElementById("hideAllExpenses");
+  const showAllIncomes = document.getElementById("showAllIncomes");
+  const hideAllIncomes = document.getElementById("hideAllIncomes");
+
+  showAllExpenses.addEventListener('click', function(event) {
+      for(let i=0;i<collapseListExpenses.length;i++)
+      {
+        collapseListExpenses[i].show();
+      }
+    }
+  );
+
+  hideAllExpenses.addEventListener('click', function(event) {
+      for(let i=0;i<collapseListExpenses.length;i++)
+      {
+        collapseListExpenses[i].hide();
+      }
+    }
+  );
+
+  showAllIncomes.addEventListener('click', function(event) {
+      for(let i=0;i<collapseListIncomes.length;i++)
+      {
+        collapseListIncomes[i].show();
+      }
+    }
+  );
+
+  hideAllIncomes.addEventListener('click', function(event) {
+      for(let i=0;i<collapseListIncomes.length;i++)
+      {
+        collapseListIncomes[i].hide();
+      }
+    }
+  );
+
 })
