@@ -448,23 +448,35 @@ class Settings extends Authenticated
         } else {
 
             $category_name = ExpensesCategoryAssignedToUsers::getCategoryName($post_fetch_promise['id']);
+            $category_limit = ExpensesCategoryAssignedToUsers::getLimit($_SESSION['user_id'], $post_fetch_promise['id']);
             ExpensesCategoryAssignedToUsers::updateCategory($post_fetch_promise['id'], 
             empty($post_fetch_promise['name']) ? NULL : $post_fetch_promise['name'],
             $post_fetch_promise['limit_checkbox'] ? $post_fetch_promise['limit_value'] : NULL);
+            $limit_value = (empty($post_fetch_promise['limit_value'])?'0.00':number_format($post_fetch_promise['limit_value'], 2, '.', ''));
 
-            if (!empty($post_fetch_promise['name']) && isset($post_fetch_promise['limit_value'])) {
+            $data['flash_message_type'][0] = 'success';
+
+            if (!empty($post_fetch_promise['name']) && $post_fetch_promise['limit_checkbox'] && !isset($category_limit)) {
                 $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name . ' na: ' . $post_fetch_promise['name'];
-                $data['flash_message_body'][0] .= ' oraz dodano limit: ' . $post_fetch_promise['limit_value'];
-            } else if (empty($post_fetch_promise['name']) && isset($post_fetch_promise['limit_value'])) {
-                $data['flash_message_body'][0] = 'Zmieniono limit dla kategorii: ' . $category_name . ' na: ' . $post_fetch_promise['limit_value'];
-            } else if (!empty($post_fetch_promise['name']) && !isset($post_fetch_promise['limit_value'])) {
-                $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name['name'] . ' na: ' . $post_fetch_promise['name'];
-            } else if (empty($post_fetch_promise['name']) && !isset($post_fetch_promise['limit_value'])) {
-                $data['flash_message_body'][0] = 'Usunięto limit dla kategorii: ' . $category_name . ' na: ' . $post_fetch_promise['limit_value'];
+                $data['flash_message_body'][0] .= ' oraz dodano limit: ' . $limit_value;
+            } else if (!empty($post_fetch_promise['name']) && $post_fetch_promise['limit_checkbox'] && ($category_limit != $post_fetch_promise['limit_value'])) {
+                $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name . ' na: ' . $post_fetch_promise['name'];
+                $data['flash_message_body'][0] .= ' oraz zmieniono limit z: ' . $category_limit . ' na: ' . $limit_value;
+            } else if (empty($post_fetch_promise['name']) && $post_fetch_promise['limit_checkbox'] && ($category_limit == $post_fetch_promise['limit_value']) && isset($category_limit)) {
+                ;
+            } else if (empty($post_fetch_promise['name']) && $post_fetch_promise['limit_checkbox'] && ($category_limit == $post_fetch_promise['limit_value'])) {
+                $data['flash_message_body'][0] = 'Do kategorii: ' . $category_name . ' dodano limit: ' . '0.00';
+            } else if (empty($post_fetch_promise['name']) && $post_fetch_promise['limit_checkbox'] && isset($category_limit)) {
+                $data['flash_message_body'][0] = 'Zmieniono limit dla kategorii: ' . $category_name . ' z: ' . (empty($category_limit)?'0.00':number_format($category_limit, 2, '.', '')) . ' na: ' . $limit_value;
+            } else if (empty($post_fetch_promise['name']) && $post_fetch_promise['limit_checkbox'] && !isset($category_limit)) {
+                $data['flash_message_body'][0] = 'Do kategorii: ' . $category_name . ' dodano limit: ' . $limit_value;
+            } else if (!empty($post_fetch_promise['name']) && !$post_fetch_promise['limit_checkbox'] && isset($category_limit)) {
+                $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name . ' na: ' . $post_fetch_promise['name'] . ' oraz usunięto limit';
+            } else if (!empty($post_fetch_promise['name']) && $post_fetch_promise['limit_checkbox']) {
+                $data['flash_message_body'][0] = 'Zmieniono nazwę kategorii z: ' . $category_name . ' na: ' . $post_fetch_promise['name'];
+            } else if (empty($post_fetch_promise['name']) && !$post_fetch_promise['limit_checkbox'] && isset($category_limit)) {
+                $data['flash_message_body'][0] = 'Usunięto limit dla kategorii: ' . $category_name;
             }
-
-
-            $data['flash_message_type'][0] = 'info';
 
         }
 
