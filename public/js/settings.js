@@ -352,7 +352,9 @@ document.getElementById("inputPasswordCurrentBtn").addEventListener('click', fun
       const data = await res.json();
       updateExpensesCategoryList(data);
       document.getElementById("floatingChgCatNameExpenses").value = '';
-      printFlashMessages(data);
+      if (data.flash_message_body !== undefined) {
+        printFlashMessages(data);
+      }
     } catch (e) {
       console.log('ERROR: ', e);
     }
