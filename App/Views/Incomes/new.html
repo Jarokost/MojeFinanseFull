@@ -13,7 +13,7 @@
 
 <main class="container">
     <div class="bg-light px-5 py-4 rounded">
-      <div class="center-block">
+      <div class="center-block settings-modal-bg py-3 px-2 rounded">
         <form method="post" action="/Incomes/add" id="formAddIncome">
 
           {% if income.errors is not empty %}
@@ -30,7 +30,7 @@
           <div class="form-floating mb-2">
             <input
               type="number"
-              class="form-control input-width"
+              class="form-control input-width fw-bold"
               id="floatingInputKwota"
               name="amount"
               placeholder="0.00"
@@ -43,7 +43,7 @@
           <div class="form-floating mb-2">
             <input
               type="date"
-              class="form-control input-width"
+              class="form-control input-width fw-bold"
               id="floatingDate"
               name="date_of_income"
               placeholder="Data"
@@ -55,7 +55,7 @@
 
           <!-- JS use class is-invalid when input validation -->
           <div class="form-floating mb-2">
-            <select class="form-select input-width" 
+            <select class="form-select input-width fw-bold" 
             id="floatingSelect"
             name="income_category_assigned_to_user_id"
             >
@@ -72,7 +72,7 @@
 
           <div class="form-floating mb-2">
             <textarea
-              class="form-control input-width"
+              class="form-control input-width fw-bold"
               placeholder="Komentarz"
               id="floatingTextarea"
               name="income_comment"

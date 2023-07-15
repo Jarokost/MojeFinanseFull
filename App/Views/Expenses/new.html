@@ -14,7 +14,7 @@
 
 <main class="container">
     <div class="bg-light px-5 py-4 rounded">
-      <div class="center-block">
+      <div class="center-block settings-modal-bg py-3 px-2 rounded">
         <form method="post" action="/Expenses/add" id="formAddExpense">
 
           {% if expense.errors is not empty %}
@@ -31,7 +31,7 @@
           <div class="form-floating mb-1">
             <input
               type="number"
-              class="form-control input-width"
+              class="form-control input-width fw-bold"
               id="floatingInputKwota"
               name="amount"
               placeholder="0.00"
@@ -41,13 +41,13 @@
             <label id="floatingInputKwotaLabel" for="floatingInputKwota">Kwota [PLN]</label>
           </div>
 
-          <div id="limitDisplayAmountInput" class="mb-2"></div>
+          <div id="limitDisplayAmountInput" class="mb-2 text-white"></div>
 
           <!-- JS use class is-invalid when input validation -->
           <div class="form-floating mb-1">
             <input
               type="date"
-              class="form-control input-width"
+              class="form-control input-width fw-bold"
               id="floatingDate"
               name="date_of_expense"
               placeholder="Data"
@@ -57,11 +57,11 @@
             <label id="floatingDateLabel" for="floatingDate">Data</label>
           </div>
 
-          <div id="limitDisplayThisMonthSpent" class="mb-2"></div>
+          <div id="limitDisplayThisMonthSpent" class="mb-2 text-white"></div>
 
           <!-- JS use class is-invalid when input validation -->
           <div class="form-floating mb-1">
-            <select class="form-select input-width" 
+            <select class="form-select input-width fw-bold" 
             id="floatingSelect"
             name="expense_category_assigned_to_user_id"
             >
@@ -76,11 +76,11 @@
             <label id="floatingSelectLabel" for="floatingSelect">Kategoria</label>
           </div>
 
-          <div id="limitDisplayForThisCategory" class="mb-2"></div>
+          <div id="limitDisplayForThisCategory" class="mb-2 text-white"></div>
 
           <!-- JS use class is-invalid when input validation -->
           <div class="form-floating mb-2">
-            <select class="form-select input-width" 
+            <select class="form-select input-width fw-bold" 
             id="floatingSelectMethod"
             name="payment_method_assigned_to_user_id"
             >
@@ -97,7 +97,7 @@
 
           <div class="form-floating mb-2">
             <textarea
-              class="form-control input-width"
+              class="form-control input-width fw-bold"
               placeholder="Komentarz"
               id="floatingTextarea"
               name="expense_comment"
