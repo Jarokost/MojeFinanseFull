@@ -1,4 +1,10 @@
-{% extends 'base.html' %} {% block title %}Home{% endblock %} {% block footer %}
+{% extends 'base.html' %} {% block title %}Home{% endblock %} 
+
+{% block link %}
+<link href="/fontello/css/fontello.css" rel="stylesheet" />
+{% endblock %}
+
+{% block footer %}
 
 <script src="/js/passShowHide.js"></script>
 <script src="/js/validateInputsHomePage.js"></script>
@@ -199,10 +205,10 @@
               <label id="inputPasswordLabel" for="inputPassword">Hasło</label>
             </div>
             <button
-              class="btn btn-outline-secondary"
+              class="btn btn-outline-secondary icon-eye"
               type="button"
               id="inputPasswordBtn"
-            >Pokaż</button>
+            ></button>
           </div>
           <div class="form-check mb-3 text-white">
             <label>
@@ -302,10 +308,10 @@
               <label id="inputPasswordRegLabel" for="inputPasswordReg">Hasło</label>
             </div>
             <button
-              class="btn btn-outline-secondary"
+              class="btn btn-outline-secondary icon-eye"
               type="button"
               id="inputPasswordRegBtn"
-            >Pokaż</button>
+            ></button>
           </div>
 
           <button

@@ -554,3 +554,8 @@ tr.hide-table-padding td {
   width: 300px !important;
   height: 400px !important;
 }
+
+.icon-eye-off,
+.icon-eye {
+  font-size: 22px;
+}
