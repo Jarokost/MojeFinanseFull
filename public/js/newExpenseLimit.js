@@ -78,9 +78,11 @@ async function displayLimitOnInputChange() {
         document.getElementById("limitDisplayAmountInput").textContent = '';
     }
     if (difference < 0) {
+        document.getElementById("limitDisplayAmountInput").classList.remove("text-white");
         document.getElementById("limitDisplayAmountInput").classList.add("text-warning");
     } else {
         document.getElementById("limitDisplayAmountInput").classList.remove("text-warning");
+        document.getElementById("limitDisplayAmountInput").classList.add("text-white");
     }
 }
 

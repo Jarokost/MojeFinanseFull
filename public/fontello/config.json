@@ -103,6 +103,18 @@
       "css": "eye-off",
       "code": 59399,
       "src": "fontawesome"
+    },
+    {
+      "uid": "48b87105bd38c20315f1b705b8c7b38c",
+      "css": "list",
+      "code": 59400,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "4d2dfc45d8176b1f26aed973fa84a91e",
+      "css": "indent-right",
+      "code": 59401,
+      "src": "fontawesome"
     }
   ]
 }

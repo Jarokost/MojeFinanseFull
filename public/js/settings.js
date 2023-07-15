@@ -1,6 +1,24 @@
 let id_to_delete = 0;
 let table_row = null;
 
+const rowBelowXl1 = document.getElementById("row-below-xl-1");
+const rowBelowXl2 = document.getElementById("row-below-xl-2");
+window.addEventListener("resize", updateSize);
+function updateSize() {
+  if(window.innerWidth < 1200) {
+    rowBelowXl1.classList.remove('row');
+    rowBelowXl2.classList.remove('row');
+  } else {
+    rowBelowXl1.classList.add('row');
+    rowBelowXl2.classList.add('row');
+  }
+}
+
+window.addEventListener('load', function () {
+  updateSize();
+});
+
+
 function updateIncomesCategoryList(data)
 {
   let table_rows = document.querySelectorAll("#tableIncomesCategories tr");
