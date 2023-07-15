@@ -11,6 +11,13 @@ function passShowHide(buttonId) {
     else passwordInput.type = "password";
     
     let button = document.getElementById(buttonId);
-    if (button.innerHTML == "Pokaż") button.innerHTML = "Ukryj";
-    else button.innerHTML = "Pokaż";
+    if (button.classList.contains('icon-eye')) {
+        //button.innerHTML = "Ukryj";
+        button.classList.add('icon-eye-off');
+        button.classList.remove('icon-eye');
+    } else { 
+        //button.innerHTML = "Pokaż";
+        button.classList.add('icon-eye');
+        button.classList.remove('icon-eye-off');
+    }
 }
