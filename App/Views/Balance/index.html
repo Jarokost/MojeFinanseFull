@@ -289,23 +289,23 @@
   <!-- MODAL - date selection -->
   <div class="modal fade" id="modalDateSelector" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-              <div class="modal-header p-5 pb-4 border-bottom-0">
-              <h1 class="fw-bold mb-0 fs-2">Wybierz zakres dat</h1>
+          <div class="modal-content settings-modal-bg">
+              <div class="modal-header p-5 mb-3 mb-sm-0 pb-4 border-bottom-0">
+              <h1 class="fw-bold mb-0 fs-2 text-white">Wybierz zakres dat</h1>
               <button
                   type="button"
-                  class="btn-close"
+                  class="btn-close btn-close-white"
                   data-bs-dismiss="modal"
                   aria-label="Close"
               ></button>
               </div>
 
-              <div class="modal-body p-5 pt-0">
+              <div class="modal-body p-3 p-sm-5 mb-4 mb-sm-0 pt-0">
               <form action="/balance/indexSelectedDates" method="post">
                   <div class="form-floating mb-3">
                   <input
                       type="date"
-                      class="form-control rounded-3"
+                      class="form-control rounded-3 fw-bold"
                       name="dateFrom"
                       id="floatingDateFrom"
                       placeholder="Data od"
@@ -316,7 +316,7 @@
                   <div class="form-floating mb-3">
                   <input
                       type="date"
-                      class="form-control rounded-3"
+                      class="form-control rounded-3 fw-bold"
                       name="dateTo"
                       id="floatingDateTo"
                       placeholder="Data do"
@@ -325,10 +325,10 @@
                   <label for="floatingDateTo">Data do</label>
                   </div>
                   <button
-                  class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+                  class="w-100 mb-2 btn btn-lg rounded-3 btn-success fw-bold"
                   type="submit"
                   >
-                  Zatwierdź
+                  Pokaż bilans
                   </button>
               </form>
               </div>
@@ -341,7 +341,7 @@
   <div class="modal fade" id="modalEditExpense" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content settings-modal-bg">
-        <div class="modal-header p-5 pb-4 border-bottom-0">
+        <div class="modal-header p-5 mb-3 mb-sm-0 pb-4 border-bottom-0">
           <h1 class="fw-bold mb-0 fs-2 text-white">Edycja wydatku</h1>
           <button
             type="button"
@@ -355,7 +355,7 @@
           <input type="hidden" name="id" id="editExpenseId"/>
 
           <!-- JS use class is-invalid when input validation -->
-          <div class="modal-body p-5 pt-0">
+          <div class="modal-body p-3 p-sm-5 mb-4 mb-sm-0 pt-0">
             <div class="form-floating mb-2">
               <input
                 type="number"
@@ -440,7 +440,7 @@
   <div class="modal fade" id="modalRemoveExpense" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content settings-modal-bg fw-bold text-white">
-        <div class="modal-header p-5 pb-4 border-bottom-0">
+        <div class="modal-header p-5 mb-3 mb-sm-0 pb-4 border-bottom-0">
           <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
           <button
             type="button"
@@ -449,7 +449,7 @@
           ></button>
         </div>
 
-        <div class="modal-body p-5 pt-0">
+        <div class="modal-body p-3 p-sm-5 mb-4 mb-sm-0 pt-0">
 
           <form method="post" id="formRemoveExpense">
 
@@ -475,7 +475,7 @@
   <div class="modal fade" id="modalEditIncome" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content settings-modal-bg">
-        <div class="modal-header p-5 pb-4 border-bottom-0">
+        <div class="modal-header p-5 mb-3 mb-sm-0 pb-4 border-bottom-0">
           <h1 class="fw-bold mb-0 fs-2 text-white">Edycja przychodu</h1>
           <button
             type="button"
@@ -484,7 +484,7 @@
           ></button>
         </div>
 
-        <div class="modal-body p-5 pt-0">
+        <div class="modal-body p-3 p-sm-5 mb-4 mb-sm-0 pt-0">
 
           <form method="post" id="formEditIncome">
 
@@ -559,7 +559,7 @@
   <div class="modal fade" id="modalRemoveIncome" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content settings-modal-bg fw-bold text-white">
-        <div class="modal-header p-5 pb-4 border-bottom-0">
+        <div class="modal-header p-5 mb-3 mb-sm-0 pb-4 border-bottom-0">
           <h1 class="fw-bold mb-0 fs-2 w-100">Usuwanie wydatku</h1>
           <button
             type="button"
@@ -568,7 +568,7 @@
           ></button>
         </div>
 
-        <div class="modal-body p-5 pt-0">
+        <div class="modal-body p-3 p-sm-5 mb-4 mb-sm-0 pt-0">
 
           <form method="post" id="formRemoveIncome">
 
