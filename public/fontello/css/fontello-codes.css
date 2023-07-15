@@ -7,6 +7,8 @@
 .icon-mail:before { content: '\e805'; } /* '' */
 .icon-eye:before { content: '\e806'; } /* '' */
 .icon-eye-off:before { content: '\e807'; } /* '' */
+.icon-list:before { content: '\e808'; } /* '' */
+.icon-indent-right:before { content: '\e809'; } /* '' */
 .icon-trash:before { content: '\f1f8'; } /* '' */
 .icon-user-plus:before { content: '\f234'; } /* '' */
 .icon-user-times:before { content: '\f235'; } /* '' */

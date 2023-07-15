@@ -416,25 +416,25 @@ table.rounded-corners.table-balance tr td:first-child {
 table.rounded-corners.table-balance tr td:nth-child(3) {
   text-align: center;
   padding: 10px 5px;
-  min-width: 110px;
-  max-width: 110px;
+  min-width: 98px;
+  max-width: 98px;
 }
 
 table.rounded-corners.table-balance tr td:nth-child(4) {
   text-align: center;
   margin: 50px;
   padding: 10px 5px;
-  min-width: 150px;
-  max-width: 150px;
-  word-wrap: break-word;
-  /* overflow: hidden; */
+  min-width: 145px;
+  max-width: 145px;
+  /* word-wrap: break-word; */
+  overflow: hidden;
 }
 
 table.rounded-corners.table-balance tr td:nth-child(7) {
   text-align: right;
   padding: 10px 10px 10px 5px;
-  min-width: 100px;
-  max-width: 100px;
+  min-width: 90px;
+  max-width: 90px;
 }
 
 table.rounded-corners.table-balance tr td:nth-child(3).balance-btn-td {

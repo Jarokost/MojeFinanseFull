@@ -25,8 +25,8 @@
 
 {% block body %}
     <main class="container">
-        <div class="bg-light px-sm-0 px-xl-4 py-sm-0 py-xl-4 mb-5 rounded">
-            <div class="row">
+        <div class="bg-light px-0 px-lg-4 py-1 py-lg-4 mb-5 rounded">
+            <div id="row-below-lg-1" class="row">
                 <div id="summary" class="text-center bg-dark rounded text-secondary py-3 my-3 mx-auto">
                     <div class="h3">PODSUMOWANIE</div>
                     <div class="h5">{{ action }}</div>
@@ -87,7 +87,6 @@
                 {% endif %}
                   {% if balance.incomes_sum.amount_sum is not null %}
                     <div class="col-lg-6" id="tableIncomesDiv">
-                      <!-- <div class="rectangle_red"></div> -->
 
                         <table class="table caption-top rounded-corners table-balance fw-bold m-auto" id="tableIncomes">
                             <caption>
@@ -96,19 +95,19 @@
                                   Przychody
                                 </div>
                                 <div class="table-caption-div-btn">
-                                  <button class="btn btn-secondary fw-bold" 
+                                  <button class="btn btn-secondary fw-bold icon-indent-right" 
                                     id="showAllIncomes"
                                     type="button" 
                                     data-bs-toggle="collapse" 
                                     aria-expanded="false" 
-                                    >Pokaż szczegóły
+                                    >
                                   </button>
-                                  <button class="btn btn-secondary fw-bold" 
+                                  <button class="btn btn-secondary fw-bold icon-list" 
                                     id="hideAllIncomes"
                                     type="button" 
                                     data-bs-toggle="collapse" 
                                     aria-expanded="true" 
-                                    >Ukryj szczegóły
+                                    >
                                   </button>
                                 </div>
                               </div>
@@ -185,8 +184,7 @@
                   <div class="d-flex justify-content-center" id="tableIncomesNullDiv">
                 {% endif %}
                   {% if balance.expenses_sum.amount_sum is not null %}
-                    <div class="col-lg-6" id="tableExpensesDiv">
-                      <!-- <div class="rectangle_blue"></div> -->
+                    <div class="col-lg-6 my-4 my-lg-0" id="tableExpensesDiv">
 
                         <table class="table caption-top rounded-corners table-balance fw-bold m-auto" id="tableExpenses">
                             <caption>
@@ -195,19 +193,19 @@
                                   Wydatki
                                 </div>
                                 <div class="table-caption-div-btn">
-                                  <button class="btn btn-secondary fw-bold" 
+                                  <button class="btn btn-secondary fw-bold icon-indent-right" 
                                     id="showAllExpenses"
                                     type="button" 
                                     data-bs-toggle="collapse" 
                                     aria-expanded="false" 
-                                    >Pokaż szczegóły
+                                    >
                                   </button>
-                                  <button class="btn btn-secondary fw-bold" 
+                                  <button class="btn btn-secondary fw-bold icon-list" 
                                     id="hideAllExpenses"
                                     type="button" 
                                     data-bs-toggle="collapse" 
                                     aria-expanded="true" 
-                                    >Ukryj szczegóły
+                                    >
                                   </button>
                                 </div>
                               </div>

@@ -20,6 +20,7 @@ const expensesTableWrapper = document.createElement("div");
 expensesTableWrapper.setAttribute("class", "d-flex justify-content-center");
 const expensesChartWrapper = document.createElement("div");
 expensesChartWrapper.setAttribute("class", "d-flex justify-content-center");
+const rowBelowLg1 = document.getElementById("row-below-lg-1");
 
 function drawChartIncomes() {
   chart_data_incomes = google.visualization.arrayToDataTable(incomes_categories_sum_table);
@@ -37,8 +38,8 @@ function drawChartIncomes() {
     //legend: "none",
     legend: {position: 'top', maxLines: 10, textStyle: {color: 'black', fontSize: 16}},
     backgroundColor: "transparent",
-    width: 450,
-    height: 450,
+    width: 390,
+    height: 390,
     fontSize: 18
   };
 
@@ -64,8 +65,8 @@ function drawChartExpenses() {
     //legend: "none",
     legend: {position: 'top', maxLines: 10, textStyle: {color: 'black', fontSize: 16}},
     backgroundColor: "transparent",
-    width: 450,
-    height: 450,
+    width: 390,
+    height: 390,
     fontSize: 18
   };
 
@@ -170,9 +171,20 @@ const updateExpensesGraphData = async () => {
 
 }
 
+function updateSize() {
+  if(window.innerWidth < 992) {
+    rowBelowLg1.classList.remove('row');
+  } else {
+    rowBelowLg1.classList.add('row');
+  }
+}
+
 google.charts.load("current", { packages: ["corechart"] });
 
 window.addEventListener('load', function () {
+
+  window.addEventListener("resize", updateSize);
+  updateSize();
 
   if ( graphIncomesDivElement !== null ) {
     

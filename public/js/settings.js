@@ -5,7 +5,6 @@ const rowBelowXl1 = document.getElementById("row-below-xl-1");
 const rowBelowXl2 = document.getElementById("row-below-xl-2");
 window.addEventListener("resize", updateSize);
 function updateSize() {
-  console.log(window.innerHeight, window.innerWidth);
   if(window.innerWidth < 1200) {
     rowBelowXl1.classList.remove('row');
     rowBelowXl2.classList.remove('row');
