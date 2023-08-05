@@ -214,4 +214,34 @@ class IncomesCategoryAssignedToUsers extends \Core\Model
 
         return $stmt->fetch();
     }
+
+    public static function getCategoryIdMinValueForUserId($user_id) {
+        $sql = 'SELECT MIN(id)
+                FROM incomes_category_assigned_to_users
+                WHERE user_id = :user_id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+    public static function getCategoryIdMaxValueForUserId($user_id) {
+        $sql = 'SELECT MAX(id)
+                FROM incomes_category_assigned_to_users
+                WHERE user_id = :user_id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
 }
