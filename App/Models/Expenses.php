@@ -369,4 +369,45 @@ class Expenses extends \Core\Model
 
         return $stmt->fetchColumn();
     }
+
+    public static function addRandom($qty, $user_id, $minExpenseCategryId, $maxExpenseCategryId, $minPaymentMethodId, $maxPaymentMethodId)
+    {
+        $date_start = strtotime("-90 Days");
+        $date_end = strtotime("+30 Days");
+                                    
+        $sql = 'INSERT INTO expenses (user_id, expense_category_assigned_to_user_id, payment_method_assigned_to_user_id, amount, date_of_expense, expense_comment)
+                VALUES ';
+        
+        for ($i = 1; $i < $qty; $i++) {
+            $sql .= '(
+                    :user_id' . $i . ', 
+                    :expense_category_assigned_to_user_id' . $i . ', 
+                    :payment_method_assigned_to_user_id' . $i . ', 
+                    :amount' . $i . ', 
+                    :date_of_expense' . $i . ', 
+                    :expense_comment' . $i . '),';
+        }
+
+        $sql .= '(
+            :user_id' . $qty . ', 
+            :expense_category_assigned_to_user_id' . $qty . ', 
+            :payment_method_assigned_to_user_id' . $qty . ', 
+            :amount' . $qty . ', 
+            :date_of_expense' . $qty . ', 
+            :expense_comment' . $qty . ')';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        for ($i = 1; $i <= $qty; $i++) {
+            $stmt->bindValue(':user_id' . $i, $user_id, PDO::PARAM_STR);
+            $stmt->bindValue(':expense_category_assigned_to_user_id' . $i, mt_rand($minExpenseCategryId, $maxExpenseCategryId), PDO::PARAM_INT);
+            $stmt->bindValue(':payment_method_assigned_to_user_id' . $i, mt_rand($minPaymentMethodId, $maxPaymentMethodId), PDO::PARAM_INT);
+            $stmt->bindValue(':amount' . $i, mt_rand(25, 2500), PDO::PARAM_STR);
+            $stmt->bindValue(':date_of_expense' . $i, date('Y-m-d',mt_rand($date_start, $date_end)), PDO::PARAM_STR);
+            $stmt->bindValue(':expense_comment' . $i, 'transaction ID: ' . mt_rand(1, 99999) , PDO::PARAM_STR);
+        }          
+
+        return $stmt->execute();
+    }
 }

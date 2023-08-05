@@ -7,6 +7,8 @@ use \App\Models\User;
 use \App\Models\IncomesCategoryAssignedToUsers;
 use \App\Models\ExpensesCategoryAssignedToUsers;
 use \App\Models\PaymentMethodsAssignedToUsers;
+use \App\Models\Expenses;
+use \App\Models\Incomes;
 
 /**
  * Signup controller
@@ -42,6 +44,15 @@ class Signup extends \Core\Controller
             ExpensesCategoryAssignedToUsers::fillCategoriesAssignedToUserWithDefault($lastUserId['id']);
             PaymentMethodsAssignedToUsers::fillCategoriesAssignedToUserWithDefault($lastUserId['id']);
 
+            $incomesCategoryMinId = IncomesCategoryAssignedToUsers::getCategoryIdMinValueForUserId($lastUserId['id']);
+            $incomesCategoryMaxId = IncomesCategoryAssignedToUsers::getCategoryIdMaxValueForUserId($lastUserId['id']);
+            $expensesCategoryMinId = ExpensesCategoryAssignedToUsers::getCategoryIdMinValueForUserId($lastUserId['id']);
+            $expensesCategoryMaxId = ExpensesCategoryAssignedToUsers::getCategoryIdMaxValueForUserId($lastUserId['id']);
+            $paymentMethodMinId = PaymentMethodsAssignedToUsers::getCategoryIdMinValueForUserId($lastUserId['id']);
+            $paymentMethodMaxId = PaymentMethodsAssignedToUsers::getCategoryIdMaxValueForUserId($lastUserId['id']);
+
+            Expenses::addRandom(10, $lastUserId['id'], $expensesCategoryMinId, $expensesCategoryMaxId, $paymentMethodMinId, $paymentMethodMaxId);
+            
             $user->sendActivationEmail();
 
             $this->redirect('/signup/success');
