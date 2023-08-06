@@ -313,4 +313,79 @@ class Incomes extends \Core\Model
 
         return $stmt->fetch();
     }
+
+    public static function addRandom($qty, $user_id, $minIncomeCategryId, $maxIncomeCategryId)
+    {
+        $date_start = strtotime("-90 Days");
+        $date_end = strtotime("+30 Days");
+                                    
+        $sql = 'INSERT INTO incomes (user_id, income_category_assigned_to_user_id, amount, date_of_income, income_comment)
+                VALUES ';
+        
+        for ($i = 1; $i < $qty; $i++) {
+            $sql .= '(
+                    :user_id' . $i . ', 
+                    :income_category_assigned_to_user_id' . $i . ', 
+                    :amount' . $i . ', 
+                    :date_of_income' . $i . ', 
+                    :income_comment' . $i . '),';
+        }
+
+        $sql .= '(
+            :user_id' . $qty . ', 
+            :income_category_assigned_to_user_id' . $qty . ', 
+            :amount' . $qty . ', 
+            :date_of_income' . $qty . ', 
+            :income_comment' . $qty . ')';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        for ($i = 1; $i <= $qty; $i++) {
+            $stmt->bindValue(':user_id' . $i, $user_id, PDO::PARAM_INT);
+            $stmt->bindValue(':income_category_assigned_to_user_id' . $i, mt_rand($minIncomeCategryId, $maxIncomeCategryId), PDO::PARAM_INT);
+            $stmt->bindValue(':amount' . $i, mt_rand(25, 2500), PDO::PARAM_STR);
+            $stmt->bindValue(':date_of_income' . $i, date('Y-m-d',mt_rand($date_start, $date_end)), PDO::PARAM_STR);
+            $stmt->bindValue(':income_comment' . $i, 'transaction ID: ' . mt_rand(1, 99999) , PDO::PARAM_STR);
+        }          
+
+        return $stmt->execute();
+    }
+
+    public static function addRecordsFromTestFile($user_id, $minIncomeCategryId, $records)
+    {
+        $sql = 'INSERT INTO incomes (user_id, income_category_assigned_to_user_id, amount, date_of_income, income_comment)
+                VALUES ';
+
+        foreach ($records as $i => $record) {
+            if ($i === array_key_last($records)) {
+                $sql .= '(
+                    :user_id' . $i . ', 
+                    :income_category_assigned_to_user_id' . $i . ', 
+                    :amount' . $i . ', 
+                    :date_of_income' . $i . ', 
+                    :income_comment' . $i . ')';
+            } else {
+                $sql .= '(
+                    :user_id' . $i . ', 
+                    :income_category_assigned_to_user_id' . $i . ',  
+                    :amount' . $i . ', 
+                    :date_of_income' . $i . ', 
+                    :income_comment' . $i . '),';
+            }
+        }
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        foreach ($records as $i => $record) {
+            $stmt->bindValue(':user_id' . $i, $user_id, PDO::PARAM_INT);
+            $stmt->bindValue(':income_category_assigned_to_user_id' . $i, $record->income_category_assigned_to_user_id+$minIncomeCategryId-1, PDO::PARAM_INT);
+            $stmt->bindValue(':amount' . $i, $record->amount, PDO::PARAM_STR);
+            $stmt->bindValue(':date_of_income' . $i, $record->date_of_income, PDO::PARAM_STR);
+            $stmt->bindValue(':income_comment' . $i, $record->income_comment, PDO::PARAM_STR);
+        }          
+
+        return $stmt->execute();
+    }
 }

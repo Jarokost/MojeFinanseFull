@@ -400,7 +400,7 @@ class Expenses extends \Core\Model
         $stmt = $db->prepare($sql);
 
         for ($i = 1; $i <= $qty; $i++) {
-            $stmt->bindValue(':user_id' . $i, $user_id, PDO::PARAM_STR);
+            $stmt->bindValue(':user_id' . $i, $user_id, PDO::PARAM_INT);
             $stmt->bindValue(':expense_category_assigned_to_user_id' . $i, mt_rand($minExpenseCategryId, $maxExpenseCategryId), PDO::PARAM_INT);
             $stmt->bindValue(':payment_method_assigned_to_user_id' . $i, mt_rand($minPaymentMethodId, $maxPaymentMethodId), PDO::PARAM_INT);
             $stmt->bindValue(':amount' . $i, mt_rand(25, 2500), PDO::PARAM_STR);
@@ -412,13 +412,7 @@ class Expenses extends \Core\Model
     }
 
     public static function addRecordsFromTestFile($user_id, $minExpenseCategryId, $minPaymentMethodId, $records)
-    {
-        $date_start = strtotime("-90 Days");
-        $date_end = strtotime("+30 Days");
-
-        $recordsLength = count($records);
-        $recordsLengthLess = $recordsLength - 1;
-                                    
+    {                            
         $sql = 'INSERT INTO expenses (user_id, expense_category_assigned_to_user_id, payment_method_assigned_to_user_id, amount, date_of_expense, expense_comment)
                 VALUES ';
 
