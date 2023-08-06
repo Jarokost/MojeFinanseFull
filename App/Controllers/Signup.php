@@ -9,6 +9,7 @@ use \App\Models\ExpensesCategoryAssignedToUsers;
 use \App\Models\PaymentMethodsAssignedToUsers;
 use \App\Models\Expenses;
 use \App\Models\Incomes;
+use \App\ExpensesTestRecords;
 
 /**
  * Signup controller
@@ -51,7 +52,9 @@ class Signup extends \Core\Controller
             $paymentMethodMinId = PaymentMethodsAssignedToUsers::getCategoryIdMinValueForUserId($lastUserId['id']);
             $paymentMethodMaxId = PaymentMethodsAssignedToUsers::getCategoryIdMaxValueForUserId($lastUserId['id']);
 
-            Expenses::addRandom(10, $lastUserId['id'], $expensesCategoryMinId, $expensesCategoryMaxId, $paymentMethodMinId, $paymentMethodMaxId);
+            $expensesRecords = new ExpensesTestRecords();
+            //Expenses::addRandom(10, $lastUserId['id'], $expensesCategoryMinId, $expensesCategoryMaxId, $paymentMethodMinId, $paymentMethodMaxId);
+            Expenses::addRecordsFromTestFile($lastUserId['id'], $expensesCategoryMinId, $paymentMethodMinId, $expensesRecords->records);
             
             $user->sendActivationEmail();
 
