@@ -251,4 +251,34 @@ class ExpensesCategoryAssignedToUsers extends \Core\Model
 
         return $stmt->fetchColumn();
     }
+
+    public static function getCategoryIdMinValueForUserId($user_id) {
+        $sql = 'SELECT MIN(id)
+                FROM expenses_category_assigned_to_users
+                WHERE user_id = :user_id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+    public static function getCategoryIdMaxValueForUserId($user_id) {
+        $sql = 'SELECT MAX(id)
+                FROM expenses_category_assigned_to_users
+                WHERE user_id = :user_id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
 }
