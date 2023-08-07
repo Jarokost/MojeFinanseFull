@@ -11,6 +11,7 @@ use \App\Models\Expenses;
 use \App\Models\Incomes;
 use \App\ExpensesTestRecords;
 use \App\IncomesTestRecords;
+use \App\Config;
 
 /**
  * Signup controller
@@ -46,19 +47,21 @@ class Signup extends \Core\Controller
             ExpensesCategoryAssignedToUsers::fillCategoriesAssignedToUserWithDefault($lastUserId['id']);
             PaymentMethodsAssignedToUsers::fillCategoriesAssignedToUserWithDefault($lastUserId['id']);
 
-            $incomesCategoryMinId = IncomesCategoryAssignedToUsers::getCategoryIdMinValueForUserId($lastUserId['id']);
-            $incomesCategoryMaxId = IncomesCategoryAssignedToUsers::getCategoryIdMaxValueForUserId($lastUserId['id']);
-            $expensesCategoryMinId = ExpensesCategoryAssignedToUsers::getCategoryIdMinValueForUserId($lastUserId['id']);
-            $expensesCategoryMaxId = ExpensesCategoryAssignedToUsers::getCategoryIdMaxValueForUserId($lastUserId['id']);
-            $paymentMethodMinId = PaymentMethodsAssignedToUsers::getCategoryIdMinValueForUserId($lastUserId['id']);
-            $paymentMethodMaxId = PaymentMethodsAssignedToUsers::getCategoryIdMaxValueForUserId($lastUserId['id']);
+            if (in_array($user->email, Config::TEST_EMAILS, true)) {
+                $incomesCategoryMinId = IncomesCategoryAssignedToUsers::getCategoryIdMinValueForUserId($lastUserId['id']);
+                $incomesCategoryMaxId = IncomesCategoryAssignedToUsers::getCategoryIdMaxValueForUserId($lastUserId['id']);
+                $expensesCategoryMinId = ExpensesCategoryAssignedToUsers::getCategoryIdMinValueForUserId($lastUserId['id']);
+                $expensesCategoryMaxId = ExpensesCategoryAssignedToUsers::getCategoryIdMaxValueForUserId($lastUserId['id']);
+                $paymentMethodMinId = PaymentMethodsAssignedToUsers::getCategoryIdMinValueForUserId($lastUserId['id']);
+                $paymentMethodMaxId = PaymentMethodsAssignedToUsers::getCategoryIdMaxValueForUserId($lastUserId['id']);
 
-            $expensesRecords = new ExpensesTestRecords();
-            $incomesRecords = new IncomesTestRecords();
-            // Expenses::addRandom(10, $lastUserId['id'], $expensesCategoryMinId, $expensesCategoryMaxId, $paymentMethodMinId, $paymentMethodMaxId);
-            // Incomes::addRandom(10, $lastUserId['id'], $incomesCategoryMinId, $incomesCategoryMaxId);
-            Expenses::addRecordsFromTestFile($lastUserId['id'], $expensesCategoryMinId, $paymentMethodMinId, $expensesRecords->records);
-            Incomes::addRecordsFromTestFile($lastUserId['id'], $incomesCategoryMinId, $incomesRecords->records);
+                $expensesRecords = new ExpensesTestRecords();
+                $incomesRecords = new IncomesTestRecords();
+                // Expenses::addRandom(10, $lastUserId['id'], $expensesCategoryMinId, $expensesCategoryMaxId, $paymentMethodMinId, $paymentMethodMaxId);
+                // Incomes::addRandom(10, $lastUserId['id'], $incomesCategoryMinId, $incomesCategoryMaxId);
+                Expenses::addRecordsFromTestFile($lastUserId['id'], $expensesCategoryMinId, $paymentMethodMinId, $expensesRecords->records);
+                Incomes::addRecordsFromTestFile($lastUserId['id'], $incomesCategoryMinId, $incomesRecords->records);
+            }
             
             $user->sendActivationEmail();
 
