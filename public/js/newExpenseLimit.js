@@ -51,7 +51,7 @@ async function displayLimitForCategory() {
         document.getElementById("limitDisplayForThisCategory").textContent = `Wybrana kategoria nie posiada limitu`;
         categoryHasLimit = false;
     } else {
-        document.getElementById("limitDisplayForThisCategory").textContent = `Limit dla wybranej kategorii wynosi: ${limitForCategory} [PLN]`;
+        document.getElementById("limitDisplayForThisCategory").textContent = `Limit dla wybranej kategorii wynosi: ${parseFloat(limitForCategory).toFixed(2)} [PLN]`;
         categoryHasLimit = true;
     }
 }
@@ -59,7 +59,7 @@ async function displayLimitForCategory() {
 async function displayMonthlyExpensesForCategory() {
     expensesSumForCategory = await getExpsensesSumForCategory();
     if (categoryHasLimit && expensesSumForCategory !== null) {
-        document.getElementById("limitDisplayThisMonthSpent").textContent = `W wybranym miesiącu dla tej kategorii wydano: ${expensesSumForCategory} [PLN]`;
+        document.getElementById("limitDisplayThisMonthSpent").textContent = `W wybranym miesiącu dla tej kategorii wydano: ${parseFloat(expensesSumForCategory).toFixed(2)} [PLN]`;
     } else if (categoryHasLimit && expensesSumForCategory === null) {
         document.getElementById("limitDisplayThisMonthSpent").textContent = `W wybranym miesiącu dla tej kategorii wydano: 0 [PLN]`;
     } else {
@@ -72,7 +72,7 @@ async function displayLimitOnInputChange() {
     let inputValue = document.getElementById("floatingInputKwota").value;
     if (categoryHasLimit === true) {
         difference = limitForCategory - expensesSumForCategory - inputValue;
-        document.getElementById("limitDisplayAmountInput").textContent = `Pozostałe środki w ramach limitu: ${difference} [PLN]`;
+        document.getElementById("limitDisplayAmountInput").textContent = `Pozostałe środki w ramach limitu: ${parseFloat(difference).toFixed(2)} [PLN]`;
     } else {
         difference = 0;
         document.getElementById("limitDisplayAmountInput").textContent = '';
